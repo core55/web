@@ -11,10 +11,15 @@ export default {
 </script>
 
 <style>
-#app {
-  display: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-}
+  body {
+    margin: 0;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+
+  #app {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
 </style>

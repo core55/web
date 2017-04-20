@@ -7,27 +7,51 @@
     name: 'google-map',
     data () {
       return {
-        map: null
+        callbackName: 'googleMapsApiCallback'
       }
     },
+    props: {
+        callback: {
+            type: Function,
+            default () {}
+        },
+        params: {
+            type: Object,
+            default () { return {}; }
+        }
+    },
     methods: {
-      initMap () {
-        let app = this;
-        app.map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: {lat: -25.363, lng: 131.044}
-        });
+      loadGoogleMapsApi () {
+        if (window.googleMapApiIsLoaded) {
+            this.callback();
+            return;
+        }
+
+        let script = document.createElement('script');
+        window[this.callbackName] = this.callback;
+
+        let params = [];
+        params.push('callback=' + this.callbackName);
+        params.push('key=' + process.env.GOOGLE_MAP_KEY);
+
+        script.src = process.env.GOOGLE_MAP_URL + '?' + params.join('&');
+        document.body.appendChild(script);
+        window.googleMapApiIsLoaded = true;
       }
     },
     mounted () {
-      window.initMap = this.initMap;
+      this.loadGoogleMapsApi();
     },
   }
 </script>
 
 <style scoped>
   #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
     width: 100%;
-    height: 500px;
+    height: 100%;
+    z-index: 0;
   }
 </style>
