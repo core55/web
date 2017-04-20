@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
-// import Create from '@/components/Create'
-// import View from '@/components/View'
+import Create from '@/components/Create'
+import View from '@/components/View'
 
 Vue.use(Router)
 
@@ -13,15 +13,15 @@ export default new Router({
       name: 'Hello',
       component: Hello
     },
-    // {
-    //   path: '/create',
-    //   name: 'Create',
-    //   component: Create
-    // },
-    // {
-    //   path: '/view',
-    //   name: 'View',
-    //   component: View
-    // }
+    {
+      path: '/create',
+      name: 'Create',
+      component: Create
+    },
+    {
+      path: '/view',
+      name: 'View',
+      component: View
+    }
   ]
 })
