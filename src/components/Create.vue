@@ -1,8 +1,13 @@
 <template>
   <div>
-    <el-button size="large" id="btn-action-create" icon="plus" @click="createEvent"></el-button>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
+    <div>
+      <el-button size="large" id="btn-action-create" icon="plus" @click="createEvent"></el-button>
+      <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+      <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
+    </div>
+
+    <div id="outcircle" class='outer-circle'></div>
+    <div id="incircle" class='inner-circle'></div>
   </div>
 </template>
 
@@ -142,13 +147,18 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #btn-action-create {
     z-index: 1;
     position: absolute;
     right: 24px;
     bottom: 24px;
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    font-size: 24px;
+    line-height: 1.33;
+    border-radius: 35px;
   }
 
   .controls {
@@ -194,6 +204,31 @@ export default {
   }
   #target {
     width: 345px;
+  }
+
+  .outer-circle {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-style:solid;
+    margin: -25px 0 0 -25px;
+
+  }
+
+  .inner-circle {
+    width: 5px;
+    height: 5px;
+    border-style:solid;
+    background: black;
+    border-radius: 50%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -2px 0 0 -2px;
   }
 
 </style>
