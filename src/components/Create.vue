@@ -32,7 +32,6 @@ export default {
     initMap () {
       let app = this;
       var infoWindow = null;
-
       //geolocation obtain for pos
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -72,7 +71,6 @@ export default {
           // more details for that place.
           searchBox.addListener('places_changed', function() {
             var places = searchBox.getPlaces();
-
             if (places.length == 0) {
               return;
             }
@@ -90,30 +88,10 @@ export default {
                 console.log("Returned place contains no geometry");
                 return;
               }
-              var icon = {
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25)
-              };
+              app.map.setCenter(place.geometry.location);
 
-              // Create a marker for each place.
-              markers.push(new google.maps.Marker({
-                map: app.map,
-                icon: icon,
-                title: place.name,
-                position: place.geometry.location
-              }));
-
-              if (place.geometry.viewport) {
-                // Only geocodes have viewport.
-                bounds.union(place.geometry.viewport);
-              } else {
-                bounds.extend(place.geometry.location);
-              }
             });
-            app.map.fitBounds(bounds);
+
           });
 
         }, function() {
