@@ -1,6 +1,7 @@
 <template>
   <div>
       <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
+    <el-button size="medium" id="sharebtn" icon="share" @click="createpEW"></el-button>
   </div>
 </template>
 
@@ -36,4 +37,12 @@
   }
 </script>
 
-<style scoped></style>
+<style scoped>
+  #sharebtn{
+    z-index: 1;
+    position: absolute;
+    right: 24px;
+    bottom: 690px;
+  }
+
+</style>

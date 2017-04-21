@@ -33,14 +33,18 @@ export default {
       let app = this;
       var infoWindow = null;
 
-      //geolocation obtain for pos
+      //check gps status
       if (navigator.geolocation) {
+        //success
         navigator.geolocation.getCurrentPosition(function(position) {
+
+          //geolocation obtain for pos
            app.pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
 
+          //page content
           app.map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: app.pos,
@@ -117,13 +121,17 @@ export default {
           });
 
         }, function() {
+
           app.$message.error('Oops, The Geolocation service failed.');
         });
       } else {
         app.$message.error('Oops, Browser doesn\'t support Geolocation.');
+
       }
     },
+
     async createMeetup () {
+
       console.log("A button was clicked.");
       var app = this;
       this.loading = true;
