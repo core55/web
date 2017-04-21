@@ -11,4 +11,41 @@ export default class Api {
       initialLongitude: lng
     });
   }
+
+  static handleLocationError(browserHasGeolocation, infoWindow, map) {
+    let message = 'Error: Your browser doesn\'t support geolocation.';
+
+    if (browserHasGeolocation) {
+      message = 'Error: The Geolocation service failed.';
+    }
+
+    this.addInfoWindowToMap(map, map.getCenter(), message);
+  }
+
+  static addInfoWindowToMap(map, pos, message) {
+    var infoWindow = new google.maps.InfoWindow;
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(message);
+    infoWindow.open(map);
+  }
+
+  static getMyLocation() {
+    return new Promise(resolve => {
+        if (!navigator.geolocation) {
+            resolve(false);
+          return false;
+        }
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+            resolve({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          // return 
+        }, function() {
+            resolve(false);
+          return false;
+        });
+    });
+  }
 }
