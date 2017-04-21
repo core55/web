@@ -19,23 +19,14 @@ export default {
   data () {
     return {
       map: null,
-      loading: false,
-      pos:null
+      loading: true,
+      pos: null
     }
   },
   methods: {
     initMap () {
       let app = this;
-//      app.map = new google.maps.Map(document.getElementById('map'), {
-//        zoom: 13,
-//        center: {lat: -25.363, lng: 131.044},
-//        disableDefaultUI: true
-//      });
-
-      var infoWindow=null;
-      // Try HTML5 geolocation.
-
-      console.log(navigator.geolocation);
+      var infoWindow = null;
 
       //geolocation obtain for pos
       if (navigator.geolocation) {
@@ -44,22 +35,21 @@ export default {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
+
           app.map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: app.pos,
             disableDefaultUI: true
           });
 
-          infoWindow=new google.maps.InfoWindow;
+          infoWindow = new google.maps.InfoWindow;
+          app.loading = false;
 
           var marker = new google.maps.Marker({
             position : app.pos,
             map: app.map
           });
 
-          infoWindow.setPosition(app.pos);
-//          infoWindow.setContent('Location found.');
-//          infoWindow.open(app.map);
           app.map.setCenter(app.pos);
 
           // Create the search box and link it to the UI element.
@@ -122,22 +112,12 @@ export default {
           });
 
         }, function() {
-          app.handleLocationError(true, infoWindow, app.pos);
+          app.$message.error('Oops, The Geolocation service failed.');
         });
       } else {
-        // Browser doesn't support Geolocation
-        app.handleLocationError(false, infoWindow, app.pos);
+        app.$message.error('Oops, Browser doesn\'t support Geolocation.');
       }
-
     },
-
-    handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      infoWindow.setPosition(pos);
-      infoWindow.setContent(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
-      infoWindow.open(app.map);
-      },
     async createEvent () {
       console.log("A button was clicked.");
       var app = this;
