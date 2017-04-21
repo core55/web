@@ -5,11 +5,15 @@ import router from './../router';
 Vue.use(VueResource);
 
 export default class Api {
-  static createEvent (lat, lng, zoom) {
+  static getMeetup (id) {
+    return Vue.http.get(process.env.API_URL + 'meetups/' + id);
+  }
+
+  static createMeetup (lat, lng, zoom) {
     return Vue.http.post(process.env.API_URL + 'meetups', {
-      initialLatitude: lat,
-      initialLongitude: lng,
-      zoom: zoom
+      centerLatitude: lat,
+      centerLongitude: lng,
+      zoomLevel: zoom
     });
   }
 
@@ -48,5 +52,9 @@ export default class Api {
           return false;
         });
     });
+  }
+
+  static getMeetupUsers (id) {
+    return Vue.http.get(process.env.API_URL + 'meetups/' + id + '/users');
   }
 }
