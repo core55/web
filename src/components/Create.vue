@@ -25,22 +25,58 @@ export default {
     initMap () {
       let app = this;
       app.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
+        zoom: 13,
         center: {lat: -25.363, lng: 131.044},
         disableDefaultUI: true
       });
+
+      var infoWindow = new google.maps.InfoWindow;
+      // Try HTML5 geolocation.
+
+      console.log(navigator.geolocation);
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          var marker = new google.maps.Marker({
+            position : pos,
+            map: app.map
+          });
+          
+          infoWindow.setPosition(pos);
+//          infoWindow.setContent('Location found.');
+//          infoWindow.open(app.map);
+          app.map.setCenter(pos);
+        }, function() {
+          app.handleLocationError(true, infoWindow, app.map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        app.handleLocationError(false, infoWindow, app.map.getCenter());
+      }
     },
+
+    handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      infoWindow.setPosition(pos);
+      infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+      infoWindow.open(app.map);
+      },
     async createEvent () {
       console.log("A button was clicked.");
       var app = this;
-
       this.loading = true;
       let response = await Api.createEvent();
       setTimeout(function() {
         router.push({ name: 'View', params: { id: response }});
         app.loading = false;
       }, 1000);
-      
+
       return;
 
       if (response.ok) {
@@ -50,7 +86,8 @@ export default {
 
       this.$message.error('Oops, something went wrong.');
     }
-  }
+  },
+
 }
 </script>
 
