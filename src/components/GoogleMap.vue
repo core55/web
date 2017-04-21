@@ -33,6 +33,7 @@
         let params = [];
         params.push('callback=' + this.callbackName);
         params.push('key=' + process.env.GOOGLE_MAP_KEY);
+        params.push('libraries=places');
 
         script.src = process.env.GOOGLE_MAP_URL + '?' + params.join('&');
         document.body.appendChild(script);
