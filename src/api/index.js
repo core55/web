@@ -5,10 +5,11 @@ import router from './../router';
 Vue.use(VueResource);
 
 export default class Api {
-  static createEvent (lat, lng) {
+  static createEvent (lat, lng, zoom) {
     return Vue.http.post(process.env.API_URL + 'meetups', {
       initialLatitude: lat,
-      initialLongitude: lng
+      initialLongitude: lng,
+      zoom: zoom
     });
   }
 

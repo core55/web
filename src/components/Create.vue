@@ -122,7 +122,11 @@ export default {
       console.log("A button was clicked.");
       var app = this;
       this.loading = true;
-      let response = await Api.createEvent(-25.363, 131.044);
+
+      var position = this.map.getCenter();
+      var zoom = this.map.getZoom();
+
+      let response = await Api.createEvent(position.lat(), position.lng(), zoom);
       app.loading = false;
 
       if (response.ok) {
