@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button size="large" id="btn-action-create" icon="plus" @click="createEvent"></el-button>
+      <el-button size="large" id="btn-action-create" icon="plus" @click="createMeetup"></el-button>
       <input id="pac-input" class="controls" type="text" placeholder="Search Box">
       <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     </div>
@@ -123,7 +123,7 @@ export default {
         app.$message.error('Oops, Browser doesn\'t support Geolocation.');
       }
     },
-    async createEvent () {
+    async createMeetup () {
       console.log("A button was clicked.");
       var app = this;
       this.loading = true;
@@ -131,7 +131,7 @@ export default {
       var position = this.map.getCenter();
       var zoom = this.map.getZoom();
 
-      let response = await Api.createEvent(position.lat(), position.lng(), zoom);
+      let response = await Api.createMeetup(position.lat(), position.lng(), zoom);
       app.loading = false;
 
       if (response.ok) {
