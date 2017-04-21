@@ -132,16 +132,12 @@ export default {
       console.log("A button was clicked.");
       var app = this;
       this.loading = true;
-      let response = await Api.createEvent();
-      setTimeout(function() {
-        router.push({ name: 'View', params: { id: response }});
-        app.loading = false;
-      }, 1000);
-
-      return;
+      let response = await Api.createEvent(-25.363, 131.044);
+      app.loading = false;
 
       if (response.ok) {
         router.push({ name: 'View', params: { id: 'hash' }});
+        console.log(response);
         return;
       }
 
