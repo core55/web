@@ -54,6 +54,13 @@ export default class Api {
     });
   }
 
+  static updateUserLocation (id, location, user) {
+    return Vue.http.put(process.env.API_URL + 'meetups/' + id + '/users', {
+      lat: location.lat,
+      lng: location.lng
+    });
+  }
+
   static getMeetupUsers (id) {
     return Vue.http.get(process.env.API_URL + 'meetups/' + id + '/users');
   }

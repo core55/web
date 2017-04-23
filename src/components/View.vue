@@ -1,7 +1,7 @@
 <template>
   <div>
-      <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <el-button size="medium" id="sharebtn" icon="share" @click="creatshare"></el-button>
+    <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
+    <el-button size="medium" id="sharebtn" icon="share" @click="shareMeetup"></el-button>
   </div>
 </template>
 
@@ -19,38 +19,43 @@
       return {
         loading: true,
         meetupId: null,
+        meetup: null,
         map: null,
         pos: null,
-        }
-      },
+        user: null
+      }
+    },
     methods: {
-      initMap(){
+      initMap() {
         let app = this;
-        app.pos = {
-          lat:-34.397 ,
-          lng:150.644
-        };
-        app.map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 13,
-          center: app.pos,
+        this.meetup = this.getMeetup();
+        this.map = new google.maps.Map(document.getElementById('map'), {
+          zoom: app.meetup.zoomLevel,
+          center: {
+            lat: app.meetup.centerLatitude,
+            lng: app.meetup.centerLongitude
+          },
           disableDefaultUI: true
         });
 
-        app.loading = false;
-        app.map.setCenter(app.pos);
+        this.loading = false;
         this.$message('Map Created.');
 
       },
-      creatshare(){
-
-
+      shareMeetup() {
+        let hash = this.meetupId;
+        // todo
       },
-        async getMeetup() {
-          this.meetupId = this.$route.params.id;
-          let meetup = await Api.getMeetup(this.meetupId);
-          this.loading = false;
-          return meetup;
-        }
+      async getMeetup() {
+        this.meetupId = this.$route.params.id;
+        let meetup = await Api.getMeetup(this.meetupId);
+        this.loading = false;
+        return meetup;
+      },
+      async updateMyLocation() {
+        let location = await Api.getMyLocation();
+        let response = await Api.updateUserLocation(this.meetupId, location, 'user');
+      }
     },
     mounted () {
       let meetup = this.getMeetup();
@@ -59,7 +64,7 @@
 </script>
 
 <style scoped>
-  #sharebtn{
+  #sharebtn {
     z-index: 1;
     position: absolute;
     right: 24px;
@@ -71,7 +76,4 @@
     line-height: 1.33;
     border-radius: 35px;
   }
-
-
-
 </style>

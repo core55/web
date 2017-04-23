@@ -29,88 +29,60 @@ export default {
     }
   },
   methods: {
-    initMap () {
+    async initMap () {
       let app = this;
       var infoWindow = null;
-      //check gps status
-      if (navigator.geolocation) {
-        //success
-        navigator.geolocation.getCurrentPosition(function(position) {
 
-          //geolocation obtain for pos
-           app.pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
+      this.pos = await Api.getMyLocation();
 
-          //page content
-          app.map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
-            center: app.pos,
-            disableDefaultUI: true
-          });
-
-          infoWindow = new google.maps.InfoWindow;
-          app.loading = false;
-
-          var marker = new google.maps.Marker({
-            position : app.pos,
-            map: app.map
-          });
-
-          app.map.setCenter(app.pos);
-
-          // Create the search box and link it to the UI element.
-          var input = document.getElementById('pac-input');
-          var searchBox = new google.maps.places.SearchBox(input);
-          app.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-
-          // Bias the SearchBox results towards current map's viewport.
-          app.map.addListener('bounds_changed', function() {
-            searchBox.setBounds(app.map.getBounds());
-          });
-
-          var markers = [];
-          // Listen for the event fired when the user selects a prediction and retrieve
-          // more details for that place.
-          searchBox.addListener('places_changed', function() {
-            var places = searchBox.getPlaces();
-            if (places.length == 0) {
-              return;
-            }
-
-            // Clear out the old markers.
-            markers.forEach(function(marker) {
-              marker.setMap(null);
-            });
-            markers = [];
-
-            // For each place, get the icon, name and location.
-            var bounds = new google.maps.LatLngBounds();
-            places.forEach(function(place) {
-              if (!place.geometry) {
-                console.log("Returned place contains no geometry");
-                return;
-              }
-              app.map.setCenter(place.geometry.location);
-
-            });
-
-          });
-
-        }, function() {
-
-          app.$message.error('Oops, The Geolocation service failed.');
-        });
-      } else {
-        app.$message.error('Oops, Browser doesn\'t support Geolocation.');
-
+      if (!app.pos) {
+        app.$message.error('Oops, The Geolocation service failed.');
+        app.loading = false;
+        return;
       }
+
+      app.map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 13,
+        center: app.pos,
+        disableDefaultUI: true
+      });
+
+      app.loading = false;
+      this.initSearchBox();
     },
+    initSearchBox() {
+      let app = this;
 
+      // Create the search box and link it to the UI element.
+      var input = document.getElementById('pac-input');
+      var searchBox = new google.maps.places.SearchBox(input);
+      app.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+      // Bias the SearchBox results towards current map's viewport.
+      app.map.addListener('bounds_changed', function() {
+        searchBox.setBounds(app.map.getBounds());
+      });
+
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener('places_changed', function() {
+        var places = searchBox.getPlaces();
+        if (places.length == 0) {
+          return;
+        }
+
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+          if (!place.geometry) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
+          app.map.setCenter(place.geometry.location);
+        });
+      });
+    },
     async createMeetup () {
-
-      console.log("A button was clicked.");
       var app = this;
       this.loading = true;
 
@@ -121,15 +93,14 @@ export default {
       app.loading = false;
 
       if (response.ok) {
-        router.push({ name: 'View', params: { id: 'hash' }});
-        console.log(response);
+        let hash = response.body.hash;
+        router.push({ name: 'View', params: { id: hash }});
         return;
       }
 
       this.$message.error('Oops, something went wrong.');
     }
   },
-
 }
 </script>
 
