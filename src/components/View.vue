@@ -52,32 +52,28 @@
 
         this.loading = false;
         this.joinEvent();
-
-        let users = await Api.getMeetupUsers(this.meetupId);
-        console.log(users);
-        if (response.ok ==true) {
-         // var text = JSON.parse(users.bodyText);
-          users = users.body._embedded.users;
-          //console.log(text);
-          //text = text._embedded.users;
-          this.updateMarkers(users);
-        }
-        else{
-          this.$message.error('Oops, could not retrieve the Users!');
-        }
-
+        this.updateUsersOnMap();
+      },
+        async updateUsersOnMap(){
+          let users = await Api.getMeetupUsers(this.meetupId);
+          if (users.ok ==true) {
+            users = users.body._embedded.users;
+            this.updateMarkers(users);
+          }
+          else{
+            this.$message.error('Oops, could not retrieve the Users!');
+          }
       },
       async updateMarkers(users){
         var i;
         for (i in users) {
-          // console.log(this.markersMap.indexOf(users[i].nickname));
           if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
             this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
             continue;
           }
 
           this.markersMap[users[i].nickname] = {
-            marker: new google.maps.Marker({
+            marker: new google.maps.Marker({ //We create a new marker
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
               lable: users[i].nickname,
@@ -154,6 +150,7 @@
       // let twoMinutes = 10000;
       this.updatingLocationInterval = setInterval(function() {
         app.updateMyLocation();
+        app.updateUsersOnMap();
       }, twoMinutes);
     },
   }
