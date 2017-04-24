@@ -50,7 +50,7 @@ export default class Api {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           });
-          // return 
+          // return
         }, function() {
             resolve(false);
           return false;

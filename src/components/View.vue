@@ -23,7 +23,8 @@
         map: null,
         pos: null,
         user: null,
-        userMeetups: null
+        userMeetups: null,
+        markersMap: []
       }
     },
     methods: {
@@ -49,7 +50,48 @@
 
         this.loading = false;
         this.joinEvent();
+
+        let users = await Api.getMeetupUsers(this.meetupId);
+        console.log(users);
+        if (response.ok ==true) {
+         // var text = JSON.parse(users.bodyText);
+          users = users.body._embedded.users;
+          //console.log(text);
+          //text = text._embedded.users;
+          this.updateMarkers(users);
+        }
+        else{
+          this.$message.error('Oops, could not retrieve the Users!');
+        }
+
       },
+      async updateMarkers(users){
+        var i
+        for (i in  users) {
+          console.log(this.markersMap.indexOf(users[i].nickname));
+          //if (false) {
+          if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
+            this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
+          }
+          else { //we create a new marker
+            this.markersMap[users[i].nickname] = {
+              marker: new google.maps.Marker({
+                position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
+                map: this.map,
+                lable: users[i].nickname,
+                title: users[i].nickname,
+                //animation: google.maps.Animation.BOUNCE,
+
+
+              })
+            }
+          }
+        }
+      },
+      async userCoordToLatLng(user){
+        return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
+      },
+
       shareMeetup() {
         let hash = this.meetupId;
         // todo
