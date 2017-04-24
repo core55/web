@@ -22,7 +22,8 @@
         meetup: null,
         map: null,
         pos: null,
-        user: null
+        user: null,
+        userMeetups: null
       }
     },
     methods: {
@@ -47,7 +48,7 @@
         });
 
         this.loading = false;
-        this.$message('Map Created.');
+        this.joinEvent();
       },
       shareMeetup() {
         let hash = this.meetupId;
@@ -62,10 +63,33 @@
       async updateMyLocation() {
         let location = await Api.getMyLocation();
         let response = await Api.updateUserLocation(this.meetupId, location, 'user');
+      },
+      async joinEvent() {
+        this.user = JSON.parse(localStorage.getItem('userId'));
+        this.userMeetups = JSON.parse(localStorage.getItem('userMeetups'));
+        if (!this.userMeetups) { this.userMeetups = []; }
+
+        if (this.userMeetups.indexOf(this.meetupId) > -1) {
+          // already joined
+          this.$message.info('Already joined the Meetup!');
+          return;
+        }
+
+        let position = await Api.getMyLocation();
+        let response = await Api.joinMeetup(this.meetupId, {
+          lastLatitude: position.lat,
+          lastLongitude: position.lng
+        });
+
+        if (response.ok == true) {
+          this.userMeetups.push(this.meetupId);
+          localStorage.setItem('userMeetups', JSON.stringify(this.userMeetups));
+          this.$message.success('Successfuly joined the Meetup!');
+        }
       }
     },
     mounted () {
-      let meetup = this.getMeetup();
+
     },
   }
 </script>
