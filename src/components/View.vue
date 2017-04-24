@@ -110,15 +110,16 @@
         }
 
         let position = await Api.getMyLocation();
-        let response = await Api.updateUserLocation({id: 26}, {
+        let response = await Api.updateUserLocation(this.user, {
           lastLatitude: position.lat,
           lastLongitude: position.lng
         });
 
         this.updatingLocation = false;
+        // console.log(response);
       },
       async joinEvent() {
-        this.user = JSON.parse(localStorage.getItem('userId'));
+        this.user = JSON.parse(localStorage.getItem('user'));
         this.userMeetups = JSON.parse(localStorage.getItem('userMeetups'));
         if (!this.userMeetups) { this.userMeetups = []; }
 
@@ -129,21 +130,31 @@
         }
 
         let position = await Api.getMyLocation();
-        let response = await Api.joinMeetup(this.meetupId, {
+        let params = {
           lastLatitude: position.lat,
           lastLongitude: position.lng
-        });
+        };
+
+        if (this.user != null) {
+          params['id'] = this.user.id;
+        }
+
+        let response = await Api.joinMeetup(this.meetupId, params);
 
         if (response.ok == true) {
           this.userMeetups.push(this.meetupId);
           localStorage.setItem('userMeetups', JSON.stringify(this.userMeetups));
           this.$message.success('Successfuly joined the Meetup!');
+
+          this.user = response.body;
+          localStorage.setItem('user', JSON.stringify(this.user));
         }
       }
     },
     mounted () {
       let app = this;
       let twoMinutes = 2 * 60 * 1000;
+      // let twoMinutes = 10000;
       this.updatingLocationInterval = setInterval(function() {
         app.updateMyLocation();
       }, twoMinutes);
