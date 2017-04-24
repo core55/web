@@ -18,7 +18,7 @@ export default class Api {
   }
 
   static joinMeetup (meetup, user) {
-    return Vue.http.post(process.env.API_URL + 'meetups/' + meetup + '/users', user);
+    return Vue.http.post(process.env.API_URL + 'meetups/' + meetup + '/users/save', user);
   }
 
   static handleLocationError(browserHasGeolocation, infoWindow, map) {
