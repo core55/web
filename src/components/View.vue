@@ -68,25 +68,22 @@
 
       },
       async updateMarkers(users){
-        var i
-        for (i in  users) {
-          console.log(this.markersMap.indexOf(users[i].nickname));
-          //if (false) {
+        var i;
+        for (i in users) {
+          // console.log(this.markersMap.indexOf(users[i].nickname));
           if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
             this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
+            continue;
           }
-          else { //we create a new marker
-            this.markersMap[users[i].nickname] = {
-              marker: new google.maps.Marker({
-                position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
-                map: this.map,
-                lable: users[i].nickname,
-                title: users[i].nickname,
-                //animation: google.maps.Animation.BOUNCE,
 
-
-              })
-            }
+          this.markersMap[users[i].nickname] = {
+            marker: new google.maps.Marker({
+              position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
+              map: this.map,
+              lable: users[i].nickname,
+              title: users[i].nickname,
+              //animation: google.maps.Animation.BOUNCE,
+            })
           }
         }
       },
