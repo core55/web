@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button size="large" id="btn-action-create" icon="plus" @click="createMeetup"></el-button>
+      <el-button size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
       <input id="pac-input" class="controls" type="text" placeholder="Search Box">
       <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     </div>
@@ -110,12 +110,16 @@ export default {
     position: absolute;
     right: 24px;
     bottom: 24px;
-    width: 70px;
-    height: 70px;
-    padding: 10px 16px;
-    font-size: 24px;
-    line-height: 1.33;
+    width: 71px;
+    height: 71px;
+    padding: 0px 0px;
+    font-size: 50px;
     border-radius: 35px;
+    border-color: white;
+    /* Oval: */
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px 2px rgba(0,0,0,0.8);
+    text-align: center;
   }
 
   .controls {
