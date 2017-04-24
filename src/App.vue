@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="slide">
+    <transition>
       <router-view></router-view>
     </transition>
   </div>
