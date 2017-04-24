@@ -26,9 +26,17 @@
       }
     },
     methods: {
-      initMap() {
+      async initMap() {
         let app = this;
-        this.meetup = this.getMeetup();
+        let response = await this.getMeetup();
+        this.loading = false;
+
+        if (response.ok == false) {
+          this.$message.error('Oops, could not retrieve the Meetup!');
+          return;
+        }
+
+        this.meetup = response.body;
         this.map = new google.maps.Map(document.getElementById('map'), {
           zoom: app.meetup.zoomLevel,
           center: {
@@ -40,7 +48,6 @@
 
         this.loading = false;
         this.$message('Map Created.');
-
       },
       shareMeetup() {
         let hash = this.meetupId;
