@@ -24,7 +24,9 @@
         pos: null,
         user: null,
         userMeetups: null,
-        markersMap: []
+        markersMap: [],
+        updatingLocation: false,
+        updatingLocationInterval: null
       }
     },
     methods: {
@@ -103,8 +105,17 @@
         return meetup;
       },
       async updateMyLocation() {
-        let location = await Api.getMyLocation();
-        let response = await Api.updateUserLocation(this.meetupId, location, 'user');
+        if (this.updatingLocation) {
+          return true;
+        }
+
+        let position = await Api.getMyLocation();
+        let response = await Api.updateUserLocation({id: 26}, {
+          lastLatitude: position.lat,
+          lastLongitude: position.lng
+        });
+
+        this.updatingLocation = false;
       },
       async joinEvent() {
         this.user = JSON.parse(localStorage.getItem('userId'));
@@ -131,7 +142,11 @@
       }
     },
     mounted () {
-
+      let app = this;
+      let twoMinutes = 2 * 60 * 1000;
+      this.updatingLocationInterval = setInterval(function() {
+        app.updateMyLocation();
+      }, twoMinutes);
     },
   }
 </script>

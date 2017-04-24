@@ -58,11 +58,8 @@ export default class Api {
     });
   }
 
-  static updateUserLocation (meetup, location, user) {
-    return Vue.http.patch(process.env.API_URL + 'meetups/' + meetup + '/users', {
-      lastLatitude: location.lat,
-      lastLongitude: location.lng
-    });
+  static updateUserLocation (user, params) {
+    return Vue.http.patch(process.env.API_URL + 'users/' + user.id, params);
   }
 
   static getMeetupUsers (meetup) {
