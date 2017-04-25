@@ -51,11 +51,15 @@ export default class Api {
             lng: position.coords.longitude
           });
           // return
-        }, function() {
+        }, function(error) {
             resolve(false);
           return false;
         });
     });
+  }
+
+  static getMyFuzzyGoogleLocation() {
+    return Vue.http.post(process.env.GOOGLE_GEOLOCATION_URL + process.env.GOOGLE_MAP_KEY);
   }
 
   static updateUserLocation (user, params) {
