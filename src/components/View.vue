@@ -86,10 +86,46 @@
       async userCoordToLatLng(user){
         return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
       },
-
       shareMeetup() {
+        let app =this;
         let hash = this.meetupId;
-        // todo
+        app.url ="http://localhost:8080/#/";
+
+        this.$prompt('This is the Invitation link', 'Tip', {
+          confirmButtonText: 'Copy',
+          cancelButtonText: 'Cancel',
+          inputValue: app.url+ hash,
+        }).then(() => {
+          var id = "message";
+          var messagearea = document.createElement("textarea");
+          messagearea.id = id;
+          messagearea.style.zIndex=-1;
+          var t = document.createTextNode(app.url);// Create a text node
+          var t2 = document.createTextNode(hash);
+          messagearea.appendChild(t);
+          messagearea.appendChild(t2);
+          document.querySelector("body").appendChild(messagearea);
+          var selector = document.getElementById(id);
+          selector.select();
+
+          try {
+            document.execCommand('copy');
+          }catch (err) {
+            this.$message({
+              type: 'info',
+              message: 'copy error' + err
+            });
+          }
+          this.$message({
+            type: 'success',
+            message: 'Copy successful'
+          });
+        }).catch((err) => {
+          this.$message({
+            type: 'info',
+            message: 'Input canceled. Error: '+err
+          });
+        });
       },
       async getMeetup() {
         this.meetupId = this.$route.params.id;
