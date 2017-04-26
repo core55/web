@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <div>
-      <el-button size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
-      <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-      <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    </div>
+  <section>
+    <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
+    <el-button size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 
     <div id="outcircle" class='outer-circle'></div>
     <div id="incircle" class='inner-circle'></div>
-  </div>
+  </section>
 </template>
 
 <script>

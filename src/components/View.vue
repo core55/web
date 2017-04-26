@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
@@ -7,7 +7,7 @@
       <el-input id="share-url" v-model="shareUrl"></el-input>
       <el-button type="primary" @click="shareMeetup">Confirm</el-button>
     </el-dialog>
-  </div>
+  </section>
 </template>
 
 <script>
