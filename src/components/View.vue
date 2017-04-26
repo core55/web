@@ -73,6 +73,18 @@
         },
       async updateMarkers(users){
         var i;
+        function getInitials(nickname) {
+            if (nickname) {
+              var trimmed = nickname.trim().split(' ');
+              for (i = 0; i < trimmed.length; i++) {
+                trimmed[i] = trimmed[i].charAt(0);
+              }
+              return trimmed.join(' ');
+            } else {
+              return 'XX'; //Should be some Default value in case there is no nickname
+            }
+        };
+
         for (i in users) {
           if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
             this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
@@ -84,10 +96,9 @@
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
               //user's nickname is updated -> customized marker should be implemented
-              lable: users[i].nickname,
+              lable: getInitials(users[i].nickname),
               title: users[i].nickname,
             })
-
           }
         }
       },
