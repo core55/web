@@ -9,12 +9,8 @@ export default class Api {
     return Vue.http.get(process.env.API_URL + 'meetups/' + id);
   }
 
-  static createMeetup (lat, lng, zoom) {
-    return Vue.http.post(process.env.API_URL + 'meetups', {
-      centerLatitude: lat,
-      centerLongitude: lng,
-      zoomLevel: zoom
-    });
+  static createMeetup (params) {
+    return Vue.http.post(process.env.API_URL + 'meetups', params);
   }
 
   static joinMeetup (meetup, user) {
@@ -71,7 +67,7 @@ export default class Api {
 
   static updateUsersNickname (user,nickname){
     return Vue.http.patch(process.env.API_URL + 'users/' + user.id, {
-      nickname: nickname
+      name: nickname
     });
   }
 

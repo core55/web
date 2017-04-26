@@ -24,7 +24,8 @@ export default {
     return {
       map: null,
       loading: true,
-      pos: null
+      pos: null,
+      marker: null
     }
   },
   methods: {
@@ -50,15 +51,24 @@ export default {
       this.initSearchBox();
 
 
-      //When click a certain position on the create.vue, the coordinate is acquired.
-      //you need to implement the way that maps get created
+      //coordinate of a clicked place is obtained
+      //pin is draggable and as it gets dragged to the map, the corresponding coordinates get updated.
+      //only one pin is permitted to be the meeting point.
       google.maps.event.addListener(app.map, 'click', function( event ){
-        var marker = new google.maps.Marker({
+        if(app.marker != null) {
+          return;
+        }
+
+        app.marker = new google.maps.Marker({
           draggable : true,
           position: {lat: event.latLng.lat(), lng:event.latLng.lng()},
           map: app.map
         });
-     //
+
+        google.maps.event.addListener(app.marker,'dragend',function(event) {
+          app.marker.setPosition(event.latLng);
+        });
+
       });
 
 
@@ -102,7 +112,22 @@ export default {
       var position = this.map.getCenter();
       var zoom = this.map.getZoom();
 
-      let response = await Api.createMeetup(position.lat(), position.lng(), zoom);
+      var params = {
+        centerLatitude: position.lat(),
+        centerLongitude: position.lng(),
+        zoomLevel: zoom
+      };
+
+
+      if (this.marker) {
+        var markerPosition = this.marker.getPosition();
+        params['pinLongitude'] = markerPosition.lng();
+        params['pinLatitude'] = markerPosition.lat();
+      }
+
+      console.log(marker);
+      let response = await Api.createMeetup(params);
+
       app.loading = false;
 
       if (response.ok) {
