@@ -1,7 +1,12 @@
 <template>
   <div>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <el-button size="medium" id="sharebtn" icon="share" @click="shareMeetup"></el-button>
+    <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
+
+    <el-dialog class="dialog-share-button" v-model="shareButtonDialog" size="tiny">
+      <el-input id="share-url" v-model="shareUrl"></el-input>
+      <el-button type="primary" @click="shareMeetup">Confirm</el-button>
+    </el-dialog>
   </div>
 </template>
 
@@ -26,7 +31,9 @@
         userMeetups: null,
         markersMap: [],
         updatingLocation: false,
-        updatingLocationInterval: null
+        updatingLocationInterval: null,
+        shareButtonDialog: false,
+        shareUrl: ''
       }
     },
     methods: {
@@ -87,44 +94,27 @@
         return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
       },
       shareMeetup() {
-        let app =this;
+        this.shareButtonDialog = false;
+
+        let app = this;
         let hash = this.meetupId;
-        app.url ="http://localhost:8080/#/";
+        var shareInput = document.querySelector('#share-url > input');
 
-        this.$prompt('This is the Invitation link', 'Tip', {
-          confirmButtonText: 'Copy',
-          cancelButtonText: 'Cancel',
-          inputValue: app.url+ hash,
-        }).then(() => {
-          var id = "message";
-          var messagearea = document.createElement("textarea");
-          messagearea.id = id;
-          messagearea.style.zIndex=-1;
-          var t = document.createTextNode(app.url);// Create a text node
-          var t2 = document.createTextNode(hash);
-          messagearea.appendChild(t);
-          messagearea.appendChild(t2);
-          document.querySelector("body").appendChild(messagearea);
-          var selector = document.getElementById(id);
-          selector.select();
-
-          try {
-            document.execCommand('copy');
-          }catch (err) {
-            this.$message({
-              type: 'info',
-              message: 'copy error' + err
-            });
-          }
-          this.$message({
-            type: 'success',
-            message: 'Copy successful'
-          });
-        }).catch((err) => {
+        try {
+          shareInput.select();
+          document.execCommand('copy');
+        }catch(err) {
           this.$message({
             type: 'info',
-            message: 'Input canceled. Error: '+err
+            message: 'copy error' + err
           });
+
+          return;
+        }
+
+        this.$message({
+          type: 'success',
+          message: 'Copy successful'
         });
       },
       async getMeetup() {
@@ -181,6 +171,8 @@
       }
     },
     mounted () {
+      this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
+
       let app = this;
       let twoMinutes = 2 * 60 * 1000;
       // let twoMinutes = 10000;
@@ -192,7 +184,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" type="text/scss">
   #sharebtn {
     z-index: 1;
     position: absolute;
@@ -208,5 +200,15 @@
     background: #FFFFFF;
     box-shadow: 0 2px 8px 2px rgba(0,0,0,0.8);
     text-align: center;
+  }
+
+  .dialog-share-button {
+    .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog__body {
+      padding: 0;
+    }
   }
 </style>

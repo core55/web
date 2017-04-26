@@ -104,7 +104,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss" type="text/scss">
   #btn-action-create {
     z-index: 1;
     position: absolute;
