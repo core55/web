@@ -15,6 +15,7 @@
 import GoogleMap from './GoogleMap';
 import Api from '../api';
 import router from '../router';
+import * as marker from "vue";
 
 export default {
   name: 'create',
@@ -42,13 +43,27 @@ export default {
       }
 
       app.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 13,
+        zoom: 15,
         center: app.pos,
         disableDefaultUI: true
       });
 
       app.loading = false;
       this.initSearchBox();
+
+
+      //When click a certain position on the create.vue, the coordinate is acquired.
+      //you need to implement the way that maps get created
+      google.maps.event.addListener(app.map, 'click', function( event ){
+        var marker = new google.maps.Marker({
+          draggable : true,
+          position: {lat: event.latLng.lat(), lng:event.latLng.lng()},
+          map: app.map
+        });
+     //
+      });
+
+
     },
     initSearchBox() {
       let app = this;

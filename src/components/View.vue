@@ -54,12 +54,10 @@
         this.joinEvent();
 
         let users = await Api.getMeetupUsers(this.meetupId);
-        console.log(users);
+
         if (response.ok ==true) {
-         // var text = JSON.parse(users.bodyText);
+
           users = users.body._embedded.users;
-          //console.log(text);
-          //text = text._embedded.users;
           this.updateMarkers(users);
         }
         else{
@@ -80,10 +78,11 @@
             marker: new google.maps.Marker({
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
+              //user's nickname is updated -> customized marker should be implemented
               lable: users[i].nickname,
               title: users[i].nickname,
-              //animation: google.maps.Animation.BOUNCE,
             })
+
           }
         }
       },
@@ -105,7 +104,6 @@
         if (this.updatingLocation) {
           return true;
         }
-
         let position = await Api.getMyLocation();
         let response = await Api.updateUserLocation(this.user, {
           lastLatitude: position.lat,
@@ -113,7 +111,7 @@
         });
 
         this.updatingLocation = false;
-        // console.log(response);
+
       },
       async joinEvent() {
         this.user = JSON.parse(localStorage.getItem('user'));

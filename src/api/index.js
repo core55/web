@@ -44,7 +44,6 @@ export default class Api {
             resolve(false);
           return false;
         }
-
         navigator.geolocation.getCurrentPosition(function(position) {
             resolve({
             lat: position.coords.latitude,
@@ -65,4 +64,11 @@ export default class Api {
   static getMeetupUsers (meetup) {
     return Vue.http.get(process.env.API_URL + 'meetups/' + meetup + '/users');
   }
+
+  static updateUsersNickname (user,nickname){
+    return Vue.http.patch(process.env.API_URL + 'users/' + user.id, {
+      nickname: nickname
+    });
+  }
+
 }
