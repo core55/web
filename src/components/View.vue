@@ -1,8 +1,13 @@
 <template>
-  <div>
+  <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <el-button size="medium" id="sharebtn" icon="share" @click="shareMeetup"></el-button>
-  </div>
+    <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
+
+    <el-dialog class="dialog-share-button" v-model="shareButtonDialog" size="tiny">
+      <el-input id="share-url" v-model="shareUrl"></el-input>
+      <el-button type="primary" @click="shareMeetup">Confirm</el-button>
+    </el-dialog>
+  </section>
 </template>
 
 <script>
@@ -26,7 +31,9 @@
         userMeetups: null,
         markersMap: [],
         updatingLocation: false,
-        updatingLocationInterval: null
+        updatingLocationInterval: null,
+        shareButtonDialog: false,
+        shareUrl: ''
       }
     },
     methods: {
@@ -52,30 +59,28 @@
 
         this.loading = false;
         this.joinEvent();
-
-        let users = await Api.getMeetupUsers(this.meetupId);
-
-        if (response.ok ==true) {
-
-          users = users.body._embedded.users;
-          this.updateMarkers(users);
-        }
-        else{
-          this.$message.error('Oops, could not retrieve the Users!');
-        }
-
+        this.updateUsersOnMap();
       },
+        async updateUsersOnMap(){
+          let users = await Api.getMeetupUsers(this.meetupId);
+          if (users.ok ==true) {
+            users = users.body._embedded.users;
+            this.updateMarkers(users);
+          }
+          else{
+            this.$message.error('Oops, could not retrieve the Users!');
+          }
+        },
       async updateMarkers(users){
         var i;
         for (i in users) {
-          // console.log(this.markersMap.indexOf(users[i].nickname));
           if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
             this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
             continue;
           }
 
           this.markersMap[users[i].nickname] = {
-            marker: new google.maps.Marker({
+            marker: new google.maps.Marker({ //We create a new marker
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
               //user's nickname is updated -> customized marker should be implemented
@@ -89,10 +94,29 @@
       async userCoordToLatLng(user){
         return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
       },
-
       shareMeetup() {
+        this.shareButtonDialog = false;
+
+        let app = this;
         let hash = this.meetupId;
-        // todo
+        var shareInput = document.querySelector('#share-url > input');
+
+        try {
+          shareInput.select();
+          document.execCommand('copy');
+        }catch(err) {
+          this.$message({
+            type: 'info',
+            message: 'copy error' + err
+          });
+
+          return;
+        }
+
+        this.$message({
+          type: 'success',
+          message: 'Copy successful'
+        });
       },
       async getMeetup() {
         this.meetupId = this.$route.params.id;
@@ -147,17 +171,20 @@
       }
     },
     mounted () {
+      this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
+
       let app = this;
       let twoMinutes = 2 * 60 * 1000;
       // let twoMinutes = 10000;
       this.updatingLocationInterval = setInterval(function() {
         app.updateMyLocation();
+        app.updateUsersOnMap();
       }, twoMinutes);
     },
   }
 </script>
 
-<style scoped>
+<style lang="scss" type="text/scss">
   #sharebtn {
     z-index: 1;
     position: absolute;
@@ -173,5 +200,15 @@
     background: #FFFFFF;
     box-shadow: 0 2px 8px 2px rgba(0,0,0,0.8);
     text-align: center;
+  }
+
+  .dialog-share-button {
+    .el-dialog__header {
+      display: none;
+    }
+
+    .el-dialog__body {
+      padding: 0;
+    }
   }
 </style>

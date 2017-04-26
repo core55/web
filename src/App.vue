@@ -12,16 +12,21 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" type="text/scss">
+  html {
+    height: 100%;
+  }
+
   body {
     margin: 0;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   #app {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 100%;
+    display: flex;
   }
 </style>
