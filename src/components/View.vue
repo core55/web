@@ -2,14 +2,10 @@
   <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
-
     <el-dialog class="dialog-share-button" top="46%" v-model="shareButtonDialog" size="small" >
-
-
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
       </el-input>
-
     </el-dialog>
   </section>
 </template>
@@ -135,7 +131,6 @@
             type: 'info',
             message: 'copy error' + err
           });
-
           return;
         }
 
@@ -154,6 +149,7 @@
         if (this.updatingLocation) {
           return true;
         }
+
         let position = await Api.getMyLocation();
         let response = await Api.updateUserLocation(this.user, {
           lastLatitude: position.lat,
@@ -231,10 +227,6 @@
   body .v-modal{
     background:rgba(62,171,58,0.30);
   }
-
-
-
-
   .dialog-share-button {
     .el-dialog{
       margin-bottom: 0;
@@ -244,30 +236,22 @@
         background:rgba(62,171,58,0.30);
       }
     }
-
     .el-input__inner{
-
       text-decoration: underline;
       font-size: 18px;
       color: #4990E2 ;
       letter-spacing: 0;
       box-shadow:inset 0 0 3px 2px rgba(0,0,0,0.50);
       border:0px;
-
       background: #FFFFFF ;
       box-shadow: inset 0 0 3px 2px rgba(0,0,0,0.50);
       border-radius: 100px;
       width:122%;
       padding:30px 10px;
-
       @media (max-width: 732px) {
         width:132%;
       }
-
-
     }
-
-
     .el-button{
       padding:21px 24px;
     }
@@ -278,7 +262,6 @@
       max-width: 495px;
       min-width: 360px;
     }
-
     .el-input-group--append .el-input__inner, .el-input-group__prepend{
       border-radius: 100px;
     }
@@ -300,7 +283,6 @@
     .el-dialog__header {
       display: none;
     }
-
     .el-dialog__body {
       padding: 0;
     }
