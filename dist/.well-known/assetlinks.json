@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.core55.joinup",
+    "sha256_cert_fingerprints":
+    ["D2:76:A3:3C:4C:05:87:BF:3B:13:B5:4D:70:E0:05:17:D9:64:23:AE:F2:BB:5F:95:5C:84:57:C8:2C:31:56:A0"]
+  }
+}]
