@@ -22,6 +22,7 @@
 <script>
   import GoogleMap from './GoogleMap';
   import Api from '../api';
+  import Helper from '../helper';
   import router from '../router';
 
   export default {
@@ -110,20 +111,7 @@
           }
         },
       async updateMarkers(users){
-        var i;
-        function getInitials(nickname) {
-            if (nickname) {
-              var trimmed = nickname.trim().split(' ');
-              for (i = 0; i < trimmed.length; i++) {
-                trimmed[i] = trimmed[i].charAt(0);
-              }
-              return trimmed.join(' ');
-            } else {
-              return 'XX'; //Should be some Default value in case there is no nickname
-            }
-        };
-
-        for (i in users) {
+        for (var i in users) {
           if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
             this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
             continue;
@@ -134,7 +122,7 @@
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
               //user's nickname is updated -> customized marker should be implemented
-              lable: getInitials(users[i].nickname),
+              label: Helper.getInitials(users[i].nickname),
               title: users[i].nickname,
             })
           }
