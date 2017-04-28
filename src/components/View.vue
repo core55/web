@@ -82,14 +82,17 @@
           disableDefaultUI: true
         });
 
-        app.pinmarker = new google.maps.Marker({
-          draggable : true,
-          position: {lat: app.meetup.pinLatitude, lng:app.meetup.pinLongitude},
-          map: app.map
-        });
-        google.maps.event.addListener(app.pinmarker,'dragend',function(event) {
+        if (this.meetup.pinLatitude && this.meetup.pinLongitude) {
+          app.pinmarker = new google.maps.Marker({
+            draggable : true,
+            position: {lat: app.meetup.pinLatitude, lng:app.meetup.pinLongitude},
+            map: app.map
+          });
+
+          google.maps.event.addListener(app.pinmarker,'dragend',function(event) {
             app.pinmarker.setPosition(event.latLng);
-        });
+          });
+        }
 
         this.loading = false;
         this.joinEvent();
