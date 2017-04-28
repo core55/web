@@ -2,11 +2,20 @@
   <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
-    <el-dialog class="dialog-share-button" top="46%" v-model="shareButtonDialog" size="small" >
+
+    <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
       </el-input>
     </el-dialog>
+
+    <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="NicknameDialog":close-on-click-modal="false" size="small" >
+      <el-input id="enter-name" v-model="nickname" placeholder="Type your name" size="large">
+        <el-button type="info" slot="append"  @click="nicknameinput">Enter</el-button>
+      </el-input>
+    </el-dialog>
+
+
   </section>
 </template>
 
@@ -34,10 +43,24 @@
         updatingLocationInterval: null,
         shareButtonDialog: false,
         shareUrl:   '',
-        pinmarker: null
+        nickname:   '',
+        pinmarker: null,
+        NicknameDialog:false
       }
     },
     methods: {
+      async nicknameinput(){
+
+        let response = await Api.updateUsersNickname(this.user,this.nickname);
+        if (response.ok == false) {
+          this.$message.error('Oops, Nickname can not been set!');
+          return;
+        };
+
+        this.user = response.body;
+        localStorage.setItem('user', JSON.stringify(this.user));
+        this.NicknameDialog=false;
+      },
       async initMap() {
         let app = this;
         let response = await this.getMeetup();
@@ -67,9 +90,13 @@
             app.pinmarker.setPosition(event.latLng);
         });
 
-
         this.loading = false;
         this.joinEvent();
+
+        if(app.user.nickname==null){
+         this.NicknameDialog =true;
+        }
+
         this.updateUsersOnMap();
       },
         async updateUsersOnMap(){
@@ -223,11 +250,11 @@
     box-shadow: 0 2px 8px 2px rgba(0,0,0,0.8);
     text-align: center;
   }
-
+//share botton
   body .v-modal{
     background:rgba(62,171,58,0.30);
   }
-  .dialog-share-button {
+  .app-dialog {
     .el-dialog{
       margin-bottom: 0;
       background:#3EAB3A;
@@ -286,5 +313,17 @@
     .el-dialog__body {
       padding: 0;
     }
+
+    //nickname box
+    &.app-dialog-nickname{
+      .el-input__inner {
+        text-decoration: none;
+        font-size: 18px;
+        color: #000;
+      }
+    }
+
   }
+
 </style>
+    
