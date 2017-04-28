@@ -51,7 +51,6 @@
     },
     methods: {
       async nicknameinput(){
-
         let response = await Api.updateUsersNickname(this.user,this.nickname);
         if (response.ok == false) {
           this.$message.error('Oops, Nickname can not been set!');
@@ -86,6 +85,7 @@
           app.pinmarker = new google.maps.Marker({
             draggable : true,
             position: {lat: app.meetup.pinLatitude, lng:app.meetup.pinLongitude},
+            label: 'Meetup',
             map: app.map
           });
 
@@ -97,7 +97,7 @@
         this.loading = false;
         this.joinEvent();
 
-        if(app.user.nickname==null){
+        if(!app.user || app.user.nickname==null){
          this.NicknameDialog =true;
         }
 
