@@ -294,7 +294,7 @@
       this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
 
       let app = this;
-      let twoMinutes = 2 * 60 * 100;
+      let twoMinutes = 2 * 60 * 1000;
       // let twoMinutes = 10000;
       this.updatingLocationInterval = setInterval(function() {
         app.updateMyLocation();
