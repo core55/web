@@ -25,6 +25,12 @@
   import Helper from '../helper';
   import router from '../router';
 
+  // Importing the MeetUp Pin files (.svg) from the assets folder
+  import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
+  import Anonymous_Pin from '../assets/Anonymous_Pin.svg';       // Anonymouse Pin
+  import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
+  import User_Pin from '../assets/User_Pin.svg';              // The location of other users
+
   export default {
     name: 'view',
     components: {
@@ -85,7 +91,7 @@
           app.pinmarker = new google.maps.Marker({
             draggable : true,
             position: {lat: app.meetup.pinLatitude, lng:app.meetup.pinLongitude},
-            label: 'Meetup',
+            icon: MeetingPoint_Pin,
             map: app.map
           });
 
@@ -151,10 +157,21 @@
             continue;
           }
 
+          var pin = User_Pin;
+
+          // Selects appropiate Pin to Display (Onself, Anonymous User or User with Nickname)
+          if(this.user.id == users[i].id) {
+              pin = You_Pin;
+            } else if (users[i].nickname == null){
+              pin = Anonymous_Pin;
+            }
+
+
           this.markersMap[users[i].id] = {
             marker: new google.maps.Marker({ //We create a new marker
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
+              icon: pin,
               //user's nickname is updated -> customized marker should be implemented
               label: Helper.getInitials(users[i].nickname),
               title: users[i].nickname

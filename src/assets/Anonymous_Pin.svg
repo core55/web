@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="61px" viewBox="0 0 50 61" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>Anonymous_Pin</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Anonymous_Pin">
+            <g id="Anon">
+                <g id="Pin">
+                    <path d="M16.3944552,48.4794504 L25,61.71875 L33.6055448,48.4794504 C43.1730251,44.9718052 50,35.7831653 50,25 C50,11.1928813 38.8071187,0 25,0 C11.1928813,0 0,11.1928813 0,25 C0,35.7831653 6.82697486,44.9718052 16.3944552,48.4794504 Z" id="Combined-Shape" fill="#000000"></path>
+                    <circle id="Oval-6" fill="#FFFFFF" cx="25" cy="25" r="23.4375"></circle>
+                </g>
+                <g id="Anonymous" transform="translate(8.593750, 7.031250)" fill="#000000">
+                    <path d="M0.504113551,35.1862944 C3.11643817,28.7542363 9.42699679,24.21875 16.796875,24.21875 C23.9624822,24.21875 30.1266784,28.5063004 32.8639518,34.6558894 C28.6320064,38.8300089 22.8199849,41.40625 16.40625,41.40625 C10.2687746,41.40625 4.68229354,39.0471626 0.504113551,35.1862944 Z" id="Combined-Shape"></path>
+                    <circle id="Oval-7" cx="16.796875" cy="10.546875" r="10.546875"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

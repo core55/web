@@ -15,9 +15,9 @@ import Api from '../api';
 import router from '../router';
 import * as marker from "vue";
 
-// MeetUp Pin files (.svg) 
-import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg';
-import You_Pin from '../assets/You_Pin.svg';
+// Importing the MeetUp Pin files (.svg) from the assets folder
+import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
+import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
 
 export default {
   name: 'create',
