@@ -30,7 +30,6 @@ export default class Helper {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
 
-
     for (var i in currentUsers) {
       var userId = currentUsers[i];
       var marker = currentMarkers[userId].marker;
@@ -38,52 +37,75 @@ export default class Helper {
       var tagId = "#" + marker.title; //get string representation
       var userTag = document.querySelector(tagId);
 
-      if (!bounds.contains(position)) {
-        //tagShow.Show = true;
-        userTag.style.display = 'initial';
+      if (userTag) {
 
-        var xIntercept;
-        var yIntercept;
+        if (!bounds.contains(position)) {
+          //tagShow.Show = true;
+          userTag.style.display = 'initial';
 
-        //calculate slope and useful values
-        var mat = this.findDeltas(map, marker);
+          var xIntercept;
+          var yIntercept;
 
-        if (mat[1] > 0) { //pin is above view
-          userTag.style.top = 0 + "px";
-          xIntercept = (mappy.clientHeight/2) / mat[2];
-        } else { //pin is below view
-          userTag.style.top = mappy.clientHeight - userTag.offsetHeight + "px";
-          xIntercept = (-mappy.clientHeight/2) / mat[2];
+          //calculate slope and useful values
+          var mat = this.findDeltas(map, marker);
+
+          if (mat[1] > 0) { //pin is above view
+            userTag.style.top = 0 + "px";
+            xIntercept = (mappy.clientHeight/2) / mat[2];
+          } else { //pin is below view
+            userTag.style.top = mappy.clientHeight - userTag.offsetHeight + "px";
+            xIntercept = (-mappy.clientHeight/2) / mat[2];
+          }
+
+          //Adjust pin properly for screen
+          xIntercept = xIntercept / 2;
+          xIntercept += mappy.clientWidth / 2; //align with browser window
+          xIntercept -= userTag.clientWidth / 2;
+
+          if (xIntercept < 0) { //pin is on left
+            xIntercept = 0;
+            yIntercept = (mappy.clientWidth) * mat[2];
+
+            //Adjust pin for proper display
+            yIntercept += mappy.clientHeight / 2;
+            yIntercept -= userTag.clientHeight / 2;
+
+            if (yIntercept < 0) yIntercept = 0;
+            if (yIntercept > mappy.clientHeight - userTag.offsetHeight) yIntercept = mappy.clientHeight - userTag.offsetHeight;
+
+            if (yIntercept) userTag.style.top = yIntercept + "px";
+
+          } else if (xIntercept > mappy.clientWidth - userTag.offsetWidth) {
+            xIntercept = mappy.clientWidth - userTag.offsetWidth;
+            yIntercept = -mappy.clientWidth * mat[2];
+
+            //Adjust pin for proper display
+            yIntercept += mappy.clientHeight / 2;
+            yIntercept -= userTag.clientHeight / 2;
+
+            if (yIntercept < 0) yIntercept = 0;
+            if (yIntercept > mappy.clientHeight - userTag.offsetHeight) yIntercept = mappy.clientHeight - userTag.offsetHeight;
+
+            if (yIntercept) userTag.style.top = yIntercept + "px";
+          }
+
+
+          userTag.style.left = xIntercept + "px";
+
+        } else {
+          userTag.style.display = 'none';
+
+          // console.log("USER TAG IS: " + userTag);
+          // console.log("USER ID IS : " + userId);
+          // console.log("VAR I IS : " + i);
+          //tagShow.Show = false;
         }
 
-        //Adjust pin properly for screen
-        xIntercept = xIntercept / 2;
-        xIntercept += mappy.clientWidth / 2; //align with browser window
-        xIntercept -= userTag.clientWidth / 2;
 
-        if (xIntercept < 0) { //pin is on left
-          xIntercept = 0;
-          yIntercept = (mappy.clientWidth) * mat[2];
 
-        } else if (xIntercept > mappy.clientWidth - userTag.offsetWidth) {
-          xIntercept = mappy.clientWidth - userTag.offsetWidth;
-          yIntercept = -mappy.clientWidth * mat[2];
-        }
-        //Adjust pin for proper display
-        yIntercept += mappy.clientHeight / 2;
-        yIntercept -= userTag.clientHeight / 2;
-
-        if (yIntercept < 0) yIntercept = 0;
-        if (yIntercept > mappy.clientHeight - userTag.offsetHeight) yIntercept = mappy.clientHeight - userTag.offsetHeight;
-
-        if (yIntercept) userTag.style.top = yIntercept + "px";
-
-        userTag.style.left = xIntercept + "px";
-
-      } else {
-        userTag.style.display = 'none';
-        //tagShow.Show = false;
       }
+
+
     }
   }
 }
