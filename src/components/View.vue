@@ -3,6 +3,12 @@
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
+
+    <el-tag id="ok" key="title" color="red" class="tag">ok</el-tag>
+
+    <el-tag v-for="marker in markersMap" v-bind:id="marker.title" v-show="marker.show" :key="marker.title" v-bind:color = "marker.color" class="tag">{{ marker.title }}</el-tag>
+
+
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
@@ -102,6 +108,10 @@
         }
 
         this.updateUsersOnMap();
+
+        google.maps.event.addListener(app.map, 'bounds_changed', function() {
+          Helper.trackUsers(app.map, document, app.markersMap)
+        });
       },
       async updateUsersOnMap(){
           let users = await Api.getMeetupUsers(this.meetupId);
