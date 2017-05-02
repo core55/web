@@ -15,7 +15,6 @@ export default class Helper {
   static findDeltas(map, pin) {
     var latCenter = map.getBounds().getCenter().lat();
     var lngCenter = map.getBounds().getCenter().lng();
-
     var latPin = pin.getPosition().lat();
     var lngPin = pin.getPosition().lng();
     var deltaLng = lngPin - lngCenter;
@@ -34,13 +33,10 @@ export default class Helper {
       var userId = currentUsers[i];
       var marker = currentMarkers[userId].marker;
       var position = marker.getPosition();
-      var tagId = "#" + marker.title; //get string representation
-      var userTag = document.querySelector(tagId);
+      var userTag = document.getElementById(userId);
 
       if (userTag) {
-
         if (!bounds.contains(position)) {
-          //tagShow.Show = true;
           userTag.style.display = 'initial';
 
           var xIntercept;
@@ -88,24 +84,12 @@ export default class Helper {
 
             if (yIntercept) userTag.style.top = yIntercept + "px";
           }
-
-
           userTag.style.left = xIntercept + "px";
 
         } else {
           userTag.style.display = 'none';
-
-          // console.log("USER TAG IS: " + userTag);
-          // console.log("USER ID IS : " + userId);
-          // console.log("VAR I IS : " + i);
-          //tagShow.Show = false;
         }
-
-
-
       }
-
-
     }
   }
 }
