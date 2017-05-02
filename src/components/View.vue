@@ -3,11 +3,7 @@
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
-
-    <!--<el-tag v-for="userId in currentUsers" v-bind:id="userId" v-show="marker.show" :key="marker.title" v-bind:color = "marker.color" class="tag">{{ marker.title }}</el-tag>-->
-
     <el-tag v-for="userId in currentUsers" v-bind:id="userId" :key="userId" class="tag">{{ markersMap[userId].marker.title }}</el-tag>
-
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
@@ -116,7 +112,6 @@
         this.updateUsersOnMap();
 
         google.maps.event.addListener(app.map, 'bounds_changed', function() {
-//          console.log("USERS : " + app.currentUsers);
           Helper.trackUsers(app.map, document, app.markersMap, app.currentUsers);
         });
       },
@@ -299,7 +294,7 @@
       this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
 
       let app = this;
-      let twoMinutes = 2 * 60 * 1000;
+      let twoMinutes = 2 * 60 * 100;
       // let twoMinutes = 10000;
       this.updatingLocationInterval = setInterval(function() {
         app.updateMyLocation();
