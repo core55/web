@@ -103,7 +103,7 @@
 
         this.updateUsersOnMap();
       },
-        async updateUsersOnMap(){
+      async updateUsersOnMap(){
           let users = await Api.getMeetupUsers(this.meetupId);
           if (users.ok ==true) {
             users = users.body._embedded.users;
@@ -113,24 +113,58 @@
             this.$message.error('Oops, could not retrieve the Users!');
           }
         },
-      async updateMarkers(users){
+
+      //check each user if user's location has changed since last update
+      //update user's location marker according to the geolocation update
+      smooth () {
+        var app = this;
+        var users = this.markersMap;
+        var done = true;
+
         for (var i in users) {
-          if (this.markersMap.indexOf(users[i].nickname) != -1) { //the marker for that user exists already
-            this.markersMap[users[i].nickname].setPosition({lat: users[i].lastLatitude, lng: users[i].lastLongitude});
+          if (!users[i].moveTo || users[i].moveTo.length == 0) {
             continue;
           }
 
-          this.markersMap[users[i].nickname] = {
+          var update = users[i].moveTo.shift();
+          done = false;
+          users[i].marker.setPosition({lat: update.lat, lng: update.lng});
+        }
+
+        if (done == false) {
+          requestAnimationFrame(app.smooth);
+        }
+      },
+
+      async updateMarkers(users){
+        var app = this;
+        for (var i in users) {
+
+          var index = this.markersMap.findIndex(function(item) {
+            if (!item) {return false;}
+            return item.id === users[i].id;
+          });
+
+          if (index != -1) { //the marker for that user exists already
+            this.moveMarkerSmoothly(this.markersMap[users[i].id], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
+            window.requestAnimationFrame(app.smooth);
+            continue;
+          }
+
+          this.markersMap[users[i].id] = {
             marker: new google.maps.Marker({ //We create a new marker
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
               //user's nickname is updated -> customized marker should be implemented
               label: Helper.getInitials(users[i].nickname),
-              title: users[i].nickname,
-            })
+              title: users[i].nickname
+            }),
+            nickname: users[i].nickname,
+            id: users[i].id
           }
         }
       },
+
       async userCoordToLatLng(user){
         return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
       },
@@ -208,7 +242,28 @@
           this.user = response.body;
           localStorage.setItem('user', JSON.stringify(this.user));
         }
-      }
+      },
+
+      //collect user's change of location
+      //calculate steps in order to move marker smoothly
+      async moveMarkerSmoothly(user, location){
+        var previousLocation = user.marker.getPosition();
+        var t = 1000;
+
+        var deltaLat = location.lat - previousLocation.lat();
+        var deltaLng = location.lng - previousLocation.lng();
+
+        var startingLat = previousLocation.lat();
+        var startingLng = previousLocation.lng();
+
+        user.moveTo = [];
+
+        for (var i = 0; i < t; i++) {
+          startingLat += deltaLat / t;
+          startingLng += deltaLng / t;
+          user.moveTo[i] = {lat: startingLat, lng: startingLng};
+        }
+      },
     },
     mounted () {
       this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
