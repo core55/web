@@ -34,8 +34,8 @@ export default class Helper {
       var userId = currentUsers[i];
       var marker = currentMarkers[userId].marker;
       var position = marker.getPosition();
-      var tagId = "#" + marker.title; //get string representation
-      var userTag = document.querySelector(tagId);
+      //var tagId = "#" + userId; //get string representation
+      var userTag = document.getElementById(userId); //document.querySelector(tagId);
 
       if (userTag) {
 

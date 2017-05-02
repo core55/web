@@ -6,7 +6,7 @@
 
     <!--<el-tag v-for="userId in currentUsers" v-bind:id="userId" v-show="marker.show" :key="marker.title" v-bind:color = "marker.color" class="tag">{{ marker.title }}</el-tag>-->
 
-    <el-tag v-for="userId in currentUsers" v-bind:id="markersMap[userId].marker.title" :key="userId" class="tag">{{ markersMap[userId].marker.title }}</el-tag>
+    <el-tag v-for="userId in currentUsers" v-bind:id="userId" :key="userId" class="tag">{{ markersMap[userId].marker.title }}</el-tag>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
@@ -313,6 +313,7 @@
 
   .tag {
     position: absolute;
+    display: none;
   }
 
   #sharebtn {
