@@ -15,6 +15,10 @@ import Api from '../api';
 import router from '../router';
 import * as marker from "vue";
 
+// Importing the MeetUp Pin files (.svg) from the assets folder
+import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
+import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
+
 export default {
   name: 'create',
   components: {
@@ -32,6 +36,7 @@ export default {
     async initMap () {
       let app = this;
       var infoWindow = null;
+      var myPositionPin = null;
 
       this.pos = await Api.getMyLocation();
 
@@ -62,7 +67,8 @@ export default {
         app.marker = new google.maps.Marker({
           draggable : true,
           position: {lat: event.latLng.lat(), lng:event.latLng.lng()},
-          map: app.map
+          map: app.map,
+          icon: MeetingPoint_Pin
         });
 
         google.maps.event.addListener(app.marker,'dragend',function(event) {
@@ -71,6 +77,14 @@ export default {
 
       });
 
+      // Get Pin of your own positon (test)
+      myPositionPin = new google.maps.Marker({
+          draggable : false,
+          position: this.pos,
+          map: app.map,
+          icon: You_Pin,
+          offset: '0%'
+      })
 
     },
     initSearchBox() {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="79px" viewBox="0 0 64 79" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>MeetingPoint_Pin</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="MeetingPoint_Pin">
+            <g id="Meeting">
+                <g id="Pin" fill="#000000">
+                    <path d="M20.9849027,62.0536965 C8.73852782,57.5639107 0,45.8024516 0,32 C0,14.326888 14.326888,0 32,0 C49.673112,0 64,14.326888 64,32 C64,45.8024516 55.2614722,57.5639107 43.0150973,62.0536965 L32,79 L20.9849027,62.0536965 Z M32,62 C48.5685425,62 62,48.5685425 62,32 C62,15.4314575 48.5685425,2 32,2 C15.4314575,2 2,15.4314575 2,32 C2,48.5685425 15.4314575,62 32,62 Z" id="Combined-Shape"></path>
+                </g>
+                <circle id="Oval-6" fill-opacity="0.419299139" fill="#FFFFFF" cx="32" cy="32" r="30"></circle>
+                <text id="Meetup" font-family="Arial-BoldMT, Arial" font-size="15" font-weight="bold" fill="#000000">
+                    <tspan x="6.25" y="37">Meetup</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
