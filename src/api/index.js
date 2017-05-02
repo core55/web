@@ -71,4 +71,9 @@ export default class Api {
     });
   }
 
+  static letsLogin(payload){
+    return Vue.http.post(process.env.API_URL + 'login', payload);
+  }
+
+
 }
