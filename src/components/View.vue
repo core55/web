@@ -164,12 +164,15 @@
           }
 
           var pin = User_Pin;
+          var label = Helper.getInitials(users[i].nickname);
 
           // Selects appropiate Pin to Display (Onself, Anonymous User or User with Nickname)
           if(this.user && this.user.id == users[i].id) {
             pin = You_Pin;
+            label = null;
           } else if (users[i].nickname == null){
             pin = Anonymous_Pin;
+            label = null;
           }
 
           this.markersMap[users[i].id] = {
@@ -178,7 +181,7 @@
               map: this.map,
               icon: pin,
               //user's nickname is updated -> customized marker should be implemented
-              label: Helper.getInitials(users[i].nickname),
+              label: label,
               title: users[i].nickname
             }),
             nickname: users[i].nickname,
