@@ -114,6 +114,7 @@
 
         this.updateUsersOnMap();
 
+        //Listener to track when window view changes and update user location indicators accordingly
         google.maps.event.addListener(app.map, 'bounds_changed', function() {
           Helper.trackUsers(app.map, document, app.markersMap, app.currentUsers);
         });
@@ -309,7 +310,7 @@
 
 <style lang="scss" type="text/scss">
 
-  //user location indicator
+  //user location indicator styling
   .tag {
     position: absolute;
   }
