@@ -3,7 +3,7 @@
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
-    <el-tag v-for="userId in currentUsers" v-bind:id="userId" :key="userId" class="tag">{{ markersMap[userId].marker.title }}</el-tag>
+    <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
@@ -186,7 +186,9 @@
             id: users[i].id
           }
           //Add ids to list of current users
-          app.currentUsers.push(users[i].id);
+
+          //app.currentUsers.push(users[i].id);
+          app.currentUsers.push({id: users[i].id, show: false});
         }
       },
 
@@ -308,7 +310,6 @@
 
   .tag {
     position: absolute;
-    display: none;
   }
 
   #sharebtn {

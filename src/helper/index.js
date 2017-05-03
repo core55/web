@@ -30,7 +30,8 @@ export default class Helper {
     var mappy = document.getElementById('map');
 
     for (var i in currentUsers) {
-      var userId = currentUsers[i];
+      var user = currentUsers[i];
+      var userId = user.id; //currentUsers[i];
       var marker = currentMarkers[userId].marker;
       var position = marker.getPosition();
       var userTag = document.getElementById(userId);
