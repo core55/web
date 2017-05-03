@@ -3,7 +3,10 @@
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
-    <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
+    <transition-group name="fade">
+      <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
+    </transition-group>
+
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
@@ -185,9 +188,7 @@
             nickname: users[i].nickname,
             id: users[i].id
           }
-          //Add ids to list of current users
-
-          //app.currentUsers.push(users[i].id);
+          //Add user information object to currentUsers
           app.currentUsers.push({id: users[i].id, show: false});
         }
       },
@@ -308,8 +309,15 @@
 
 <style lang="scss" type="text/scss">
 
+  //user location indicator
   .tag {
     position: absolute;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.6s
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0
   }
 
   #sharebtn {
