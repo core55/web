@@ -139,7 +139,6 @@ export default {
         params['pinLatitude'] = markerPosition.lat();
       }
 
-      console.log(marker);
       let response = await Api.createMeetup(params);
 
       app.loading = false;

@@ -68,6 +68,7 @@
         this.user = response.body;
         localStorage.setItem('user', JSON.stringify(this.user));
         this.NicknameDialog=false;
+        this.updateUsersOnMap();
       },
       async initMap() {
         let app = this;
@@ -296,8 +297,8 @@
       this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
 
       let app = this;
-      let twoMinutes = 2 * 60 * 1000;
-      // let twoMinutes = 10000;
+      // let twoMinutes = 2 * 60 * 1000;
+      let twoMinutes = 30 * 1000;
       this.updatingLocationInterval = setInterval(function() {
         app.updateMyLocation();
         app.updateUsersOnMap();
