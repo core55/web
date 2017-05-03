@@ -166,12 +166,11 @@
           var pin = User_Pin;
 
           // Selects appropiate Pin to Display (Onself, Anonymous User or User with Nickname)
-          if(this.user.id == users[i].id) {
-              pin = You_Pin;
-            } else if (users[i].nickname == null){
-              pin = Anonymous_Pin;
-            }
-
+          if(this.user && this.user.id == users[i].id) {
+            pin = You_Pin;
+          } else if (users[i].nickname == null){
+            pin = Anonymous_Pin;
+          }
 
           this.markersMap[users[i].id] = {
             marker: new google.maps.Marker({ //We create a new marker
