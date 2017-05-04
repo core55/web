@@ -342,7 +342,7 @@
   }
 
   body .v-modal{
-    background-color: rgba(88, 183, 255, 0.1);
+    background-color: rgba(50, 64, 87, 0.6);
   }
 
   .app-dialog {
