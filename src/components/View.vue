@@ -20,6 +20,11 @@
       </el-dialog>
     </div>
 
+    <div id="locationsw">
+    <el-switch v-model="button" on-color="#13ce66" off-color="#ff4949">
+    </el-switch>
+    </div>
+
 
   </section>
 </template>
@@ -58,7 +63,8 @@
         shareUrl:   '',
         nickname:   '',
         pinmarker: null,
-        NicknameDialog:false
+        NicknameDialog:false,
+        button:true
       }
     },
     methods: {
@@ -252,9 +258,14 @@
         return meetup;
       },
       async updateMyLocation() {
-        if (this.updatingLocation) {
-          return true;
+        if(!this.button){
+         return;
         }
+        if (this.updatingLocation) {
+          return;
+        }
+
+        this.updatingLocation = true;
 
         let position = await Api.getMyLocation();
         let response = await Api.updateUserLocation(this.user, {
@@ -346,6 +357,13 @@
     opacity: 0
   }
 
+#locationsw{
+  z-index: 1;
+  position: absolute;
+  right: 24px;
+  bottom: 150px;
+  padding: 0px 0px 0px 0px;
+}
   #sharebtn {
     z-index: 1;
     position: absolute;
