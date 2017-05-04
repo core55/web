@@ -6,7 +6,11 @@ Vue.use(VueResource);
 
 export default class Api {
   static getMeetup (id) {
-    return Vue.http.get(process.env.API_URL + 'meetups/' + id);
+    return Vue.http.get(process.env.API_URL + 'meetups/' + id).then(function(response) {
+      return response;
+    }, function(error) {
+      return error;
+    });
   }
 
   static createMeetup (params) {

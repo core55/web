@@ -80,6 +80,7 @@
 
         if (response.ok == false) {
           this.$message.error('Oops, could not retrieve the Meetup!');
+          router.push({name: 'NotFound'});
           return;
         }
 
