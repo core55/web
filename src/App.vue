@@ -29,4 +29,16 @@ export default {
   #app {
     display: flex;
   }
+
+  html {
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+    -webkit-margin-before: 0;
+  }
 </style>
