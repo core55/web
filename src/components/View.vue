@@ -8,7 +8,10 @@
     </transition-group>
 
     <el-table v-if="showUsers" :data="currentUsers" border style="width: 100%">
-      <el-table-column label="Active Users" prop="id">
+      <el-table-column label="Active Users">
+        <template scope="scope">
+          <el-tag>{{ scope.row.id }}</el-tag>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -38,11 +41,13 @@
   import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
   import Anonymous_Pin from '../assets/Anonymous_Pin.svg';       // Anonymouse Pin
   import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
-  import User_Pin from '../assets/User_Pin.svg';              // The location of other users
+  import User_Pin from '../assets/User_Pin.svg';
+  import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";              // The location of other users
 
   export default {
     name: 'view',
     components: {
+      ElTag,
       'google-map': GoogleMap
     },
     data () {
