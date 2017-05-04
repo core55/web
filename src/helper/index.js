@@ -12,6 +12,10 @@ export default class Helper {
     return trimmed.join('');
   }
 
+  /*
+    Helper method to find vector and slope between
+    a map and a pin on the map.
+   */
   static findDeltas(map, pin) {
     var latCenter = map.getBounds().getCenter().lat();
     var lngCenter = map.getBounds().getCenter().lng();
@@ -24,20 +28,27 @@ export default class Helper {
     return [deltaLng, deltaLat, slope];
   }
 
-
-  static trackUsers(map ,document, currentMarkers, currentUsers) {
+  /*
+    Method to calculate and update position of users' location indicator tags
+    @param map - a google map object
+    @param document - a reference to the html document
+    @currentMarkers - an array of google map markers currently on map
+    @currentUsers - an array of user information objects
+   */
+  static trackUsers(map, document, currentMarkers, currentUsers) {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
 
     for (var i in currentUsers) {
-      var userId = currentUsers[i];
+      var user = currentUsers[i];
+      var userId = user.id; //currentUsers[i];
       var marker = currentMarkers[userId].marker;
       var position = marker.getPosition();
       var userTag = document.getElementById(userId);
 
       if (userTag) {
         if (!bounds.contains(position)) {
-          userTag.style.display = 'initial';
+          user.show = true;
 
           var xIntercept;
           var yIntercept;
@@ -53,16 +64,15 @@ export default class Helper {
             xIntercept = (-mappy.clientHeight/2) / mat[2];
           }
 
-          //Adjust pin properly for screen
+          //Adjust pin properly for screen and align with browser window
           xIntercept = xIntercept / 2;
-          xIntercept += mappy.clientWidth / 2; //align with browser window
+          xIntercept += mappy.clientWidth / 2;
           xIntercept -= userTag.clientWidth / 2;
 
           if (xIntercept < 0) { //pin is on left
             xIntercept = 0;
             yIntercept = (mappy.clientWidth) * mat[2];
 
-            //Adjust pin for proper display
             yIntercept += mappy.clientHeight / 2;
             yIntercept -= userTag.clientHeight / 2;
 
@@ -87,7 +97,7 @@ export default class Helper {
           userTag.style.left = xIntercept + "px";
 
         } else {
-          userTag.style.display = 'none';
+          user.show = false;
         }
       }
     }
