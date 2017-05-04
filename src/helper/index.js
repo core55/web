@@ -9,7 +9,8 @@ export default class Helper {
       trimmed[i] = trimmed[i].charAt(0);
     }
 
-    return trimmed.join('');
+    let result = trimmed.join('');
+    return result.toUpperCase();
   }
 
   /*
