@@ -1,0 +1,32 @@
+//
+// CONFIG
+//
+
+@import "config/mixin";
+@import "config/color";
+@import "config/breakpoint";
+
+//
+// MAIN
+//
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  -webkit-margin-before: 0;
+}
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

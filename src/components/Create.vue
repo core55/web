@@ -4,8 +4,7 @@
     <el-button size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box">
 
-    <div id="outcircle" class='outer-circle'></div>
-    <div id="incircle" class='inner-circle'></div>
+    <div class='area-indicator'></div>
   </section>
 </template>
 
@@ -218,29 +217,16 @@ export default {
     width: 345px;
   }
 
-  .outer-circle {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    border-style:solid;
-    margin: -25px 0 0 -25px;
-
-  }
-
-  .inner-circle {
-    width: 5px;
-    height: 5px;
-    border-style:solid;
-    background: black;
+  .area-indicator {
+    height: 450px;
+    width: 450px;
     border-radius: 50%;
     position: fixed;
     top: 50%;
     left: 50%;
-    margin: -2px 0 0 -2px;
+    margin: -225px 0 0 -225px;
+    border: 3px solid #58B7FF;
+    background-color: rgba(88, 183, 255, 0.2);
+    pointer-events: none;
   }
-
 </style>

@@ -18,8 +18,6 @@
         <el-button type="info" slot="append"  @click="nicknameinput">Enter</el-button>
       </el-input>
     </el-dialog>
-
-
   </section>
 </template>
 
