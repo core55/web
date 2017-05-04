@@ -168,7 +168,7 @@ export default {
     border-color: white;
     /* Oval: */
     background: #FFFFFF;
-    box-shadow: 0 2px 8px 2px rgba(0,0,0,0.8);
+    box-shadow: none;
     text-align: center;
   }
 
@@ -180,7 +180,7 @@ export default {
     -moz-box-sizing: border-box;
     height: 32px;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
   }
 
   #pac-input {

@@ -337,31 +337,29 @@
     border-color: white;
     /* Oval: */
     background: #FFFFFF;
-    box-shadow: 0 2px 8px 2px rgba(0,0,0,0.8);
+    box-shadow:none;
     text-align: center;
   }
-//share botton
+
   body .v-modal{
-    background:rgba(62,171,58,0.30);
+    background-color: rgba(88, 183, 255, 0.1);
   }
+
   .app-dialog {
     .el-dialog{
       margin-bottom: 0;
       background:#3EAB3A;
-      box-shadow:0 0px 0px rgba(0,0,0,.3);
-      body .v-modal{
-        background:rgba(62,171,58,0.30);
-      }
+      box-shadow:none;
     }
     .el-input__inner{
       text-decoration: underline;
       font-size: 18px;
       color: #4990E2 ;
       letter-spacing: 0;
-      box-shadow:inset 0 0 3px 2px rgba(0,0,0,0.50);
+      box-shadow:none;
       border:0px;
       background: #FFFFFF ;
-      box-shadow: inset 0 0 3px 2px rgba(0,0,0,0.50);
+      box-shadow:none;
       border-radius: 100px;
       width:122%;
       padding:30px 10px;
@@ -394,7 +392,7 @@
       background-color:#1d90e6;
       color:#fff;
       background: #4990E2 ;
-      box-shadow: 0 0 0 0 rgba(0,0,0,0.50);
+      box-shadow:none;
       border-radius: 100px;
     }
     .el-dialog__header {
