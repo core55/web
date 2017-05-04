@@ -12,12 +12,15 @@
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
       </el-input>
     </el-dialog>
+    <div id="dialog"  @keyup.enter="nicknameinput">
+      <el-dialog class="app-dialog app-dialog-nickname" top="46%"  v-model="NicknameDialog":close-on-click-modal="false" :close-on-press-escape="false" size="small" >
+        <el-input id="enter-name" v-model="nickname" placeholder="Type your name" size="large" >
+          <el-button type="info" slot="append" @click="nicknameinput">Enter</el-button>
+        </el-input>
+      </el-dialog>
+    </div>
 
-    <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="NicknameDialog":close-on-click-modal="false" size="small" >
-      <el-input id="enter-name" v-model="nickname" placeholder="Type your name" size="large">
-        <el-button type="info" slot="append"  @click="nicknameinput">Enter</el-button>
-      </el-input>
-    </el-dialog>
+
   </section>
 </template>
 
@@ -192,6 +195,25 @@
             nickname: users[i].nickname,
             id: users[i].id
           }
+
+          //status listener
+          var infowindow = null;
+          let user = users[i];
+          app.markersMap[user.id].marker.addListener('click', function () {
+            if (infowindow) {
+              infowindow.close(),
+                infowindow=null
+            }
+            infowindow = new google.maps.InfoWindow({
+              content: 'User name: ' + user.nickname + '\r\n' + 'Status: ' + user.status,
+              position: {
+                lat: app.markersMap[user.id].marker.getPosition().lat(),
+                lng: app.markersMap[user.id].marker.getPosition().lng()
+              }
+            });
+            infowindow.open(app.map, app.markersMap[user.id].marker);
+          });
+
           //Add user information object to currentUsers
           app.currentUsers.push({id: users[i].id, show: false});
         }
