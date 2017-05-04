@@ -103,6 +103,7 @@
 
           google.maps.event.addListener(app.pinmarker,'dragend',function(event) {
             app.pinmarker.setPosition(event.latLng);
+            Api.updateMeetupPinLocation(app.meetupId, app.pinmarker);
           });
         }
 

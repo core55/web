@@ -13,6 +13,20 @@ export default class Api {
     return Vue.http.post(process.env.API_URL + 'meetups', params);
   }
 
+  static updateMeetup(meetup, params) {
+    return Vue.http.patch(process.env.API_URL + 'meetups/' + meetup, params);
+  }
+
+  static updateMeetupPinLocation(meetup, pin) {
+    if (!pin) { return false; }
+
+    let position = pin.getPosition();
+    return this.updateMeetup(meetup, {
+      'pinLongitude': position.lng(),
+      'pinLatitude': position.lat()
+    });
+  }
+
   static joinMeetup (meetup, user) {
     return Vue.http.post(process.env.API_URL + 'meetups/' + meetup + '/users/save', user);
   }
