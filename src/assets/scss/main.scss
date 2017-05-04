@@ -1,5 +1,5 @@
 //
-// CONFIG
+// Config
 //
 
 @import "config/mixin";
@@ -7,7 +7,7 @@
 @import "config/breakpoint";
 
 //
-// MAIN
+// Main
 //
 
 html {
@@ -30,3 +30,9 @@ body {
   margin: 0;
   padding: 0;
 }
+
+//
+//  Partials
+//
+
+@import "partial/map";

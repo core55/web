@@ -98,7 +98,8 @@
             lat: app.meetup.centerLatitude,
             lng: app.meetup.centerLongitude
           },
-          disableDefaultUI: true
+          disableDefaultUI: true,
+          styles: Helper.getGoogleMapStyles()
         });
 
         if (this.meetup.pinLatitude && this.meetup.pinLongitude) {
