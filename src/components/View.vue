@@ -335,11 +335,15 @@
 
       let app = this;
       // let twoMinutes = 2 * 60 * 1000;
-      let twoMinutes = 30 * 1000;
-      this.updatingLocationInterval = setInterval(function() {
-        app.updateMyLocation();
-        app.updateUsersOnMap();
-      }, twoMinutes);
+
+
+  let twoMinutes = 30 * 1000;
+  this.updatingLocationInterval = setInterval(function () {
+    app.updateMyLocation();
+    app.updateUsersOnMap();
+  }, twoMinutes);
+
+
     },
   }
 </script>
