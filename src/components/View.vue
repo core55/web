@@ -7,6 +7,11 @@
       <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
     </transition-group>
 
+    <el-table v-if="showUsers" :data="currentUsers" border style="width: 100%">
+      <el-table-column label="Active Users" prop="id">
+      </el-table-column>
+    </el-table>
+
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
@@ -57,7 +62,8 @@
         shareUrl:   '',
         nickname:   '',
         pinmarker: null,
-        NicknameDialog:false
+        NicknameDialog:false,
+        showUsers: false
       }
     },
     methods: {
@@ -120,6 +126,13 @@
         //Listener to track when window view changes and update user location indicators accordingly
         google.maps.event.addListener(app.map, 'bounds_changed', function() {
           Helper.trackUsers(app.map, document, app.markersMap, app.currentUsers);
+        });
+
+        google.maps.event.addListener(app.map, 'click', function(){
+            app.showUsers = !app.showUsers;
+            for (var i in app.markersMap) {
+                console.log(app.markersMap[i].nickname);
+            }
         });
       },
       async updateUsersOnMap(){
