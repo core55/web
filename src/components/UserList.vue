@@ -108,6 +108,7 @@
     width: 320px;
     overflow: hidden;
     box-shadow: 10px 10px 19px 0px rgba(89,89,89,1);
+    opacity: 0.8;
   }
 
   .activeUserList h2 {
