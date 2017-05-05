@@ -43,6 +43,11 @@
   import Anonymous_Pin from '../assets/Anonymous_Pin.svg';       // Anonymouse Pin
   import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
   import User_Pin from '../assets/User_Pin.svg';              // The location of other users
+  // Importing Last/Online pins (Test)
+  import Pin_Online from '../assets/Pin/Color/Online.svg';  
+  import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';  
+  import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';  
+
 
   export default {
     name: 'view',
@@ -195,14 +200,23 @@
 
           var pin = User_Pin;
           var label = Helper.getInitials(users[i].nickname);
+          // timeSinceLastUpdate in minutes
+          var timeSinceLastUpdate = Helper.timeSinceLastUpdate(users[i].updatedAt);
 
-          // Selects appropiate Pin to Display (Onself, Anonymous User or User with Nickname)
+          // Selects appropiate Pin to Display 
+          // Self, Anonymous or Green,Yellow,Black depending on Last Updated
           if(this.user && this.user.id == users[i].id) {
             pin = You_Pin;
             label = null;
           } else if (users[i].nickname == null){
             pin = Anonymous_Pin;
             label = null;
+          } else if (timeSinceLastUpdate < 5.1) {   //Green if < 5 minutes
+            pin = Pin_Online;
+          } else if (timeSinceLastUpdate < 20) {    //Yellow if < 20 minutes
+            pin = Pin_Recently_Online;
+          } else if (timeSinceLastUpdate > 20){     //Red if > 20 minutes
+            pin = Pin_LongTimeAgo_Online;
           }
 
           this.markersMap[users[i].id] = {
