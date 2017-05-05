@@ -39,10 +39,10 @@
   import router from '../router';
 
   // Importing the MeetUp Pin files (.svg) from the assets folder
-  import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
-  import Anonymous_Pin from '../assets/Anonymous_Pin.svg';       // Anonymouse Pin
-  import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
-  import User_Pin from '../assets/User_Pin.svg';              // The location of other users
+  import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
+  import Anonymous_Pin from '../assets/Pin/Anonymous.svg';       // Anonymouse Pin
+  import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
+  import User_Pin from '../assets/Pin/Color/black.svg';   // The location of other users
   // Importing Last/Online pins (Test)
   import Pin_Online from '../assets/Pin/Color/Online.svg';  
   import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';  
