@@ -13,7 +13,8 @@
             </div>
             <div class="info">
               <h3 class="infoTitle">{{ user.nickname }}</h3>
-              <q class="status">{{ user.status }}</q>
+              <q class="status" v-if="user.status != null">{{ user.status }}</q>
+              <q class="status" v-else-if="user.status == null">No status</q>
             </div>
           </div>
         </li>
@@ -138,8 +139,7 @@
     left: 80px;
     top: 5px;
     text-overflow: clip;
-    overflow-y: unset;
-    overflow-x: unset;
+    overflow: hidden;
   }
 
   .infoTitle {
