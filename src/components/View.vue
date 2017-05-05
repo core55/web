@@ -211,11 +211,11 @@
           } else if (users[i].nickname == null){
             pin = Anonymous_Pin;
             label = null;
-          } else if (timeSinceLastUpdate < 5.1) {
+          } else if (timeSinceLastUpdate < 5.1) {   //Green if < 5 minutes
             pin = Pin_Online;
-          } else if (timeSinceLastUpdate < 40) {
+          } else if (timeSinceLastUpdate < 20) {    //Yellow if < 20 minutes
             pin = Pin_Recently_Online;
-          } else if (timeSinceLastUpdate > 40){
+          } else if (timeSinceLastUpdate > 20){     //Red if > 20 minutes
             pin = Pin_LongTimeAgo_Online;
           }
 
