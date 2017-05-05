@@ -1,5 +1,8 @@
 <template>
   <section>
+    <div class="request-indicator">
+      <el-progress v-show="requestStateVisible" :stroke-width="3" id="request-indicator" :show-text="false" :percentage="requestState"></el-progress>
+    </div>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
@@ -64,7 +67,9 @@
         nickname:   '',
         pinmarker: null,
         NicknameDialog:false,
-        button:true
+        button:true,
+        requestState: 0,
+        requestStateVisible: false
       }
     },
     methods: {
@@ -131,15 +136,25 @@
         });
       },
       async updateUsersOnMap(){
-          let users = await Api.getMeetupUsers(this.meetupId);
-          if (users.ok ==true) {
-            users = users.body._embedded.users;
-            this.updateMarkers(users);
-          }
-          else{
-            this.$message.error('Oops, could not retrieve the Users!');
-          }
-        },
+        let app = this;
+        this.requestState = 0;
+        this.requestStateVisible = true;
+        this.requestState = 15;
+        let users = await Api.getMeetupUsers(this.meetupId);
+        this.requestState = 100;
+        if (users.ok ==true) {
+          users = users.body._embedded.users;
+          this.updateMarkers(users);
+        }
+        else{
+          this.$message.error('Oops, could not retrieve the Users!');
+        }
+
+        setTimeout(function() {
+          app.requestStateVisible = false;
+          app.requestState = 0;
+        }, 1000);
+      },
 
       //check each user if user's location has changed since last update
       //update user's location marker according to the geolocation update
@@ -456,7 +471,20 @@
         color: #000;
       }
     }
-
   }
 
+  .request-indicator {
+    display: block;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+
+    .el-progress-bar__outer, .el-progress-bar__inner {
+      border-radius: 0;
+    }
+
+    .el-progress-bar__inner {
+      transition: all 0.5s ease-in-out;
+    }
+  }
 </style>
