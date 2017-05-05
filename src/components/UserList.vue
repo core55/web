@@ -1,5 +1,4 @@
 <template>
-  <!--<transition name="el-zoom-in-center">-->
   <transition name="bounce">
     <div class="activeUserList" v-if="show">
       <div class="sectionTitle">
@@ -9,7 +8,12 @@
       <ul>
         <li v-for="user in users" :key="user.id">
           <div class="bigCircle">
-            <div class = "photo" style="background-image: url(../../static/pug.png)">
+            <div v-if="user.avatar != null" class = "photo" :style="{ 'background-image': 'url(' + user.avatar + ')' }">
+              <div class = "statusCircle">
+                <span class="statusText">OK</span>
+              </div>
+            </div>
+            <div v-else-if="user.avatar == null" class = "photo" style="background-image: url('../../static/user-default.png')">
               <div class = "statusCircle">
                 <span class="statusText">OK</span>
               </div>

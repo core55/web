@@ -204,7 +204,8 @@
             nickname: users[i].nickname,
             id: users[i].id,
             show: false,
-            status: users[i].status
+            status: users[i].status,
+            avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
           });
         }
       },
