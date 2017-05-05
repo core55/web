@@ -37,12 +37,10 @@
   import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
   import User_Pin from '../assets/User_Pin.svg';
   import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
-  import ElCard from "../../node_modules/element-ui/packages/card/src/main";
 
   export default {
     name: 'view',
     components: {
-      ElCard,
       ElTag,
       'google-map': GoogleMap,
       'user-list': UserList
@@ -329,50 +327,6 @@
   //prevents browser window from scrolling
   html {
     overflow: hidden;
-  }
-
-  //User list View
-  .circle {
-    width: 260px;
-    height: 64px;
-    border: 1px solid red;
-    border-radius: 100px;
-    position: relative;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 5%;
-    margin-bottom:5%;
-  }
-
-  #inner {
-    position: absolute;
-    padding: 0px;
-    width: 64px;
-    height: 64px;
-    border: 1px solid red;
-    border-radius: 100px;
-    top: -1px;
-    left: -1px;
-    background-repeat: no-repeat;
-  }
-
-  .info {
-    position: absolute;
-    width: 60%;
-    height: 50%;
-    left: 30%;
-    top: 5%;
-    overflow: auto;
-  }
-
-  .infoTitle {
-    margin: 0px;
-    font-size: 18px;
-  }
-
-  .status {
-    font-family: roboto;
-    font-size: 12px;
   }
 
   //user location indicator styling
