@@ -1,7 +1,10 @@
 <template>
   <section>
+
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
+    <el-button size="medium" id="directionbtn" icon="share" @click="activateDirection"></el-button>
+
 
     <transition-group name="fade">
       <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
@@ -12,6 +15,14 @@
         <el-button type="info" slot="append"  @click="shareMeetup">Copy</el-button>
       </el-input>
     </el-dialog>
+
+    <!--<el-dialog class="app-dialog app-dialog-direction" v-model="directionButtonDialog" size="small" >-->
+      <!--&lt;!&ndash;<span>Click on your desired location </span>&ndash;&gt;-->
+      <!--<el-button type="info" size="mini" @click="direction">clickme</el-button>-->
+    <!--</el-dialog>-->
+
+
+
     <div id="dialog"  @keyup.enter="nicknameinput">
       <el-dialog class="app-dialog app-dialog-nickname" top="46%"  v-model="NicknameDialog":close-on-click-modal="false" :close-on-press-escape="false" size="small" >
         <el-input id="enter-name" v-model="nickname" placeholder="Type your name" size="large" >
@@ -34,11 +45,13 @@
   import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
   import Anonymous_Pin from '../assets/Anonymous_Pin.svg';       // Anonymouse Pin
   import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
-  import User_Pin from '../assets/User_Pin.svg';              // The location of other users
+  import User_Pin from '../assets/User_Pin.svg';
+  import ElDialog from "../../node_modules/element-ui/packages/dialog/src/component";              // The location of other users
 
   export default {
     name: 'view',
     components: {
+      ElDialog,
       'google-map': GoogleMap
     },
     data () {
@@ -58,7 +71,9 @@
         shareUrl:   '',
         nickname:   '',
         pinmarker: null,
-        NicknameDialog:false
+        NicknameDialog:false,
+        on : true,
+        choosingDirection: false
       }
     },
     methods: {
@@ -107,6 +122,16 @@
             app.pinmarker.setPosition(event.latLng);
             Api.updateMeetupPinLocation(app.meetupId, app.pinmarker);
           });
+
+          app.pinmarker.addListener('click', function () {
+            if (app.choosingDirection) {
+              app.findMyRoute({lat:app.pinmarker.getPosition().lat(), lng:app.pinmarker.getPosition().lng()});
+              app.choosingDirection = false;
+              return;
+            }
+          });
+
+
         }
 
         this.loading = false;
@@ -122,6 +147,8 @@
         google.maps.event.addListener(app.map, 'bounds_changed', function() {
           Helper.trackUsers(app.map, document, app.markersMap, app.currentUsers);
         });
+
+
       },
       async updateUsersOnMap(){
           let users = await Api.getMeetupUsers(this.meetupId);
@@ -200,6 +227,13 @@
           var infowindow = null;
           let user = users[i];
           app.markersMap[user.id].marker.addListener('click', function () {
+              if (app.choosingDirection) {
+                app.findMyRoute({lat:app.markersMap[user.id].marker.getPosition().lat(), lng:app.markersMap[user.id].marker.getPosition().lng()});
+                app.choosingDirection = false;
+
+                return;
+              }
+
             if (infowindow) {
               infowindow.close(),
                 infowindow=null
@@ -262,6 +296,7 @@
           lastLongitude: position.lng
         });
 
+
         this.updatingLocation = false;
 
       },
@@ -318,11 +353,64 @@
           user.moveTo[i] = {lat: startingLat, lng: startingLng};
         }
       },
-    },
-    mounted () {
-      this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
 
+   activateDirection () {
+     let app =  this;
+     this.choosingDirection = true;
+     this.$message.info('click your desired destination');
+   },
+
+   findMyRoute(destination){
+
+    var directionsDisplay;
+    var directionsService = new google.maps.DirectionsService();
+    let app = this;
+    var original;
+    var i = 0;
+    var instructions = [];
+
+    initialize();
+
+    function initialize() {
+     directionsDisplay = new google.maps.DirectionsRenderer();
+     original = { lat:  app.user.lastLatitude, lng: app.user.lastLongitude };
+     directionsDisplay.setMap(app.map);
+    }
+
+    calcRoute();
+
+    function calcRoute() {
+     var request = {
+       origin: original,
+       destination: destination,
+       travelMode: 'TRANSIT'
+     };
+     directionsService.route(request, function(result, status) {
+       if (status == 'OK') {
+         console.log( result.routes[0].legs[0].steps);
+         directionsDisplay.setDirections(result);
+         for (i in result.routes[0].legs[0].steps){
+           if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING"){
+             instructions[i] = i+"."+" "+ result.routes[0].legs[0].steps[i].instructions;
+           }
+           if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING"){
+             instructions[i] = i+"."+" "+"take"+ " "+"number"+ " "+result.routes[0].legs[0].steps[i].transit.line.short_name +" "+ result.routes[0].legs[0].steps[i].instructions;
+           }
+           i++
+         }
+         window.alert(instructions);
+
+//         console.log( result.routes[0].legs[0].steps);
+//         console.log(""+"take"+ '' +result.routes[0].legs[0].steps[i].transit.line.short_name + result.routes[0].legs[0].steps[i].instructions);
+       }
+     });
+    }
+  }
+
+  },
+    mounted () {
       let app = this;
+      this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
       // let twoMinutes = 2 * 60 * 1000;
       let twoMinutes = 30 * 1000;
       this.updatingLocationInterval = setInterval(function() {
@@ -361,6 +449,24 @@
     background: #FFFFFF;
     box-shadow:none;
     text-align: center;
+  }
+
+  #directionbtn{
+    z-index: 1;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    width: 71px;
+    height: 71px;
+    padding: 0px 0px 0px 0px;
+    font-size: 45px;
+    border-radius: 35px;
+    border-color: white;
+    /* Oval: */
+    background: #FFFFFF;
+    box-shadow:none;
+    text-align: center;
+
   }
 
   body .v-modal{

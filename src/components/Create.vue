@@ -122,6 +122,7 @@ export default {
       var app = this;
       this.loading = true;
 
+
       var position = this.map.getCenter();
       var zoom = this.map.getZoom();
 
