@@ -68,6 +68,7 @@
     max-height: 460px;
     width: 300px;
     overflow: hidden;
+    overflow-y: scroll;
   }
 
   .activeUserList h2 {
@@ -136,7 +137,9 @@
     height: 55px;
     left: 80px;
     top: 5px;
-    text-overflow: ellipsis;
+    text-overflow: clip;
+    overflow-y: unset;
+    overflow-x: unset;
   }
 
   .infoTitle {

@@ -21,8 +21,6 @@
         <el-button type="info" slot="append"  @click="nicknameinput">Enter</el-button>
       </el-input>
     </el-dialog>
-
-
   </section>
 </template>
 
@@ -327,6 +325,11 @@
 
 <style lang="scss" type="text/scss">
 
+  //prevents browser window from scrolling
+  html {
+    overflow: hidden;
+  }
+
   //User list View
   .circle {
     width: 260px;
@@ -382,7 +385,7 @@
     opacity: 0
   }
 
-  //Show user button
+  //Show Active users' button
   #showbtn {
     position: absolute;
     left: 24px;
