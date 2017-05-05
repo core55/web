@@ -101,8 +101,8 @@
   .activeUserList{
     background-color: white;
     position: relative;
-    top: 50px;
-    left: 50px;
+    top: 10%;
+    left: 10%;
     margin: auto;
     height: 460px;
     width: 320px;
