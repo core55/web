@@ -396,6 +396,8 @@
       background:#3EAB3A;
       box-shadow:none;
     }
+
+    .el-input--large .el-input__inner,
     .el-input__inner{
       text-decoration: underline;
       font-size: 18px;
@@ -407,7 +409,9 @@
       box-shadow:none;
       border-radius: 100px;
       width:122%;
-      padding:30px 10px;
+      line-height: 60px;
+      padding-left: 15px;
+      height: 60px;
       @media (max-width: 732px) {
         width:132%;
       }
@@ -428,9 +432,6 @@
     .el-input-group__append, .el-input-group__prepend{
       border:transparent;
       background-color:transparent;
-    }
-    .el-input--large .el-input__inner{
-      height:37px;
     }
     .el-input-group__append .el-button,
     .el-button--primary{
