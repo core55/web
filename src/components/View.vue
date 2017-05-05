@@ -8,9 +8,21 @@
     </transition-group>
 
     <el-table :data="markersMap" border style="width: 100%">
-      <el-table-column label="Active Users" width="140">
+      <el-table-column label="Active Users" width="500px">
         <template scope="scope">
-          <el-tag>{{ scope.row.nickname }}</el-tag>
+
+
+          <div class="circle">
+            <div id = "inner" style="background-image: url(../../static/pug.png)"></div>
+            <div class="info">
+              <h3 class="infoTitle">{{ scope.row.nickname }}</h3>
+              <q class="status">{{ scope.row.status }}</q>
+            </div>
+          </div>
+
+
+
+          <!--<el-tag>{{ scope.row.nickname }}</el-tag>-->
         </template>
       </el-table-column>
     </el-table>
@@ -204,7 +216,8 @@
             }),
             nickname: users[i].nickname,
             id: users[i].id,
-            show: false
+            show: false,
+            status: users[i].status
           });
         }
       },
@@ -326,6 +339,37 @@
 <style lang="scss" type="text/scss">
 
   //User list View
+  .circle {
+    width: 400px;
+    height: 150px;
+    border: 2px solid red;
+    border-radius: 150px;
+    position: relative;
+  }
+
+  #inner {
+    position: absolute;
+    padding: 0px;
+    width: 150px;
+    height: 150px;
+    border: 2px solid red;
+    border-radius: 150px;
+    top: -1px;
+    left: -1px;
+    background-repeat: no-repeat;
+  }
+
+  .info {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    left: 160px;
+    top: 5%;
+  }
+
+  .infoTitle {
+    margin: 0px;
+  }
 
   //user location indicator styling
   .tag {
