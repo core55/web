@@ -7,25 +7,21 @@
       <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
     </transition-group>
 
-    <el-table :data="markersMap" border style="width: 100%">
-      <el-table-column label="Active Users" width="500px">
-        <template scope="scope">
+    <user-list></user-list>
 
-
-          <div class="circle">
-            <div id = "inner" style="background-image: url(../../static/pug.png)"></div>
-            <div class="info">
-              <h3 class="infoTitle">{{ scope.row.nickname }}</h3>
-              <q class="status">{{ scope.row.status }}</q>
-            </div>
-          </div>
-
-
-
-          <!--<el-tag>{{ scope.row.nickname }}</el-tag>-->
-        </template>
-      </el-table-column>
-    </el-table>
+    <!--<el-table :data="markersMap" border style="width: 100%">-->
+      <!--<el-table-column label="Active Users" width="300px">-->
+        <!--<template scope="scope">-->
+          <!--<div class="circle">-->
+            <!--<div id = "inner" style="background-image: url(../../static/pug.png)"></div>-->
+            <!--<div class="info">-->
+              <!--<h3 class="infoTitle">{{ scope.row.nickname }}</h3>-->
+              <!--<q class="status">{{ scope.row.status }}</q>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+    <!--</el-table>-->
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
@@ -48,6 +44,7 @@
   import Api from '../api';
   import Helper from '../helper';
   import router from '../router';
+  import UserList from './UserList';
 
   // Importing the MeetUp Pin files (.svg) from the assets folder
   import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
@@ -62,7 +59,8 @@
     components: {
       ElCard,
       ElTag,
-      'google-map': GoogleMap
+      'google-map': GoogleMap,
+      'user-list': UserList
     },
     data () {
       return {
@@ -340,20 +338,24 @@
 
   //User list View
   .circle {
-    width: 400px;
-    height: 150px;
-    border: 2px solid red;
-    border-radius: 150px;
+    width: 260px;
+    height: 64px;
+    border: 1px solid red;
+    border-radius: 100px;
     position: relative;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 5%;
+    margin-bottom:5%;
   }
 
   #inner {
     position: absolute;
     padding: 0px;
-    width: 150px;
-    height: 150px;
-    border: 2px solid red;
-    border-radius: 150px;
+    width: 64px;
+    height: 64px;
+    border: 1px solid red;
+    border-radius: 100px;
     top: -1px;
     left: -1px;
     background-repeat: no-repeat;
@@ -361,14 +363,21 @@
 
   .info {
     position: absolute;
-    width: 50%;
+    width: 60%;
     height: 50%;
-    left: 160px;
+    left: 30%;
     top: 5%;
+    overflow: auto;
   }
 
   .infoTitle {
     margin: 0px;
+    font-size: 18px;
+  }
+
+  .status {
+    font-family: roboto;
+    font-size: 12px;
   }
 
   //user location indicator styling
