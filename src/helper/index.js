@@ -118,5 +118,5 @@ export default class Helper {
     var currentTime = (new Date().getTime() / 1000).toFixed(0);
 
     return ((currentTime - userUpdatedAt)/60).toFixed(1);
-  }
+  }  
 }
