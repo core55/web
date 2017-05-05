@@ -15,8 +15,8 @@ import Helper from '../helper';
 import router from '../router';
 
 // Importing the MeetUp Pin files (.svg) from the assets folder
-import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
-import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
+import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
+import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
 
 export default {
   name: 'create',
