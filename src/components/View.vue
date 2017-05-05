@@ -4,13 +4,13 @@
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
 
     <transition-group name="fade">
-      <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
+      <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
     </transition-group>
 
-    <el-table v-if="showUsers" :data="currentUsers" border style="width: 100%">
-      <el-table-column label="Active Users">
+    <el-table :data="markersMap" border style="width: 100%">
+      <el-table-column label="Active Users" width="140">
         <template scope="scope">
-          <el-tag>{{ scope.row.id }}</el-tag>
+          <el-tag>{{ scope.row.nickname }}</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -42,11 +42,13 @@
   import Anonymous_Pin from '../assets/Anonymous_Pin.svg';       // Anonymouse Pin
   import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
   import User_Pin from '../assets/User_Pin.svg';
-  import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";              // The location of other users
+  import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
+  import ElCard from "../../node_modules/element-ui/packages/card/src/main";              // The location of other users
 
   export default {
     name: 'view',
     components: {
+      ElCard,
       ElTag,
       'google-map': GoogleMap
     },
@@ -59,7 +61,6 @@
         pos: null,
         user: null,
         userMeetups: null,
-        currentUsers: [],
         markersMap: [],
         updatingLocation: false,
         updatingLocationInterval: null,
@@ -67,8 +68,7 @@
         shareUrl:   '',
         nickname:   '',
         pinmarker: null,
-        NicknameDialog:false,
-        showUsers: false
+        NicknameDialog:false
       }
     },
     methods: {
@@ -130,14 +130,7 @@
 
         //Listener to track when window view changes and update user location indicators accordingly
         google.maps.event.addListener(app.map, 'bounds_changed', function() {
-          Helper.trackUsers(app.map, document, app.markersMap, app.currentUsers);
-        });
-
-        google.maps.event.addListener(app.map, 'click', function(){
-            app.showUsers = !app.showUsers;
-            for (var i in app.markersMap) {
-                console.log(app.markersMap[i].nickname);
-            }
+          Helper.trackUsers(app.map, document, app.markersMap);
         });
       },
       async updateUsersOnMap(){
@@ -183,7 +176,7 @@
           });
 
           if (index != -1) { //the marker for that user exists already
-            this.moveMarkerSmoothly(this.markersMap[users[i].id], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
+            this.moveMarkerSmoothly(this.markersMap[index], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
             window.requestAnimationFrame(app.smooth);
             continue;
           }
@@ -200,7 +193,7 @@
             label = null;
           }
 
-          this.markersMap[users[i].id] = {
+          this.markersMap.push({
             marker: new google.maps.Marker({ //We create a new marker
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
@@ -210,10 +203,9 @@
               title: users[i].nickname
             }),
             nickname: users[i].nickname,
-            id: users[i].id
-          }
-          //Add user information object to currentUsers
-          app.currentUsers.push({id: users[i].id, show: false});
+            id: users[i].id,
+            show: false
+          });
         }
       },
 
@@ -332,6 +324,8 @@
 </script>
 
 <style lang="scss" type="text/scss">
+
+  //User list View
 
   //user location indicator styling
   .tag {
