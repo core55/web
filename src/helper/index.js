@@ -111,4 +111,12 @@ export default class Helper {
       }
     }
   }
+
+  static timeSinceLastUpdate (updatedAt){
+
+    var userUpdatedAt = (new Date(updatedAt).getTime() / 1000).toFixed(0);
+    var currentTime = (new Date().getTime() / 1000).toFixed(0);
+
+    return ((currentTime - userUpdatedAt)/60).toFixed(1);
+  }
 }
