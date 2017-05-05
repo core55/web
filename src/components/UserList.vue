@@ -1,8 +1,11 @@
 <template>
-  <transition name="el-zoom-in-center">
+  <!--<transition name="el-zoom-in-center">-->
+  <transition name="bounce">
     <div class="activeUserList" v-if="show">
-      <el-button icon="close" :plain="true" id="closeButton" @click="toggleShow"></el-button>
-      <h2>People</h2>
+      <div class="sectionTitle">
+        <el-button icon="close" :plain="true" id="closeButton" @click="toggleShow"></el-button>
+        <h2>People</h2>
+      </div>
       <ul>
         <li v-for="user in users" :key="user.id">
           <div class="bigCircle">
@@ -59,17 +62,52 @@
 
 
 <style lang="scss" type="text/scss">
+
+  .bounce-enter-active {
+    animation: bounce-in .5s;
+  }
+  .bounce-leave-active {
+    animation: bounce-out .5s;
+  }
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes bounce-out {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+
+  .sectionTitle {
+    padding-top: 12px;
+    height: 60px;
+    background: #EFF2F7;
+  }
+
   .activeUserList{
     background-color: white;
     position: relative;
     top: 50px;
     left: 50px;
     margin: auto;
-    padding: 20px;
-    max-height: 460px;
-    width: 300px;
+    height: 460px;
+    width: 320px;
     overflow: hidden;
-    overflow-y: scroll;
+    box-shadow: 10px 10px 19px 0px rgba(89,89,89,1);
   }
 
   .activeUserList h2 {
@@ -83,13 +121,16 @@
   }
 
   .activeUserList ul {
+    height: 380px;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    overflow-y: scroll;
   }
 
   #closeButton {
     position: absolute;
-    margin-left: 220px;
+    right: 20px;
   }
 
 
@@ -127,8 +168,8 @@
     height: 27px;
     border: 1px solid;
     border-radius: 20px;
-    top: -10px;
-    left: -10px;
+    top: -3px;
+    left: -5px;
     background: white;
   }
 
