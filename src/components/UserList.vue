@@ -1,43 +1,54 @@
 <template>
-  <div class="activeUserList">
-    <ul>
-      <li>
-        <div class="bigCircle">
-          <div class = "photo" style="background-image: url(../../static/pug.png)">
-            <div class = "statusCircle">
-              <span class="statusText">OK</span>
+  <transition name="el-zoom-in-center">
+    <div class="activeUserList" v-if="show">
+      <el-button icon="close" :plain="true" id="closeButton" @click="toggleShow"></el-button>
+      <h2>People</h2>
+      <ul>
+        <li v-for="user in users" :key="user.id">
+          <div class="bigCircle">
+            <div class = "photo" style="background-image: url(../../static/pug.png)">
+              <div class = "statusCircle">
+                <span class="statusText">OK</span>
+              </div>
+            </div>
+            <div class="info">
+              <h3 class="infoTitle">{{ user.nickname }}</h3>
+              <q class="status">{{ user.status }}</q>
             </div>
           </div>
-          <div class="info">
-            <h3 class="infoTitle">Susanne</h3>
-            <q class="status">I love cooking. I am going to stay in the kitchen tonight!</q>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
+  </transition>
 </template>
 
 <script>
+  import ElIcon from "../../node_modules/element-ui/packages/icon/src/icon";
+  import ElCollapse from "../../node_modules/element-ui/packages/collapse/src/collapse";
+
   export default {
+    components: {
+      ElCollapse,
+      ElIcon},
     name: 'user-list',
     data () {
       return {
-
       }
     },
     props: {
-      callback: {
-        type: Function,
-        default () {}
-      },
-      params: {
-        type: Object,
+      users: {
+        type: Array,
         default () { return {}; }
+      },
+      show: {
+        type: Boolean,
+        default: false
       }
     },
     methods: {
-
+        toggleShow: function() {
+            this.$emit('toggleShow');
+        }
     },
     mounted () {
 
@@ -51,10 +62,17 @@
     background-color: white;
     position: relative;
     top: 50px;
+    left: 50px;
     margin: auto;
     padding: 20px;
     max-height: 460px;
     width: 300px;
+    overflow: hidden;
+  }
+
+  .activeUserList h2 {
+    margin: 0px;
+    text-align: center;
   }
 
   .activeUserList li {
@@ -67,8 +85,13 @@
     padding: 0;
   }
 
+  #closeButton {
+    position: absolute;
+    margin-left: 220px;
+  }
 
-  .bigCircle q,h3,span {
+
+  .container q,h3,h2,span {
     color: #4A4a4a;
     border-color: black;
   }
@@ -109,7 +132,7 @@
 
   .info {
     position: absolute;
-    width: 180px;
+    width: 170px;
     height: 55px;
     left: 80px;
     top: 5px;
@@ -125,7 +148,7 @@
   .status  {
     font-size: 12px;
     font-family: roboto;
-    width: 180px;
+    width: 170px;
     height: 28px;
   }
 

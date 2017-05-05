@@ -2,26 +2,13 @@
   <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
+    <el-button icon="information" id="showbtn" @click="toggleShowUsers"></el-button>
 
     <transition-group name="fade">
       <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
     </transition-group>
 
-    <user-list></user-list>
-
-    <!--<el-table :data="markersMap" border style="width: 100%">-->
-      <!--<el-table-column label="Active Users" width="300px">-->
-        <!--<template scope="scope">-->
-          <!--<div class="circle">-->
-            <!--<div id = "inner" style="background-image: url(../../static/pug.png)"></div>-->
-            <!--<div class="info">-->
-              <!--<h3 class="infoTitle">{{ scope.row.nickname }}</h3>-->
-              <!--<q class="status">{{ scope.row.status }}</q>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-    <!--</el-table>-->
+    <user-list :users="markersMap" :show="showUsers" v-on:toggleShow="toggleShowUsers"></user-list>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
@@ -52,7 +39,7 @@
   import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
   import User_Pin from '../assets/User_Pin.svg';
   import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
-  import ElCard from "../../node_modules/element-ui/packages/card/src/main";              // The location of other users
+  import ElCard from "../../node_modules/element-ui/packages/card/src/main";
 
   export default {
     name: 'view',
@@ -78,10 +65,14 @@
         shareUrl:   '',
         nickname:   '',
         pinmarker: null,
-        NicknameDialog:false
+        NicknameDialog:false,
+        showUsers: false
       }
     },
     methods: {
+      toggleShowUsers: function () {
+          this.showUsers = !this.showUsers;
+      },
       async nicknameinput(){
         let response = await Api.updateUsersNickname(this.user,this.nickname);
         if (response.ok == false) {
@@ -389,6 +380,13 @@
   }
   .fade-enter, .fade-leave-to {
     opacity: 0
+  }
+
+  //Show user button
+  #showbtn {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
   }
 
   #sharebtn {
