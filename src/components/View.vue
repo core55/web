@@ -48,9 +48,9 @@
   import User_Pin from '../assets/Pin/Color/black.svg';   // The location of other users
   import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
   // Importing Last/Online pins (Test)
-  import Pin_Online from '../assets/Pin/Color/Online.svg';  
-  import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';  
-  import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';  
+  import Pin_Online from '../assets/Pin/Color/Online.svg';
+  import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';
+  import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';
 
   export default {
     name: 'view',
@@ -88,7 +88,7 @@
           this.showUsers = !this.showUsers;
       },
 
-      // Update nickname of user in backend DB and local storage 
+      // Update nickname of user in backend DB and local storage
       async nicknameinput(){
         let response = await Api.updateUsersNickname(this.user,this.nickname);
         if (response.ok == false) {
@@ -220,7 +220,7 @@
           // timeSinceLastUpdate in minutes
           var timeSinceLastUpdate = Helper.timeSinceLastUpdate(users[i].updatedAt);
 
-          // Selects appropiate Pin to Display 
+          // Selects appropiate Pin to Display
           // Self, Anonymous or Green,Yellow,Black depending on Last Updated
           if(this.user && this.user.id == users[i].id) {
             pin = You_Pin;
@@ -250,28 +250,28 @@
             show: false,
             status: users[i].status,
             avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
-          })
+          });
 
           //status listener
           var infowindow = null;
           let user = users[i];
-          app.markersMap[user.id].marker.addListener('click', function () {
-            if (infowindow) {
-              infowindow.close(),
-                infowindow=null
-            }
-            infowindow = new google.maps.InfoWindow({
-              content: 'User name: ' + user.nickname + '\r\n' + 'Status: ' + user.status,
-              position: {
-                lat: app.markersMap[user.id].marker.getPosition().lat(),
-                lng: app.markersMap[user.id].marker.getPosition().lng()
-              }
-            });
-            infowindow.open(app.map, app.markersMap[user.id].marker);
-          });
+          let marker = this.markersMap[this.markersMap.length - 1].marker; //latest marker will always be last
 
-          //Add user information object to currentUsers
-          app.currentUsers.push({id: users[i].id, show: false});
+          marker.addListener('click', function () {
+            if (infowindow) {
+              infowindow.close(app.map, marker);
+              infowindow = null
+            } else {
+              infowindow = new google.maps.InfoWindow({
+                content: 'User name: ' + user.nickname + '\r\n' + 'Status: ' + user.status,
+                position: {
+                  lat: marker.getPosition().lat(),
+                  lng: marker.getPosition().lng()
+                }
+              });
+              infowindow.open(app.map, marker);
+            }
+          });
         }
       },
 
