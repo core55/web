@@ -41,23 +41,21 @@ export default class Helper {
     Method to calculate and update position of users' location indicator tags
     @param map - a google map object
     @param document - a reference to the html document
-    @currentMarkers - an array of google map markers currently on map
-    @currentUsers - an array of user information objects
+    @currentMarkers - an array of google map markers currently on map i.e. active users
    */
-  static trackUsers(map, document, currentMarkers, currentUsers) {
+  static trackUsers(map, document, currentMarkers) {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
 
-    for (var i in currentUsers) {
-      var user = currentUsers[i];
-      var userId = user.id; //currentUsers[i];
-      var marker = currentMarkers[userId].marker;
+    for (var i in currentMarkers) {
+      var userId = currentMarkers[i].id
+      var marker = currentMarkers[i].marker;
       var position = marker.getPosition();
       var userTag = document.getElementById(userId);
 
       if (userTag) {
         if (!bounds.contains(position)) {
-          user.show = true;
+          currentMarkers[i].show = true;
 
           var xIntercept;
           var yIntercept;
@@ -106,7 +104,7 @@ export default class Helper {
           userTag.style.left = xIntercept + "px";
 
         } else {
-          user.show = false;
+          currentMarkers[i].show = false;
         }
       }
     }

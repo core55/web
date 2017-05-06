@@ -5,10 +5,13 @@
     </div>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
+    <el-button icon="information" id="showbtn" @click="toggleShowUsers"></el-button>
 
     <transition-group name="fade">
-      <el-tag v-for="user in currentUsers" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ markersMap[user.id].marker.title }}</el-tag>
+      <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
     </transition-group>
+
+    <user-list :users="markersMap" :show="showUsers" v-on:toggleShow="toggleShowUsers"></user-list>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small" >
       <el-input id="share-url" v-model="shareUrl":readonly="true" size="large">
@@ -28,7 +31,6 @@
     </el-switch>
     </div>
 
-
   </section>
 </template>
 
@@ -37,22 +39,25 @@
   import Api from '../api';
   import Helper from '../helper';
   import router from '../router';
+  import UserList from './UserList';
 
   // Importing the MeetUp Pin files (.svg) from the assets folder
   import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
   import Anonymous_Pin from '../assets/Pin/Anonymous.svg';       // Anonymouse Pin
   import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
   import User_Pin from '../assets/Pin/Color/black.svg';   // The location of other users
+  import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
   // Importing Last/Online pins (Test)
   import Pin_Online from '../assets/Pin/Color/Online.svg';  
   import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';  
   import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';  
 
-
   export default {
     name: 'view',
     components: {
-      'google-map': GoogleMap
+      ElTag,
+      'google-map': GoogleMap,
+      'user-list': UserList
     },
     data () {
       return {
@@ -63,7 +68,6 @@
         pos: null,
         user: null,
         userMeetups: null,
-        currentUsers: [],
         markersMap: [],
         updatingLocation: false,
         updatingLocationInterval: null,
@@ -74,10 +78,17 @@
         NicknameDialog:false,
         button:true,
         requestState: 0,
-        requestStateVisible: false
+        requestStateVisible: false,
+        showUsers: false
       }
     },
     methods: {
+      // Open and close user list panel
+      toggleShowUsers: function () {
+          this.showUsers = !this.showUsers;
+      },
+
+      // Update nickname of user in backend DB and local storage 
       async nicknameinput(){
         let response = await Api.updateUsersNickname(this.user,this.nickname);
         if (response.ok == false) {
@@ -90,6 +101,8 @@
         this.NicknameDialog=false;
         this.updateUsersOnMap();
       },
+
+      // Setup Map, try to join event (if not already joined), prompt for nickname
       async initMap() {
         let app = this;
         let response = await this.getMeetup();
@@ -137,9 +150,11 @@
 
         //Listener to track when window view changes and update user location indicators accordingly
         google.maps.event.addListener(app.map, 'bounds_changed', function() {
-          Helper.trackUsers(app.map, document, app.markersMap, app.currentUsers);
+          Helper.trackUsers(app.map, document, app.markersMap);
         });
       },
+
+      // Retrieve all users that joined the map and update locations
       async updateUsersOnMap(){
         let app = this;
         this.requestState = 0;
@@ -183,8 +198,10 @@
         }
       },
 
+      // Update users' pins including position and data (status, nickname, etc...)
       async updateMarkers(users){
         var app = this;
+        var infowindow = null;
         for (var i in users) {
 
           var index = this.markersMap.findIndex(function(item) {
@@ -193,7 +210,7 @@
           });
 
           if (index != -1) { //the marker for that user exists already
-            this.moveMarkerSmoothly(this.markersMap[users[i].id], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
+            this.moveMarkerSmoothly(this.markersMap[index], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
             window.requestAnimationFrame(app.smooth);
             continue;
           }
@@ -219,7 +236,7 @@
             pin = Pin_LongTimeAgo_Online;
           }
 
-          this.markersMap[users[i].id] = {
+          this.markersMap.push({
             marker: new google.maps.Marker({ //We create a new marker
               position: {lat: users[i].lastLatitude, lng: users[i].lastLongitude},
               map: this.map,
@@ -229,8 +246,11 @@
               title: users[i].nickname
             }),
             nickname: users[i].nickname,
-            id: users[i].id
-          }
+            id: users[i].id,
+            show: false,
+            status: users[i].status,
+            avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
+          })
 
           //status listener
           var infowindow = null;
@@ -258,6 +278,8 @@
       async userCoordToLatLng(user){
         return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
       },
+
+      // Open modal with sharing link to meetup and allow to copy it in clipboard
       shareMeetup() {
         this.shareButtonDialog = false;
 
@@ -281,12 +303,16 @@
           message: 'Share Url Copied'
         });
       },
+
+      // Retrieve a meetup from the URL hash parameter
       async getMeetup() {
         this.meetupId = this.$route.params.id;
         let meetup = await Api.getMeetup(this.meetupId);
         this.loading = false;
         return meetup;
       },
+
+      // Retrieve user's current coordinates and update location
       async updateMyLocation() {
         if(!this.button){
          return;
@@ -306,6 +332,8 @@
         this.updatingLocation = false;
 
       },
+
+      // Join a meetup if not already in. Use local storage to persist user data
       async joinEvent() {
         this.user = JSON.parse(localStorage.getItem('user'));
         this.userMeetups = JSON.parse(localStorage.getItem('userMeetups'));
@@ -360,25 +388,30 @@
         }
       },
     },
+
+    // When the View component is mounted start the timeout function to update
+    // users every 2 minutes
     mounted () {
       this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
 
       let app = this;
       // let twoMinutes = 2 * 60 * 1000;
 
-
-  let twoMinutes = 30 * 1000;
-  this.updatingLocationInterval = setInterval(function () {
-    app.updateMyLocation();
-    app.updateUsersOnMap();
-  }, twoMinutes);
-
-
+      let twoMinutes = 30 * 1000;
+      this.updatingLocationInterval = setInterval(function () {
+        app.updateMyLocation();
+        app.updateUsersOnMap();
+      }, twoMinutes);
     },
   }
 </script>
 
 <style lang="scss" type="text/scss">
+
+  //prevents browser window from scrolling
+  html {
+    overflow: hidden;
+  }
 
   //user location indicator styling
   .tag {
@@ -398,6 +431,13 @@
   bottom: 150px;
   padding: 0px 0px 0px 0px;
 }
+  //Show Active users' button
+  #showbtn {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+  }
+
   #sharebtn {
     z-index: 1;
     position: absolute;
