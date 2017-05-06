@@ -43,7 +43,7 @@ export default class Helper {
     @param document - a reference to the html document
     @currentMarkers - an array of google map markers currently on map i.e. active users
    */
-  static trackUsers(map, document, currentMarkers) {
+  static trackUsers(map, document, currentMarkers, selfId) {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
 
@@ -52,6 +52,11 @@ export default class Helper {
       var marker = currentMarkers[i].marker;
       var position = marker.getPosition();
       var userTag = document.getElementById(userId);
+
+      // Display "You" for the self User.
+      if (selfId == userId){
+        userTag.innerHTML = "You";
+      }
 
       if (userTag) {
         if (!bounds.contains(position)) {
