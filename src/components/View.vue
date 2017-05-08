@@ -50,10 +50,6 @@ import You_Pin from '../assets/Pin/You.svg';               // The location of on
 import User_Pin from '../assets/Pin/Color/black.svg';   // The location of other users
 import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
 import ElDialog from "../../node_modules/element-ui/packages/dialog/src/component";              // The location of other users
-// Importing Last/Online pins (Test)
-import Pin_Online from '../assets/Pin/Color/Online.svg';
-import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';
-import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';
 
 export default {
   name: 'view',
@@ -179,7 +175,7 @@ export default {
         });
 
       }
-      
+
       this.loading = false;
       this.joinEvent();
 
@@ -250,30 +246,26 @@ export default {
         });
 
         if (index != -1) { //the marker for that user exists already
-          this.moveMarkerSmoothly(this.markersMap[index], { lat: users[i].lastLatitude, lng: users[i].lastLongitude });
+          if(this.user.id != users[i].id && users[i].nickname != null) { //don't overwrite defaults
+            var timeSinceLastUpdate = Helper.timeSinceLastUpdate(users[i].updatedAt);
+            var pin = Helper.getPin(timeSinceLastUpdate); //get pin style
+            this.markersMap[index].marker.setMap(null); // Remove marker
+            this.markersMap[index].marker.icon = pin; // set new pin style
+            this.markersMap[index].marker.setMap(this.map); // Force refresh/reload
+          }
+          this.moveMarkerSmoothly(this.markersMap[index], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
           window.requestAnimationFrame(app.smooth);
           continue;
         }
 
         var pin = User_Pin;
         var label = Helper.getInitials(users[i].nickname);
-        // timeSinceLastUpdate in minutes
-        var timeSinceLastUpdate = Helper.timeSinceLastUpdate(users[i].updatedAt);
-
-        // Selects appropiate Pin to Display
-        // Self, Anonymous or Green,Yellow,Black depending on Last Updated
-        if (this.user && this.user.id == users[i].id) {
+        if(this.user && this.user.id == users[i].id) {
           pin = You_Pin;
           label = null;
         } else if (users[i].nickname == null) {
           pin = Anonymous_Pin;
           label = null;
-        } else if (timeSinceLastUpdate < 5.1) {   //Green if < 5 minutes
-          pin = Pin_Online;
-        } else if (timeSinceLastUpdate < 20) {    //Yellow if < 20 minutes
-          pin = Pin_Recently_Online;
-        } else if (timeSinceLastUpdate > 20) {     //Red if > 20 minutes
-          pin = Pin_LongTimeAgo_Online;
         }
 
         this.markersMap.push({

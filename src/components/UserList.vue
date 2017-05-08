@@ -9,13 +9,13 @@
         <li v-for="user in users" :key="user.id">
           <div class="bigCircle">
             <div v-if="user.avatar != null" class = "photo" :style="{ 'background-image': 'url(' + user.avatar + ')' }">
-              <div class = "statusCircle" v-bind:style="styles">
-                <span class="statusText">OK</span>
+              <div class = "statusCircle" :style="getColor(user.marker.icon)">
+                <span class="statusText">{{ user.marker.icon | getText }}</span>
               </div>
             </div>
             <div v-else-if="user.avatar == null" class = "photo" style="background-image: url('../../static/user-default.png')">
-              <div class = "statusCircle" v-bind:style="styles">
-                <span class="statusText">OK</span>
+              <div class = "statusCircle" :style="getColor(user.marker.icon)">
+                <span class="statusText">{{ user.marker.icon | getText }}</span>
               </div>
             </div>
             <div class="info">
@@ -33,6 +33,7 @@
 <script>
   import ElIcon from "../../node_modules/element-ui/packages/icon/src/icon";
   import ElCollapse from "../../node_modules/element-ui/packages/collapse/src/collapse";
+  import Helper from '../helper';
 
   export default {
     components: {
@@ -43,15 +44,11 @@
       return {
       }
     },
-    computed: {
-      styles: function() {
-          
-          return {
-              'border-color' : 'green'
-          };
-      }
+    filters: {
+        getText: function(pin) {
+            return Helper.getStatus(pin)[1] //get text from status
+        }
     },
-
     props: {
       users: {
         type: Array,
@@ -63,9 +60,16 @@
       }
     },
     methods: {
-        toggleShow: function() {
-            this.$emit('toggleShow');
-        }
+      toggleShow: function() {
+          this.$emit('toggleShow');
+      },
+      getColor: function(pin) {
+        var stat = Helper.getStatus(pin); //get color from pin
+        var color = stat[0];
+        return {
+            'border-color' : color //color of status
+        };
+      }
     },
     mounted () {
 

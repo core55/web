@@ -1,4 +1,8 @@
 import Vue from 'vue';
+// Importing Last/Online pins (Test)
+import Pin_Online from '../assets/Pin/Color/Online.svg';
+import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';
+import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';
 
 export default class Helper {
   static getInitials(nickname) {
@@ -47,8 +51,6 @@ export default class Helper {
   static trackUsers(map, document, currentMarkers, selfId) {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
-    // console.log("Client widht is: " + mappy.clientWidth);
-    // console.log("Client height is:" + mappy.clientHeight);
 
     for (var i in currentMarkers) {
       var userId = currentMarkers[i].id
@@ -148,4 +150,33 @@ export default class Helper {
 
     return R * c;
   }
+
+  static getPin(timeSinceLastUpdate) {
+    if (timeSinceLastUpdate < 5.1) {
+      return Pin_Online;
+    } else if (timeSinceLastUpdate < 20) {
+      return Pin_Recently_Online;
+    } else if (timeSinceLastUpdate > 20) {
+      return Pin_LongTimeAgo_Online;
+    }
+  }
+
+  /*
+   Method to get status of a pin
+   Used for updating statusCircle in userList
+   */
+  static getStatus(pin) {
+    if (pin === Pin_Online){
+      return ['green','ON'];
+    } else if (pin === Pin_Recently_Online) {
+      return ['yellow', '5 MIN'];
+    } else if (pin === Pin_LongTimeAgo_Online) {
+      return ['red', 'OFF'];
+    } else { //default
+      return ['black','']
+    }
+  }
+
 }
+
+
