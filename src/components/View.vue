@@ -480,7 +480,26 @@ export default {
 //prevents browser window from scrolling
 html {
   overflow: hidden;
-} //user location indicator styling
+}
+
+//user location indicator styling
+.tag {
+  position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s
+}
+
+//user location indicator styling
+.el-tag.tag {
+  background-color: #ffffff;
+  color: #4A4A4A;
+  border-color: #4A4A4A;
+  border-width: 2px;
+}
+
 .tag {
   position: absolute;
 }
@@ -572,9 +591,11 @@ body .v-modal {
       width:132%;
     }
   }
+
   .el-button {
     padding: 21px 24px;
   }
+
   .el-dialog {
     background: transparent;
     box-shadow: none;
@@ -582,15 +603,18 @@ body .v-modal {
     max-width: 495px;
     min-width: 360px;
   }
+
   .el-input-group--append .el-input__inner,
   .el-input-group__prepend {
     border-radius: 100px;
   }
+
   .el-input-group__append,
   .el-input-group__prepend {
     border: transparent;
     background-color: transparent;
   }
+
   .el-input-group__append .el-button,
   .el-button--primary {
     background-color: #1d90e6;
@@ -599,9 +623,11 @@ body .v-modal {
     box-shadow: none;
     border-radius: 100px;
   }
+
   .el-dialog__header {
     display: none;
   }
+
   .el-dialog__body {
     padding: 0;
   } //nickname box
