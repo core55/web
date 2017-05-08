@@ -33,6 +33,7 @@
 <script>
   import ElIcon from "../../node_modules/element-ui/packages/icon/src/icon";
   import ElCollapse from "../../node_modules/element-ui/packages/collapse/src/collapse";
+  import Helper from '../helper';
 
   export default {
     components: {
