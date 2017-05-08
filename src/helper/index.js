@@ -150,13 +150,29 @@ export default class Helper {
     return R * c;
   }
 
-  static getPin(timeSinceLastUpdate){
+  static getPin(timeSinceLastUpdate) {
     if (timeSinceLastUpdate < 5.1) {
       return Pin_Online;
     } else if (timeSinceLastUpdate < 20) {
       return Pin_Recently_Online;
     } else if (timeSinceLastUpdate > 20) {
       return Pin_LongTimeAgo_Online;
+    }
+  }
+
+  /*
+   Method to get the color of a pin
+   Used for updating statusCircle in userList
+   */
+  static getColorPin(pin) {
+    if (pin === Pin_Online){
+      return 'green';
+    } else if (pin === Pin_Recently_Online) {
+      return 'yellow';
+    } else if (pin === Pin_LongTimeAgo_Online) {
+      return 'red';
+    } else { //default
+      return 'black'
     }
   }
 
