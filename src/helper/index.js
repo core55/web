@@ -123,5 +123,23 @@ export default class Helper {
     var currentTime = (new Date().getTime() / 1000).toFixed(0);
 
     return ((currentTime - userUpdatedAt)/60).toFixed(1);
-  }  
+  }
+
+  // Distance Between two Coordinates
+  // Input: 2 langnitudes and 2 longitudes 
+  // Output: distance between in meters
+  static distanceFromAtoB(lat1, lon1, lat2, lon2){
+    var R = 6371e3; // metres
+    var x1 = lat1 * Math.PI / 180;  
+    var x2 = lat2 * Math.PI / 180;
+    var xDelta = (lat2-lat1) * Math.PI / 180;
+    var yDelta = (lon2-lon1) * Math.PI / 180;
+
+    var a = Math.sin(xDelta/2) * Math.sin(xDelta/2) +
+            Math.cos(x1) * Math.cos(x2) *
+            Math.sin(yDelta/2) * Math.sin(yDelta/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return R * c;
+  }
 }
