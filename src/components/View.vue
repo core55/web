@@ -7,19 +7,19 @@
     <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
     <el-button icon="information" id="showbtn" @click="toggleShowUsers"></el-button>
     <el-button size="medium" id="directionbtn" icon="d-arrow-right" @click="activateDirection"></el-button>
-  
+
     <transition-group name="fade">
       <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
     </transition-group>
-  
+
     <user-list :users="markersMap" :show="showUsers" v-on:toggleShow="toggleShowUsers"></user-list>
-  
+
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
         <el-button type="info" slot="append" @click="shareMeetup">Copy</el-button>
       </el-input>
     </el-dialog>
-  
+
     <div id="dialog" @keyup.enter="nicknameinput">
       <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="NicknameDialog" :close-on-click-modal="false" :close-on-press-escape="false" size="small">
         <el-input id="enter-name" v-model="nickname" placeholder="Type your name" size="large">
@@ -27,12 +27,12 @@
         </el-input>
       </el-dialog>
     </div>
-  
+
     <div id="locationsw">
       <el-switch v-model="button" on-color="#13ce66" off-color="#ff4949">
       </el-switch>
     </div>
-  
+
   </section>
 </template>
 
@@ -153,8 +153,33 @@ export default {
           }
         });
 
-      }
+      } else {
 
+        google.maps.event.addListener(app.map,'click', function (event) {
+          app.pinmarker = new google.maps.Marker({
+            draggable: true,
+            position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
+            icon: MeetingPoint_Pin,
+            map: app.map
+          });
+          google.maps.event.addListener(app.pinmarker, 'dragend', function (event) {
+            app.pinmarker.setPosition(event.latLng);
+            Api.updateMeetupPinLocation(app.meetupId, app.pinmarker);
+          });
+
+          //the user can look up the direction to the meetin point
+          app.pinmarker.addListener('click', function () {
+            if (app.choosingDirection) {
+              app.findMyRoute({ lat: app.pinmarker.getPosition().lat(), lng: app.pinmarker.getPosition().lng() });
+              app.choosingDirection = false;
+              return;
+            }
+          });
+
+        });
+
+      }
+      
       this.loading = false;
       this.joinEvent();
 
