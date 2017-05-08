@@ -161,12 +161,9 @@ export default {
       if (!app.user || app.user.nickname == null) {
         this.NicknameDialog = true;
       }
-
-      this.updateUsersOnMap();
-
       //Listener to track when window view changes and update user location indicators accordingly
       google.maps.event.addListener(app.map, 'bounds_changed', function () {
-        Helper.trackUsers(app.map, document, app.markersMap);
+        Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
       });
     },
 

@@ -43,9 +43,11 @@ export default class Helper {
     @param document - a reference to the html document
     @currentMarkers - an array of google map markers currently on map i.e. active users
    */
-  static trackUsers(map, document, currentMarkers) {
+  static trackUsers(map, document, currentMarkers, selfId) {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
+    // console.log("Client widht is: " + mappy.clientWidth);
+    // console.log("Client height is:" + mappy.clientHeight);
 
     for (var i in currentMarkers) {
       var userId = currentMarkers[i].id
@@ -53,12 +55,19 @@ export default class Helper {
       var position = marker.getPosition();
       var userTag = document.getElementById(userId);
 
+      // Display "You" for the self User.
+      if (selfId == userId){
+        userTag.innerHTML = "You";
+      }
+
       if (userTag) {
         if (!bounds.contains(position)) {
           currentMarkers[i].show = true;
 
           var xIntercept;
           var yIntercept;
+          //If zero, offset a random amount to avoid tag getting stuck outside window
+          var tagWidth = userTag.offsetWidth == 0 ? 40 : userTag.offsetWidth;
 
           //calculate slope and useful values
           var mat = this.findDeltas(map, marker);
@@ -88,8 +97,8 @@ export default class Helper {
 
             if (yIntercept) userTag.style.top = yIntercept + "px";
 
-          } else if (xIntercept > mappy.clientWidth - userTag.offsetWidth) {
-            xIntercept = mappy.clientWidth - userTag.offsetWidth;
+          } else if (xIntercept > mappy.clientWidth - tagWidth) { //pin is on right
+            xIntercept = mappy.clientWidth - tagWidth;
             yIntercept = -mappy.clientWidth * mat[2];
 
             //Adjust pin for proper display
@@ -101,7 +110,7 @@ export default class Helper {
 
             if (yIntercept) userTag.style.top = yIntercept + "px";
           }
-          userTag.style.left = xIntercept + "px";
+          userTag.style.left = xIntercept + "px"; //375 and 343
 
         } else {
           currentMarkers[i].show = false;
@@ -119,5 +128,23 @@ export default class Helper {
     var currentTime = (new Date().getTime() / 1000).toFixed(0);
 
     return ((currentTime - userUpdatedAt)/60).toFixed(1);
-  }  
+  }
+
+  // Distance Between two Coordinates
+  // Input: 2 langnitudes and 2 longitudes
+  // Output: distance between in meters
+  static distanceFromAtoB(lat1, lon1, lat2, lon2){
+    var R = 6371e3; // metres
+    var x1 = lat1 * Math.PI / 180;
+    var x2 = lat2 * Math.PI / 180;
+    var xDelta = (lat2-lat1) * Math.PI / 180;
+    var yDelta = (lon2-lon1) * Math.PI / 180;
+
+    var a = Math.sin(xDelta/2) * Math.sin(xDelta/2) +
+            Math.cos(x1) * Math.cos(x2) *
+            Math.sin(yDelta/2) * Math.sin(yDelta/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return R * c;
+  }
 }

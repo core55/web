@@ -9,12 +9,12 @@
         <li v-for="user in users" :key="user.id">
           <div class="bigCircle">
             <div v-if="user.avatar != null" class = "photo" :style="{ 'background-image': 'url(' + user.avatar + ')' }">
-              <div class = "statusCircle">
+              <div class = "statusCircle" v-bind:style="styles">
                 <span class="statusText">OK</span>
               </div>
             </div>
             <div v-else-if="user.avatar == null" class = "photo" style="background-image: url('../../static/user-default.png')">
-              <div class = "statusCircle">
+              <div class = "statusCircle" v-bind:style="styles">
                 <span class="statusText">OK</span>
               </div>
             </div>
@@ -43,6 +43,15 @@
       return {
       }
     },
+    computed: {
+      styles: function() {
+          
+          return {
+              'border-color' : 'green'
+          };
+      }
+    },
+
     props: {
       users: {
         type: Array,
@@ -171,11 +180,11 @@
     padding: 0px;
     width: 27px;
     height: 27px;
-    border: 1px solid;
+    border: 2px solid;
     border-radius: 20px;
-    top: -3px;
-    left: -5px;
-    background: white;
+    top: -4px;
+    left: -6px;
+    background-color: white;
   }
 
   .info {
