@@ -190,6 +190,8 @@ export default {
       google.maps.event.addListener(app.map, 'bounds_changed', function () {
         Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
       });
+
+      app.updateUsersOnMap();
     },
 
     // Retrieve all users that joined the map and update locations
