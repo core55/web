@@ -414,6 +414,12 @@
   }
 
   //user location indicator styling
+  .el-tag.tag {
+    background-color: #ffffff;
+    color: #4A4A4A;
+    border-color: #4A4A4A;
+    border-width: 2px;
+  }
   .tag {
     position: absolute;
   }
