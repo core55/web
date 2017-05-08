@@ -3,24 +3,19 @@
     <div class="panel auth-panel">
             <h3>Login</h3>
             <div>
-                <!-- Email field -->
-                <div>
-                    <input id="email" type="email" name="email" placeholder="E-Mail Address" v-model="username" autofocus>
-                </div>
-        
-                <!-- Password field -->
-                <div>
-                    <input id="password" type="password" name="password" placeholder="Password" v-model="password">
-                </div>
-                
-                <!-- Login button -->
-                <button type="submit" @click="login">Login</button>
+
+              <!-- email field -->
+              <el-input placeholder="Type your email" v-model="username"></el-input>
+
+              <!-- password field -->
+              <el-input placeholder="Type your password" v-model="password"></el-input>
+
+              <!-- Login button -->
+              <el-button @click="login"> Jiho = the BEST  </el-button>
+
             </div>
 
-            <!-- Link to Register page -->
-            <span class="auth-text"><a onclick="window.location.href='/register'">Register</a> | </span>
-            
-            <span class="auth-text"><a onclick="window.location.href='/password/reset'">Reset Password</a></span>
+
 
         </div>
   </div>
@@ -37,23 +32,39 @@ Vue.use(VueResource);
 export default {
   name: 'login',
 
-  data () {
+  data() {
     return {
-      username: "",
-      password: ""
+      username: '',
+      password: ''
     }
   },
 
   methods: {
     async login () {
 
-
-      let payload = { 
+      let payload = {
           username: this.username,
           password: this.password
         }
 
-      // TODO: make request on backend. POST to "/api/login" with the payload. You should get back a valid user  
+      let login = await Api.letsLogin(payload);
+
+      if (login.ok == true ) {
+
+        let hash = response.body.hash;
+        router.push({ name: 'View', params: { id: hash }});
+        return;
+
+      }
+
+
+
+
+
+
+
+
+      // TODO: make request on backend. POST to "/api/login" with the payload. You should get back a valid user
 
     }
   }

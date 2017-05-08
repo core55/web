@@ -2,7 +2,7 @@
   <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <el-button size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <input id="pac-input" class="controls" type="text" placeholder="Search a location...">
 
     <div class='area-indicator'></div>
   </section>
@@ -11,12 +11,12 @@
 <script>
 import GoogleMap from './GoogleMap';
 import Api from '../api';
+import Helper from '../helper';
 import router from '../router';
-import * as marker from "vue";
 
 // Importing the MeetUp Pin files (.svg) from the assets folder
-import MeetingPoint_Pin from '../assets/MeetingPoint_Pin.svg'; // Meeting Point Pin
-import You_Pin from '../assets/You_Pin.svg';               // The location of oneself
+import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
+import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
 
 export default {
   name: 'create',
@@ -48,7 +48,8 @@ export default {
       app.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
         center: app.pos,
-        disableDefaultUI: true
+        disableDefaultUI: true,
+        styles: Helper.getGoogleMapStyles()
       });
 
       app.loading = false;
@@ -184,25 +185,6 @@ export default {
     box-shadow: none;
   }
 
-  #pac-input {
-    background-color: #fff;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-    margin-left: 12px;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width: 300px;
-  }
-
-  #pac-input:focus {
-    border-color: #4d90fe;
-  }
-
-  .pac-container {
-    font-family: Roboto;
-  }
-
   #type-selector {
     color: #fff;
     background-color: #4d90fe;
@@ -216,18 +198,5 @@ export default {
   }
   #target {
     width: 345px;
-  }
-
-  .area-indicator {
-    height: 450px;
-    width: 450px;
-    border-radius: 50%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin: -225px 0 0 -225px;
-    border: 3px solid #58B7FF;
-    background-color: rgba(88, 183, 255, 0.2);
-    pointer-events: none;
   }
 </style>

@@ -14,6 +14,14 @@ export default class Helper {
   }
 
   /*
+   *  Custom google map styling.
+   */
+  static getGoogleMapStyles() {
+    // https://snazzymaps.com/style/103940/light
+    return [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#e9e9e9"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#deebd8"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#c4e5f3"},{"visibility":"on"}]}];
+  }
+
+  /*
     Helper method to find vector and slope between
     a map and a pin on the map.
    */
@@ -33,23 +41,21 @@ export default class Helper {
     Method to calculate and update position of users' location indicator tags
     @param map - a google map object
     @param document - a reference to the html document
-    @currentMarkers - an array of google map markers currently on map
-    @currentUsers - an array of user information objects
+    @currentMarkers - an array of google map markers currently on map i.e. active users
    */
-  static trackUsers(map, document, currentMarkers, currentUsers) {
+  static trackUsers(map, document, currentMarkers) {
     var bounds = map.getBounds();
     var mappy = document.getElementById('map');
 
-    for (var i in currentUsers) {
-      var user = currentUsers[i];
-      var userId = user.id; //currentUsers[i];
-      var marker = currentMarkers[userId].marker;
+    for (var i in currentMarkers) {
+      var userId = currentMarkers[i].id
+      var marker = currentMarkers[i].marker;
       var position = marker.getPosition();
       var userTag = document.getElementById(userId);
 
       if (userTag) {
         if (!bounds.contains(position)) {
-          user.show = true;
+          currentMarkers[i].show = true;
 
           var xIntercept;
           var yIntercept;
@@ -98,13 +104,20 @@ export default class Helper {
           userTag.style.left = xIntercept + "px";
 
         } else {
-          user.show = false;
+          currentMarkers[i].show = false;
         }
       }
     }
   }
 
+  // Takes in a Time in the form:
+  // "YYYY-MM-DD"DAY_OF_THE_WEEK"HH:MM:SS.MMM+HOURS_FROM_GMT"
+  // Returns the time in minutes since last Updated
+  static timeSinceLastUpdate (updatedAt){
 
+    var userUpdatedAt = (new Date(updatedAt).getTime() / 1000).toFixed(0);
+    var currentTime = (new Date().getTime() / 1000).toFixed(0);
 
-
+    return ((currentTime - userUpdatedAt)/60).toFixed(1);
+  }  
 }
