@@ -161,18 +161,18 @@ export default class Helper {
   }
 
   /*
-   Method to get the color of a pin
+   Method to get status of a pin
    Used for updating statusCircle in userList
    */
-  static getColorPin(pin) {
+  static getStatus(pin) {
     if (pin === Pin_Online){
-      return 'green';
+      return ['green','ON'];
     } else if (pin === Pin_Recently_Online) {
-      return 'yellow';
+      return ['yellow', '5 MIN'];
     } else if (pin === Pin_LongTimeAgo_Online) {
-      return 'red';
+      return ['red', 'OFF'];
     } else { //default
-      return 'black'
+      return ['black','']
     }
   }
 
