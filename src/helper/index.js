@@ -109,6 +109,7 @@ export default class Helper {
       }
     }
   }
+
   // Takes in a Time in the form:
   // "YYYY-MM-DD"DAY_OF_THE_WEEK"HH:MM:SS.MMM+HOURS_FROM_GMT"
   // Returns the time in minutes since last Updated
