@@ -86,7 +86,8 @@ export default {
       shareUrl: '',
       requestState: 0,
       showUsers: false,
-      custominfobox:null
+      custominfobox:null,
+      savemarker:null
     }
   },
   methods: {
@@ -397,12 +398,17 @@ export default {
           if (app.infowindow) {
             app.infowindow.onRemove();
             app.infowindow=null;
+            if(app.savemarker==marker) {
+              app.savemarker=null;
+              return;
+            }
           }
 
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
           var username=user.nickname;
           var status ='"' + user.status +'"';
+          app.savemarker=marker;
 
           //call for custominfobox from asset/js
           app.infowindow =new app.customInfobox.default(myLatlng, username,status, this.map);
