@@ -3,7 +3,8 @@ import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
 
 export default class MarkerHelper {
-  static attachMeetingPointMarker(app) {
+  static attachMeetingPointMarkerOnClick(app) {
+    let helper = this;
     if (!app.map || typeof app.map == 'undefined') { return false; }
 
     google.maps.event.addListener(app.map, 'click', function(event) {
@@ -12,18 +13,39 @@ export default class MarkerHelper {
         return;
       }
 
-      //coordinate of a clicked place is obtained
-      app.markers.meetup = new google.maps.Marker({
-        draggable : true,
-        position: {lat: event.latLng.lat(), lng:event.latLng.lng()},
-        map: app.map,
-        icon: PinMeetingPoint
+      helper.attachMeetingPointMarker(app, {
+        lat: event.latLng.lat(),
+        lng:event.latLng.lng()
       });
+    });
+  }
 
-      //pin is draggable and as it gets dragged to the map, the corresponding coordinates get updated.
-      google.maps.event.addListener(app.markers.meetup,'dragend',function(event) {
-        app.markers.meetup.setPosition(event.latLng);
-      });
+  static attachMeetingPointMarker(app, location, onDragend, onClick) {
+    if (!app.map || typeof app.map == 'undefined') { return false; }
+
+    //coordinate of a clicked place is obtained
+    app.markers.meetup = new google.maps.Marker({
+      draggable : true,
+      position: location,
+      map: app.map,
+      icon: PinMeetingPoint
+    });
+
+    //pin is draggable and as it gets dragged to the map, the corresponding coordinates get updated.
+    google.maps.event.addListener(app.markers.meetup, 'dragend', function(event) {
+      app.markers.meetup.setPosition(event.latLng);
+
+      if (typeof onDragend != 'undefined') {
+        onDragend();
+      }
+    });
+
+    if (typeof onClick == 'undefined') {
+      return;
+    }
+
+    app.markers.meetup.addListener('click', function () {
+      onClick();
     });
   }
 

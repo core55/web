@@ -42,16 +42,14 @@ export default {
       }
 
       // initialise map with user location as center
-      this.map = new google.maps.Map(document.getElementById('map'), {
+      this.map = MapHelper.generateMap({
         zoom: 15,
-        center: this.userLocation,
-        disableDefaultUI: true,
-        styles: Helper.getGoogleMapStyles()
+        center: this.userLocation
       });
 
       this.loading = false;
       MapHelper.initialiseSearchBox(this);
-      MarkerHelper.attachMeetingPointMarker(this);
+      MarkerHelper.attachMeetingPointMarkerOnClick(this);
       MarkerHelper.attachUserMarker(this, this.userLocation);
     },
     async createMeetup () {

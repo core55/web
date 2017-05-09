@@ -41,6 +41,8 @@
 import GoogleMap from './GoogleMap';
 import Api from '../api';
 import Helper from '../helper';
+import MarkerHelper from '../helper/marker';
+import MapHelper from '../helper/map';
 import router from '../router';
 import UserList from './UserList';
 
@@ -58,6 +60,10 @@ export default {
   data() {
     return {
       loading: true,
+      markers: {},
+
+
+
       meetupId: null,
       meetup: null,
       map: null,
@@ -81,31 +87,13 @@ export default {
     }
   },
   methods: {
-    // Open and close user list panel
-    toggleShowUsers: function () {
-      this.showUsers = !this.showUsers;
-    },
-
-    // Update nickname of user in backend DB and local storage
-    async nicknameinput() {
-      let response = await Api.updateUsersNickname(this.user, this.nickname);
-      if (response.ok == false) {
-        this.$message.error('Oops, Nickname can not been set!');
-        return;
-      };
-
-      this.user = response.body;
-      localStorage.setItem('user', JSON.stringify(this.user));
-      this.NicknameDialog = false;
-      this.updateUsersOnMap();
-    },
-
     // Setup Map, try to join event (if not already joined), prompt for nickname
     async initMap() {
       let app = this;
       let response = await this.getMeetup();
       this.loading = false;
 
+      // check if location received
       if (response.ok == false) {
         this.$message.error('Oops, could not retrieve the Meetup!');
         router.push({ name: 'NotFound' });
@@ -113,38 +101,33 @@ export default {
       }
 
       this.meetup = response.body;
-      this.map = new google.maps.Map(document.getElementById('map'), {
+
+      // initialise map with user location as center
+      this.map = MapHelper.generateMap({
         zoom: app.meetup.zoomLevel,
         center: {
           lat: app.meetup.centerLatitude,
           lng: app.meetup.centerLongitude
-        },
-        disableDefaultUI: true,
-        styles: Helper.getGoogleMapStyles()
+        }
       });
 
       if (this.meetup.pinLatitude && this.meetup.pinLongitude) {
-        app.pinmarker = new google.maps.Marker({
-          draggable: true,
-          position: { lat: app.meetup.pinLatitude, lng: app.meetup.pinLongitude },
-          icon: PinMeetingPoint,
-          map: app.map
-        });
-
-        google.maps.event.addListener(app.pinmarker, 'dragend', function (event) {
-          app.pinmarker.setPosition(event.latLng);
-          Api.updateMeetupPinLocation(app.meetupId, app.pinmarker);
-        });
-
-        //the user can look up the direction to the meetin point
-        app.pinmarker.addListener('click', function () {
+        MarkerHelper.attachMeetingPointMarker(this, {
+          lat: app.meetup.pinLatitude,
+          lng: app.meetup.pinLongitude
+        }, function() {
+          Api.updateMeetupPinLocation(app.meetupId, app.markers.meetup);
+        }, function() {
           if (app.choosingDirection) {
-            app.findMyRoute({ lat: app.pinmarker.getPosition().lat(), lng: app.pinmarker.getPosition().lng() });
+            app.findMyRoute({
+              lat: app.markers.meetup.getPosition().lat(),
+              lng: app.markers.meetup.getPosition().lng()
+            });
+
             app.choosingDirection = false;
             return;
           }
         });
-
       } else {
 
         google.maps.event.addListener(app.map,'click', function (event) {
@@ -185,6 +168,29 @@ export default {
 
       app.updateUsersOnMap();
     },
+
+
+
+    // Open and close user list panel
+    toggleShowUsers: function () {
+      this.showUsers = !this.showUsers;
+    },
+
+    // Update nickname of user in backend DB and local storage
+    async nicknameinput() {
+      let response = await Api.updateUsersNickname(this.user, this.nickname);
+      if (response.ok == false) {
+        this.$message.error('Oops, Nickname can not been set!');
+        return;
+      };
+
+      this.user = response.body;
+      localStorage.setItem('user', JSON.stringify(this.user));
+      this.NicknameDialog = false;
+      this.updateUsersOnMap();
+    },
+
+
 
     // Retrieve all users that joined the map and update locations
     async updateUsersOnMap() {
