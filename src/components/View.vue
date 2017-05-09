@@ -275,6 +275,8 @@ export default {
         user = response.body;
         UserHelper.updateUser(user);
       }
+
+      this.updateUsersOnMap();
     },
 
     /*
