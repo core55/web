@@ -482,9 +482,9 @@ export default {
   },
   created: function() {
     //Update location sharing setting
-    var button = JSON.parse(localStorage.getItem('locationUpdates'));
-    if (button == null) button = true;
-    this.toggle.locationUpdates = button;
+    var locationUpdatePreference = JSON.parse(localStorage.getItem('locationUpdates'));
+    if (locationUpdatePreference == null) locationUpdatePreference = true;
+    this.toggle.locationUpdates = locationUpdatePreference;
   }
 }
 </script>
