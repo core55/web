@@ -20,9 +20,11 @@
       </el-switch>
     </div>
 
-    <transition-group name="fade">
-      <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
-    </transition-group>
+    <div v-for="user in markersMap">
+      <transition name="fade">
+        <el-tag v-show="user.show" v-bind:id="user.id" class="tag">{{ user.nickname }}</el-tag>
+      </transition>
+    </div>
 
     <user-list :users="markersMap" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
@@ -297,6 +299,11 @@ export default {
       let app = this;
       let user = UserHelper.getUser();
       let userId = user ? user.id : null;
+
+      //Make sure trackUsers is called once all users and markers have been loaded
+      setTimeout(function(){
+        Helper.trackUsers(app.map, document, app.markersMap, user.id);
+      }, 1000);
 
       google.maps.event.addListener(app.map, 'bounds_changed', function () {
         Helper.trackUsers(app.map, document, app.markersMap, userId);
