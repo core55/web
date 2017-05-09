@@ -1,8 +1,8 @@
 import Vue from 'vue';
 // Importing Last/Online pins (Test)
-import Pin_Online from '../assets/Pin/Color/Online.svg';
-import Pin_Recently_Online from '../assets/Pin/Color/RecentlyOnline.svg';
-import Pin_LongTimeAgo_Online from '../assets/Pin/Color/LongTimeNotOnline.svg';
+import Pin_Online from '../assets/svg/pin/user-online.svg';
+import Pin_Recently_Online from '../assets/svg/pin/user-recently.svg';
+import Pin_LongTimeAgo_Online from '../assets/svg/pin/user-idle.svg';
 
 export default class Helper {
   static getInitials(nickname) {

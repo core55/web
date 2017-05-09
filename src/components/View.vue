@@ -78,26 +78,13 @@ export default {
       input: {
         nickname: ''
       },
-
-
-
       meetup: null,
       map: null,
-      pos: null,
-      user: null,
-      userMeetups: null,
       markersMap: [],
       updatingLocation: false,
       updatingLocationInterval: null,
       shareUrl: '',
-      // nickname: '',
-      pinmarker: null,
-
-      on: true,
-      // this.toggle.direction: false,
-      // button: true,
       requestState: 0,
-      requestStateVisible: false,
       showUsers: false
     }
   },
@@ -123,7 +110,7 @@ export default {
       });
 
       // attach meeting point and its events
-      if (typeof this.markers.meetup == 'undefined') {
+      if (!this.meetup.pinLatitude) {
         MarkerHelper.attachMeetingPointMarkerOnClick(this, this.updateMeetupPinLocation, this.onMeetupPinClick);
       }else {
         MarkerHelper.attachMeetingPointMarker(this, {

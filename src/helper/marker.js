@@ -33,6 +33,10 @@ export default class MarkerHelper {
       icon: PinMeetingPoint
     });
 
+    if (typeof onDragend != 'undefined') {
+      onDragend();
+    }
+
     //pin is draggable and as it gets dragged to the map, the corresponding coordinates get updated.
     google.maps.event.addListener(app.markers.meetup, 'dragend', function(event) {
       app.markers.meetup.setPosition(event.latLng);
