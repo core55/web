@@ -14,9 +14,8 @@ import Api from '../api';
 import Helper from '../helper';
 import router from '../router';
 
-// Importing the MeetUp Pin files (.svg) from the assets folder
-import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
-import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
+import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
+import PinUser from '../assets/svg/pin/user-you.svg';
 
 export default {
   name: 'create',
@@ -68,7 +67,7 @@ export default {
           draggable : true,
           position: {lat: event.latLng.lat(), lng:event.latLng.lng()},
           map: app.map,
-          icon: MeetingPoint_Pin
+          icon: PinMeetingPoint
         });
 
         google.maps.event.addListener(app.marker,'dragend',function(event) {
@@ -82,7 +81,7 @@ export default {
           draggable : false,
           position: this.pos,
           map: app.map,
-          icon: You_Pin,
+          icon: PinUser,
           offset: '0%'
       })
 

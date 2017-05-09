@@ -44,11 +44,10 @@ import Helper from '../helper';
 import router from '../router';
 import UserList from './UserList';
 
-// Importing the MeetUp Pin files (.svg) from the assets folder
-import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
-import Anonymous_Pin from '../assets/Pin/Anonymous.svg';       // Anonymouse Pin
-import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
-import User_Pin from '../assets/Pin/Color/black.svg';   // The location of other users
+import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
+import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
+import PinUserYou from '../assets/svg/pin/user-you.svg';
+import PinUser from '../assets/svg/pin/user-black.svg';
 
 export default {
   name: 'view',
@@ -128,7 +127,7 @@ export default {
         app.pinmarker = new google.maps.Marker({
           draggable: true,
           position: { lat: app.meetup.pinLatitude, lng: app.meetup.pinLongitude },
-          icon: MeetingPoint_Pin,
+          icon: PinMeetingPoint,
           map: app.map
         });
 
@@ -152,7 +151,7 @@ export default {
           app.pinmarker = new google.maps.Marker({
             draggable: true,
             position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
-            icon: MeetingPoint_Pin,
+            icon: PinMeetingPoint,
             map: app.map
           });
           google.maps.event.addListener(app.pinmarker, 'dragend', function (event) {
@@ -255,13 +254,13 @@ export default {
           continue;
         }
 
-        var pin = User_Pin;
+        var pin = PinUser;
         var label = Helper.getInitials(users[i].nickname);
         if(this.user && this.user.id == users[i].id) {
-          pin = You_Pin;
+          pin = PinUserYou;
           label = null;
         } else if (users[i].nickname == null) {
-          pin = Anonymous_Pin;
+          pin = PinAnonymous;
           label = null;
         }
 
