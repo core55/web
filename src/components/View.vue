@@ -3,10 +3,12 @@
     <div class="request-indicator">
       <el-progress v-show="requestStateVisible" :stroke-width="3" id="request-indicator" :show-text="false" :percentage="requestState"></el-progress>
     </div>
+
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <el-button size="medium" id="sharebtn" icon="share" @click="shareButtonDialog = true"></el-button>
-    <el-button icon="information" id="showbtn" @click="toggleShowUsers"></el-button>
-    <el-button size="medium" id="directionbtn" icon="d-arrow-right" @click="activateDirection"></el-button>
+
+    <el-button class="app-btn-action" size="medium" id="btn-share" icon="share" @click="shareButtonDialog = true"></el-button>
+    <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggleShowUsers"></el-button>
+    <el-button class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
 
     <transition-group name="fade">
       <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
@@ -28,11 +30,10 @@
       </el-dialog>
     </div>
 
-    <div id="locationsw">
+    <div id="switch-location-updates">
       <el-switch v-model="button" on-color="#13ce66" off-color="#ff4949">
       </el-switch>
     </div>
-
   </section>
 </template>
 

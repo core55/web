@@ -1,4 +1,4 @@
-#btn-action-create {
+.app-btn-action {
   z-index: 1;
   position: absolute;
   right: 24px;
@@ -6,11 +6,28 @@
   width: 71px;
   height: 71px;
   padding: 0px 0px;
-  font-size: 50px;
   border-radius: 35px;
   border-color: white;
-  /* Oval: */
+  font-size: 45px;
   background: #FFFFFF;
   box-shadow: none;
   text-align: center;
+}
+
+#btn-action-create {
+  font-size: 50px;
+}
+
+#btn-share {}
+
+#btn-direction {
+  right: 24px;
+  top: 24px;
+  bottom: auto;
+}
+
+#showbtn {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
 }
