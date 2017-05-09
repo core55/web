@@ -86,7 +86,8 @@ export default {
       updatingLocationInterval: null,
       shareUrl: '',
       requestState: 0,
-      showUsers: false
+      showUsers: false,
+      mapout: false
     }
   },
   methods: {
@@ -418,6 +419,8 @@ export default {
 
     // REFACTOR TODO
 
+    //using GoogleMaps API, user can click the target-either a meeting point or another user-
+    //and the API will visualize the direction and informs users with direction
     findMyRoute(destination) {
       let user = UserHelper.getUser();
       var directionsDisplay;
@@ -462,6 +465,7 @@ export default {
       }
     },
 
+    //leaving button will direct users to leave the meetup
     outsideofMap() {
       let app = this;
       this.mapout = true;
