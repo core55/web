@@ -1,0 +1,15 @@
+.request-indicator {
+  display: block;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+
+  .el-progress-bar__outer,
+  .el-progress-bar__inner {
+    border-radius: 0;
+  }
+
+  .el-progress-bar__inner {
+    transition: all 0.5s ease-in-out;
+  }
+}

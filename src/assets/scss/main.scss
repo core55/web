@@ -13,6 +13,7 @@
 html {
   height: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 *,
@@ -31,9 +32,17 @@ body {
   padding: 0;
 }
 
+body .v-modal {
+  background-color: rgba(50, 64, 87, 0.6);
+}
+
 //
 //  Partials
 //
 
 @import "partial/map";
 @import "partial/button";
+@import "partial/dialog";
+@import "partial/location-indicator";
+@import "partial/location-switch";
+@import "partial/request";

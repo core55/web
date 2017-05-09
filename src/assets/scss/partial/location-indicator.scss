@@ -1,0 +1,31 @@
+//user location indicator styling
+.tag {
+  position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s
+}
+
+//user location indicator styling
+.el-tag.tag {
+  background-color: #ffffff;
+  color: #4A4A4A;
+  border-color: #4A4A4A;
+  border-width: 2px;
+}
+
+.tag {
+  position: absolute;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.6s
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0
+}

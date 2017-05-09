@@ -1,0 +1,74 @@
+.app-dialog {
+  .el-dialog {
+    margin-bottom: 0;
+    background: #3EAB3A;
+    box-shadow: none;
+  }
+
+  .el-input--large .el-input__inner,
+  .el-input__inner {
+    text-decoration: underline;
+    font-size: 18px;
+    color: #4990E2;
+    letter-spacing: 0;
+    box-shadow: none;
+    border: 0px;
+    background: #FFFFFF;
+    box-shadow: none;
+    border-radius: 100px;
+    width: 122%;
+    line-height: 60px;
+    padding-left: 15px;
+    height: 60px;
+    @media (max-width: 732px) {
+      width:132%;
+    }
+  }
+
+  .el-button {
+    padding: 21px 24px;
+  }
+
+  .el-dialog {
+    background: transparent;
+    box-shadow: none;
+    height: 47px;
+    max-width: 495px;
+    min-width: 360px;
+  }
+
+  .el-input-group--append .el-input__inner,
+  .el-input-group__prepend {
+    border-radius: 100px;
+  }
+
+  .el-input-group__append,
+  .el-input-group__prepend {
+    border: transparent;
+    background-color: transparent;
+  }
+
+  .el-input-group__append .el-button,
+  .el-button--primary {
+    background-color: #1d90e6;
+    color: #fff;
+    background: #4990E2;
+    box-shadow: none;
+    border-radius: 100px;
+  }
+
+  .el-dialog__header {
+    display: none;
+  }
+
+  .el-dialog__body {
+    padding: 0;
+  } //nickname box
+  &.app-dialog-nickname {
+    .el-input__inner {
+      text-decoration: none;
+      font-size: 18px;
+      color: #000;
+    }
+  }
+}
