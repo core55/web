@@ -89,6 +89,11 @@ export default {
       showUsers: false
     }
   },
+  watch: {
+    'toggle.locationUpdates': function(val) {
+        localStorage.setItem("locationUpdates", JSON.stringify(val));
+    }
+  },
   methods: {
     async initMap() {
       let app = this;
@@ -484,6 +489,12 @@ export default {
       app.updateMyLocation();
       app.updateUsersOnMap();
     }, twoMinutes);
+  },
+  created: function() {
+    //Update location sharing setting
+    var locationUpdatePreference = JSON.parse(localStorage.getItem('locationUpdates'));
+    if (locationUpdatePreference == null) locationUpdatePreference = true;
+    this.toggle.locationUpdates = locationUpdatePreference;
   }
 }
 </script>
