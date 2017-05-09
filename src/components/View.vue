@@ -87,7 +87,9 @@ export default {
       updatingLocationInterval: null,
       shareUrl: '',
       requestState: 0,
-      showUsers: false
+      showUsers: false,
+      custominfobox:null,
+      savemarker:null
     }
   },
   watch: {
@@ -127,6 +129,7 @@ export default {
       }
 
       this.loading = false;
+      this.customInfobox = require('../assets/js/customInfobox');
       this.joinEvent();
       this.initialiseUserOutOfBoundsTracking();
       this.updateUsersOnMap();
@@ -378,6 +381,7 @@ export default {
             label: label,
             title: users[i].nickname
           }),
+
           show: false,
           status: users[i].status,
           avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
@@ -397,23 +401,25 @@ export default {
             app.toggle.direction = false;
             return;
           }
-
           // close info window if one is already open
-          if (app.infoWindow) {
-            app.infoWindow.close(app.map, marker);
-            app.infoWindow = null;
+          if (app.infowindow) {
+            app.infowindow.onRemove();
+            app.infowindow=null;
+            if(app.savemarker==marker) {
+              app.savemarker=null;
+              return;
+            }
           }
 
           // spawn new infowindow
-          app.infoWindow = new google.maps.InfoWindow({
-            content: 'User name: ' + user.nickname + '\r\n' + 'Status: ' + user.status,
-            position: {
-              lat: marker.getPosition().lat(),
-              lng: marker.getPosition().lng()
-            }
-          });
+          var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
+          var username=user.nickname;
+          var status ='"' + user.status +'"';
+          app.savemarker=marker;
 
-          app.infoWindow.open(app.map, marker);
+          //call for custominfobox from asset/js
+          app.infowindow =new app.customInfobox.default(myLatlng, username,status, this.map);
+          //integrate the infowindow.open sinide custominfobox. as soon as the box spawn the window open
         });
       }
     },
