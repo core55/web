@@ -1,7 +1,7 @@
 <template>
   <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <el-button size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
+    <el-button class="app-btn-action" size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
     <input id="pac-input" class="controls" type="text" placeholder="Search a location...">
 
     <div class='area-indicator'></div>
@@ -12,10 +12,8 @@
 import GoogleMap from './GoogleMap';
 import Api from '../api';
 import Helper from '../helper';
+import MarkerHelper from '../helper/marker';
 import router from '../router';
-
-import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
-import PinUser from '../assets/svg/pin/user-you.svg';
 
 export default {
   name: 'create',
@@ -27,14 +25,13 @@ export default {
       map: null,
       loading: true,
       pos: null,
-      marker: null
+      markers: {}
     }
   },
   methods: {
     async initMap () {
       let app = this;
-      var infoWindow = null;
-      var myPositionPin = null;
+
 
       this.pos = await Api.getMyLocation();
 
@@ -54,37 +51,8 @@ export default {
       app.loading = false;
       this.initSearchBox();
 
-
-      //coordinate of a clicked place is obtained
-      //pin is draggable and as it gets dragged to the map, the corresponding coordinates get updated.
-      //only one pin is permitted to be the meeting point.
-      google.maps.event.addListener(app.map, 'click', function( event ){
-        if(app.marker != null) {
-          return;
-        }
-
-        app.marker = new google.maps.Marker({
-          draggable : true,
-          position: {lat: event.latLng.lat(), lng:event.latLng.lng()},
-          map: app.map,
-          icon: PinMeetingPoint
-        });
-
-        google.maps.event.addListener(app.marker,'dragend',function(event) {
-          app.marker.setPosition(event.latLng);
-        });
-
-      });
-
-      // Get Pin of your own positon (test)
-      myPositionPin = new google.maps.Marker({
-          draggable : false,
-          position: this.pos,
-          map: app.map,
-          icon: PinUser,
-          offset: '0%'
-      })
-
+      MarkerHelper.attachMeetingPointMarker(this);
+      MarkerHelper.attachUserMarker(this, this.pos);
     },
     initSearchBox() {
       let app = this;
