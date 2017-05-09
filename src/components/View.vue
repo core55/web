@@ -48,14 +48,10 @@ import MeetingPoint_Pin from '../assets/Pin/Meetup.svg'; // Meeting Point Pin
 import Anonymous_Pin from '../assets/Pin/Anonymous.svg';       // Anonymouse Pin
 import You_Pin from '../assets/Pin/You.svg';               // The location of oneself
 import User_Pin from '../assets/Pin/Color/black.svg';   // The location of other users
-import ElTag from "../../node_modules/element-ui/packages/tag/src/tag";
-import ElDialog from "../../node_modules/element-ui/packages/dialog/src/component";              // The location of other users
 
 export default {
   name: 'view',
   components: {
-    ElDialog,
-    ElTag,
     'google-map': GoogleMap,
     'user-list': UserList
   },
