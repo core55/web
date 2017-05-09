@@ -156,47 +156,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss" type="text/scss">
-  #btn-action-create {
-    z-index: 1;
-    position: absolute;
-    right: 24px;
-    bottom: 24px;
-    width: 71px;
-    height: 71px;
-    padding: 0px 0px;
-    font-size: 50px;
-    border-radius: 35px;
-    border-color: white;
-    /* Oval: */
-    background: #FFFFFF;
-    box-shadow: none;
-    text-align: center;
-  }
-
-  .controls {
-    margin-top: 10px;
-    border: 1px solid transparent;
-    border-radius: 2px 0 0 2px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    height: 32px;
-    outline: none;
-    box-shadow: none;
-  }
-
-  #type-selector {
-    color: #fff;
-    background-color: #4d90fe;
-    padding: 5px 11px 0px 11px;
-  }
-
-  #type-selector label {
-    font-family: Roboto;
-    font-size: 13px;
-    font-weight: 300;
-  }
-  #target {
-    width: 345px;
-  }
-</style>
+<style scoped lang="scss" type="text/scss"></style>
