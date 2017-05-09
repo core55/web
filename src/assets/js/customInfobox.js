@@ -26,6 +26,7 @@ export default class customInfobox extends google.maps.OverlayView {
     this.setMap(map);
   }
 
+  //add the div box into pane
   onAdd() {
     var div = document.createElement('div');
     div.style.borderStyle = 'solid';
@@ -40,7 +41,6 @@ export default class customInfobox extends google.maps.OverlayView {
     div.setAttribute("v-animation",'')
     div.className="bounce-enter-active"
     // Create the img element and attach it to the div.
-
      this.content1 = document.createElement('p');
     var u = document.createTextNode(this.username_);
     this.content2= document.createElement('p');
@@ -75,12 +75,12 @@ export default class customInfobox extends google.maps.OverlayView {
     var panes = this.getPanes();
     panes.overlayImage.appendChild(div);
   }
-
+  //draw out the box
   draw() {
     var overlayProjection = this.getProjection();
     var position = this.myLatlng_;
     var px = overlayProjection.fromLatLngToDivPixel(position);
-//postion
+    //postion
     var div = this.div_;
     div.style.left = px.x+16+ 'px';
     div.style.top = px.y -128+ 'px';
@@ -95,7 +95,7 @@ export default class customInfobox extends google.maps.OverlayView {
     this.div_ = null;
   }
 
-//not useful
+  //not useful
   hide() {
     if (this.div_) {
       // The visibility property must be a string enclosed in quotes.
@@ -105,7 +105,7 @@ export default class customInfobox extends google.maps.OverlayView {
     }
   }
 
-//not useful
+ //not useful
   show() {
     if (this.div_) {
       this.div_.setAttribute("v-if", "show");
@@ -114,7 +114,7 @@ export default class customInfobox extends google.maps.OverlayView {
     }
   }
 
-//not useful (further expierment required)
+ //not useful (further expierment required)
   toggle()  {
     if (this.div_) {
       this.element.setAttribute("v-if", "show=!show");

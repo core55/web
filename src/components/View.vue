@@ -373,6 +373,7 @@ export default {
             label: label,
             title: users[i].nickname
           }),
+
           show: false,
           status: users[i].status,
           avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
