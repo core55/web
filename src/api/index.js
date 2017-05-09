@@ -93,5 +93,8 @@ export default class Api {
     return Vue.http.post(process.env.API_URL + 'login', payload);
   }
 
+  static letsRegister(registerInfo){
+    return Vue.http.post(process.env.API_URL + 'register', registerInfo);
+  }
 
 }

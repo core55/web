@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-container page-login">
+  <div class="flex-container">
     <div class="panel auth-panel">
-      <h3>Login</h3>
+      <h3>Register</h3>
       <div>
         <!-- email field -->
         <el-input placeholder="Type your email" v-model="username"></el-input>
@@ -9,59 +9,68 @@
         <!-- password field -->
         <el-input placeholder="Type your password" v-model="password"></el-input>
 
-        <!-- Login button -->
-        <el-button @click="login">Jiho = the BEST</el-button>
+        <!-- password comparison field -->
+        <el-input placeholder="Type your password again" v-model="password1"></el-input>
 
         <!-- Register button -->
-        <el-button @click="register"> New user? Click to register! </el-button>
+        <el-button @click="register"> Jiho = the BEST  </el-button>
+
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
-import Api from '../api';
-import router from '../router';
-import Vue from 'vue';
-import VueResource from 'vue-resource';
+  import Api from '../api';
+  import router from '../router';
+  import Vue from 'vue';
+  import VueResource from 'vue-resource';
 
-Vue.use(VueResource);
+  Vue.use(VueResource);
 
-export default {
-  name: 'login',
-  data() {
-    return {
-      username: '',
-      password: ''
-    }
-  },
-  methods: {
-    async login () {
-      let payload = {
-        username: this.username,
-        password: this.password
+  export default {
+    name: 'register',
+
+    data() {
+      return {
+        username: '',
+        password: '',
+        password1: ''
       }
-
-      let login = await Api.letsLogin(payload);
-
-      if (login.ok == true ) {
-        let hash = response.body.hash;
-        router.push({ name: 'View', params: { id: hash }});
-        return;
-      }
-
     },
 
-    register(){
-      router.push({ name: 'Register' });
+    methods: {
+      async register () {
+
+        let registerInfo = {
+          username: this.username,
+          password: this.password,
+          password1: this.password1
+        }
+
+        if (password.equals(password1)){
+          let register = await Api.letsRegister(registerInfo);
+
+          if (register.ok == true ) {
+
+            let hash = response.body.hash;
+            router.push({ name: 'View', params: { id: hash }});
+            return;
+
+          }
+        }
+        else {
+          this.$message.info('password does not match');
+        }
+
+      }
     }
   }
-}
 </script>
 
 <style scoped lang="scss" type="text/scss">
-.page-login {
-  &.flex-container {
+  .flex-container {
     height: 100%;
     width: 100%;
     display: flex;
@@ -87,8 +96,6 @@ export default {
       cursor: pointer;
       margin: 30px 0;
       padding: 20px;
-      -webkit-transition: all 0.3 ease;
-      transition: all 0.3 ease;
       width: 55%;
       min-width: 125px;
       &:hover {
@@ -114,5 +121,5 @@ export default {
       }
     }
   }
-}
+
 </style>
