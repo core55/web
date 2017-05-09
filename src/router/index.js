@@ -4,6 +4,8 @@ import Create from '@/components/Create'
 import View from '@/components/View'
 import Login from '@/components/Login'
 import NotFound from '@/components/NotFound'
+import LeftMeetup from '@/components/LeftMeetup'
+import Register from '@/components/Register'
 
 Vue.use(Router)
 
@@ -23,6 +25,16 @@ export default new Router({
       path: '/404',
       name: 'NotFound',
       component: NotFound
+    },
+    {
+      path: '/leftMeetup',
+      name: 'LeftMeetup',
+      component: LeftMeetup
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/m/:id',
