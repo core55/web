@@ -53,17 +53,14 @@
           let register = await Api.letsRegister(registerInfo);
 
           if (register.ok == true ) {
-
             let hash = response.body.hash;
             router.push({ name: 'View', params: { id: hash }});
             return;
-
           }
         }
         else {
           this.$message.info('password does not match');
         }
-
       }
     }
   }
