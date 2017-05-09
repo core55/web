@@ -3,7 +3,7 @@ import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
 
 export default class MarkerHelper {
-  static attachMeetingPointMarkerOnClick(app) {
+  static attachMeetingPointMarkerOnClick(app, onDragend, onClick) {
     let helper = this;
     if (!app.map || typeof app.map == 'undefined') { return false; }
 
@@ -16,7 +16,7 @@ export default class MarkerHelper {
       helper.attachMeetingPointMarker(app, {
         lat: event.latLng.lat(),
         lng:event.latLng.lng()
-      });
+      }, onDragend, onClick);
     });
   }
 

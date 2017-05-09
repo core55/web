@@ -90,17 +90,14 @@ export default {
     // Setup Map, try to join event (if not already joined), prompt for nickname
     async initMap() {
       let app = this;
-      let response = await this.getMeetup();
-      this.loading = false;
+      this.meetup = await this.getMeetup();
 
-      // check if location received
-      if (response.ok == false) {
+      // Redirect if meetup does not exist
+      if (this.meetup.ok == false) {
         this.$message.error('Oops, could not retrieve the Meetup!');
         router.push({ name: 'NotFound' });
         return;
       }
-
-      this.meetup = response.body;
 
       // initialise map with user location as center
       this.map = MapHelper.generateMap({
@@ -111,63 +108,71 @@ export default {
         }
       });
 
-      if (this.meetup.pinLatitude && this.meetup.pinLongitude) {
+      // attach meeting point and its events
+      if (typeof this.markers.meetup == 'undefined') {
+        MarkerHelper.attachMeetingPointMarkerOnClick(this, this.updateMeetupPinLocation, this.onMeetupPinClick);
+      }else {
         MarkerHelper.attachMeetingPointMarker(this, {
           lat: app.meetup.pinLatitude,
           lng: app.meetup.pinLongitude
-        }, function() {
-          Api.updateMeetupPinLocation(app.meetupId, app.markers.meetup);
-        }, function() {
-          if (app.choosingDirection) {
-            app.findMyRoute({
-              lat: app.markers.meetup.getPosition().lat(),
-              lng: app.markers.meetup.getPosition().lng()
-            });
-
-            app.choosingDirection = false;
-            return;
-          }
-        });
-      } else {
-
-        google.maps.event.addListener(app.map,'click', function (event) {
-          app.pinmarker = new google.maps.Marker({
-            draggable: true,
-            position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
-            icon: PinMeetingPoint,
-            map: app.map
-          });
-          google.maps.event.addListener(app.pinmarker, 'dragend', function (event) {
-            app.pinmarker.setPosition(event.latLng);
-            Api.updateMeetupPinLocation(app.meetupId, app.pinmarker);
-          });
-
-          //the user can look up the direction to the meetin point
-          app.pinmarker.addListener('click', function () {
-            if (app.choosingDirection) {
-              app.findMyRoute({ lat: app.pinmarker.getPosition().lat(), lng: app.pinmarker.getPosition().lng() });
-              app.choosingDirection = false;
-              return;
-            }
-          });
-
-        });
-
+        }, this.updateMeetupPinLocation, this.onMeetupPinClick);
       }
 
       this.loading = false;
       this.joinEvent();
+      this.initialiseUserOutOfBoundsTracking();
+      this.updateUsersOnMap();
+      this.promptForNickname();
+    },
 
-      if (!app.user || app.user.nickname == null) {
+    /*
+     *  Send meetup location update to backend.
+     */
+    updateMeetupPinLocation() {
+      Api.updateMeetupPinLocation(this.meetupId, this.markers.meetup);
+    },
+
+    /*
+     *  Show directions towards meetup pin.
+     */
+    onMeetupPinClick() {
+      if (this.choosingDirection) {
+        this.findMyRoute({
+          lat: this.markers.meetup.getPosition().lat(),
+          lng: this.markers.meetup.getPosition().lng()
+        });
+
+        this.choosingDirection = false;
+        return;
+      }
+    },
+
+    /*
+     *  If nickname is not set, ask for input.
+     */
+    promptForNickname() {
+      if (!this.user || this.user.nickname == null) {
         this.NicknameDialog = true;
       }
+    },
+
+    /*
+     *  If nickname is not set, ask for input.
+     */
+    initialiseUserOutOfBoundsTracking() {
+      let app = this;
       //Listener to track when window view changes and update user location indicators accordingly
       google.maps.event.addListener(app.map, 'bounds_changed', function () {
         Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
       });
-
-      app.updateUsersOnMap();
     },
+
+
+
+
+
+
+    // TODO
 
 
 
