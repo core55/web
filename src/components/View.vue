@@ -1,22 +1,22 @@
 <template>
   <section>
     <div class="request-indicator">
-      <el-progress v-show="requestStateVisible" :stroke-width="3" id="request-indicator" :show-text="false" :percentage="requestState"></el-progress>
+      <el-progress v-show="toggle.requestState" :stroke-width="3" id="request-indicator" :show-text="false" :percentage="requestState"></el-progress>
     </div>
 
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
 
-    <el-button class="app-btn-action" size="medium" id="btn-share" icon="share" @click="shareButtonDialog = true"></el-button>
-    <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggleShowUsers"></el-button>
+    <el-button class="app-btn-action" size="medium" id="btn-share" icon="share" @click="toggle.shareDialog = true"></el-button>
+    <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
 
     <transition-group name="fade">
       <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
     </transition-group>
 
-    <user-list :users="markersMap" :show="showUsers" v-on:toggleShow="toggleShowUsers"></user-list>
+    <user-list :users="markersMap" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
-    <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="shareButtonDialog" size="small">
+    <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
         <el-button type="info" slot="append" @click="shareMeetup">Copy</el-button>
       </el-input>
@@ -61,17 +61,20 @@ export default {
   data() {
     return {
       loading: true,
+      meetupHash: null,
       markers: {},
       toggle: {
         nicknamePrompt: false,
-        userList: false
+        userList: false,
+        requestState: false,
+        shareDialog: false
       },
       input: {
         nickname: ''
       },
 
 
-      meetupId: null,
+
       meetup: null,
       map: null,
       pos: null,
@@ -80,7 +83,6 @@ export default {
       markersMap: [],
       updatingLocation: false,
       updatingLocationInterval: null,
-      shareButtonDialog: false,
       shareUrl: '',
       // nickname: '',
       pinmarker: null,
@@ -133,10 +135,20 @@ export default {
     },
 
     /*
+     *  Retrieve a meetup from the URL hash parameter.
+     */
+    async getMeetup() {
+      this.meetupHash = this.$route.params.id;
+      let meetup = await Api.getMeetup(this.meetupHash);
+      this.loading = false;
+      return meetup;
+    },
+
+    /*
      *  Send meetup location update to backend.
      */
     updateMeetupPinLocation() {
-      Api.updateMeetupPinLocation(this.meetupId, this.markers.meetup);
+      Api.updateMeetupPinLocation(this.meetupHash, this.markers.meetup);
     },
 
     /*
@@ -178,6 +190,71 @@ export default {
       this.updateUsersOnMap();
     },
 
+    /*
+     *  Open modal with sharing link to meetup and allow to copy it in clipboard.
+     */
+    shareMeetup() {
+      this.toggle.shareDialog = false;
+      var shareInput = document.querySelector('#share-url > input');
+
+      try {
+        shareInput.select();
+        document.execCommand('copy');
+      } catch (error) {
+        this.$message.error('Oops, Something went wrong: ' + error);
+        return;
+      }
+
+      this.$message.success('Url copied and ready to share!');
+    },
+
+    /*
+     *  Retrieve all users of the meetup and trigger update.
+     */
+    async updateUsersOnMap() {
+      let app = this;
+      this.requestState = 0;
+      this.toggle.requestState = true;
+      this.requestState = 15;
+
+      let response = await Api.getMeetupUsers(this.meetupHash);
+      this.requestState = 100;
+
+      setTimeout(function () {
+        app.toggle.requestState = false;
+        app.requestState = 0;
+      }, 1000);
+
+      if (response.ok == false) {
+        this.$message.error('Oops, could not retrieve the Users!');
+        return;
+      }
+
+      let users = response.body._embedded.users;
+      this.updateMarkers(users);
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -198,37 +275,6 @@ export default {
     },
 
 
-
-    // Open and close user list panel
-    toggleShowUsers: function () {
-      this.showUsers = !this.showUsers;
-    },
-
-
-
-
-
-    // Retrieve all users that joined the map and update locations
-    async updateUsersOnMap() {
-      let app = this;
-      this.requestState = 0;
-      this.requestStateVisible = true;
-      this.requestState = 15;
-      let users = await Api.getMeetupUsers(this.meetupId);
-      this.requestState = 100;
-      if (users.ok == true) {
-        users = users.body._embedded.users;
-        this.updateMarkers(users);
-      }
-      else {
-        this.$message.error('Oops, could not retrieve the Users!');
-      }
-
-      setTimeout(function () {
-        app.requestStateVisible = false;
-        app.requestState = 0;
-      }, 1000);
-    },
 
     //check each user if user's location has changed since last update
     //update user's location marker according to the geolocation update
@@ -336,38 +382,9 @@ export default {
       return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
     },
 
-    // Open modal with sharing link to meetup and allow to copy it in clipboard
-    shareMeetup() {
-      this.shareButtonDialog = false;
 
-      let app = this;
-      let hash = this.meetupId;
-      var shareInput = document.querySelector('#share-url > input');
 
-      try {
-        shareInput.select();
-        document.execCommand('copy');
-      } catch (err) {
-        this.$message({
-          type: 'info',
-          message: 'copy error' + err
-        });
-        return;
-      }
 
-      this.$message({
-        type: 'success',
-        message: 'Share Url Copied'
-      });
-    },
-
-    // Retrieve a meetup from the URL hash parameter
-    async getMeetup() {
-      this.meetupId = this.$route.params.id;
-      let meetup = await Api.getMeetup(this.meetupId);
-      this.loading = false;
-      return meetup;
-    },
 
     // Retrieve user's current coordinates and update location
     async updateMyLocation() {
@@ -397,7 +414,7 @@ export default {
       this.userMeetups = JSON.parse(localStorage.getItem('userMeetups'));
       if (!this.userMeetups) { this.userMeetups = []; }
 
-      if (this.userMeetups.indexOf(this.meetupId) > -1) {
+      if (this.userMeetups.indexOf(this.meetupHash) > -1) {
         // already joined
         this.$message.info('Already joined the Meetup!');
         return;
@@ -413,10 +430,10 @@ export default {
         params['id'] = this.user.id;
       }
 
-      let response = await Api.joinMeetup(this.meetupId, params);
+      let response = await Api.joinMeetup(this.meetupHash, params);
 
       if (response.ok == true) {
-        this.userMeetups.push(this.meetupId);
+        this.userMeetups.push(this.meetupHash);
         localStorage.setItem('userMeetups', JSON.stringify(this.userMeetups));
         this.$message.success('Successfuly joined the Meetup!');
 
