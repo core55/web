@@ -9,11 +9,13 @@
 </template>
 
 <script>
+
+import router from '../router';
 import GoogleMap from './GoogleMap';
 import Api from '../api';
 import Helper from '../helper';
+import MapHelper from '../helper/map';
 import MarkerHelper from '../helper/marker';
-import router from '../router';
 
 export default {
   name: 'create',
@@ -24,73 +26,36 @@ export default {
     return {
       map: null,
       loading: true,
-      pos: null,
+      userLocation: null,
       markers: {}
     }
   },
   methods: {
     async initMap () {
-      let app = this;
+      this.userLocation = await Api.getMyLocation();
 
-
-      this.pos = await Api.getMyLocation();
-
-      if (!app.pos) {
-        app.$message.error('Oops, The Geolocation service failed.');
-        app.loading = false;
+      // check if location received
+      if (!this.userLocation) {
+        this.$message.error('Oops, The Geolocation service failed.');
+        this.loading = false;
         return;
       }
 
-      app.map = new google.maps.Map(document.getElementById('map'), {
+      // initialise map with user location as center
+      this.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
-        center: app.pos,
+        center: this.userLocation,
         disableDefaultUI: true,
         styles: Helper.getGoogleMapStyles()
       });
 
-      app.loading = false;
-      this.initSearchBox();
-
+      this.loading = false;
+      MapHelper.initialiseSearchBox(this);
       MarkerHelper.attachMeetingPointMarker(this);
-      MarkerHelper.attachUserMarker(this, this.pos);
-    },
-    initSearchBox() {
-      let app = this;
-
-      // Create the search box and link it to the UI element.
-      var input = document.getElementById('pac-input');
-      var searchBox = new google.maps.places.SearchBox(input);
-      app.map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
-
-      // Bias the SearchBox results towards current map's viewport.
-      app.map.addListener('bounds_changed', function() {
-        searchBox.setBounds(app.map.getBounds());
-      });
-
-      // Listen for the event fired when the user selects a prediction and retrieve
-      // more details for that place.
-      searchBox.addListener('places_changed', function() {
-        var places = searchBox.getPlaces();
-        if (places.length == 0) {
-          return;
-        }
-
-        // For each place, get the icon, name and location.
-        var bounds = new google.maps.LatLngBounds();
-        places.forEach(function(place) {
-          if (!place.geometry) {
-            console.log("Returned place contains no geometry");
-            return;
-          }
-          app.map.setCenter(place.geometry.location);
-        });
-      });
+      MarkerHelper.attachUserMarker(this, this.userLocation);
     },
     async createMeetup () {
-      var app = this;
       this.loading = true;
-
-
       var position = this.map.getCenter();
       var zoom = this.map.getZoom();
 
@@ -100,16 +65,14 @@ export default {
         zoomLevel: zoom
       };
 
-
-      if (this.marker) {
-        var markerPosition = this.marker.getPosition();
+      if (this.markers.meetup) {
+        var markerPosition = this.markers.meetup.getPosition();
         params['pinLongitude'] = markerPosition.lng();
         params['pinLatitude'] = markerPosition.lat();
       }
 
       let response = await Api.createMeetup(params);
-
-      app.loading = false;
+      this.loading = false;
 
       if (response.ok) {
         let hash = response.body.hash;
