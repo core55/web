@@ -8,7 +8,16 @@
 
     <el-button class="app-btn-action" size="medium" id="btn-share" icon="share" @click="toggle.shareDialog = true"></el-button>
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
-    <el-button class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
+
+    <span>
+      <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
+      <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
+    </span>
+
+    <div id="switch-location-updates">
+      <el-switch v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949">
+      </el-switch>
+    </div>
 
     <transition-group name="fade">
       <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
@@ -28,11 +37,6 @@
           <el-button type="info" slot="append" @click="updateNickname">Enter</el-button>
         </el-input>
       </el-dialog>
-    </div>
-
-    <div id="switch-location-updates">
-      <el-switch v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949">
-      </el-switch>
     </div>
   </section>
 </template>
@@ -68,7 +72,8 @@ export default {
         userList: false,
         requestState: false,
         shareDialog: false,
-        locationUpdates: true
+        locationUpdates: true,
+        direction: false
       },
       input: {
         nickname: ''
@@ -89,7 +94,7 @@ export default {
       pinmarker: null,
 
       on: true,
-      choosingDirection: false,
+      // this.toggle.direction: false,
       // button: true,
       requestState: 0,
       requestStateVisible: false,
@@ -156,13 +161,13 @@ export default {
      *  Show directions towards meetup pin.
      */
     onMeetupPinClick() {
-      if (this.choosingDirection) {
+      if (this.toggle.direction) {
         this.findMyRoute({
           lat: this.markers.meetup.getPosition().lat(),
           lng: this.markers.meetup.getPosition().lng()
         });
 
-        this.choosingDirection = false;
+        this.toggle.direction = false;
         return;
       }
     },
@@ -286,7 +291,27 @@ export default {
       }
     },
 
+    /*
+     *  Listener to track when window view changes and update user location indicators accordingly.
+     */
+    initialiseUserOutOfBoundsTracking() {
+      let app = this;
+      let user = UserHelper.getUser();
+      google.maps.event.addListener(app.map, 'bounds_changed', function () {
+        Helper.trackUsers(app.map, document, app.markersMap, user.id);
+      });
+    },
 
+    /*
+     *  Activates google direction api listener.
+     */
+    activateDirection() {
+      this.toggle.direction = !this.toggle.direction;
+
+      if (this.toggle.direction) {
+        this.$message.info('click your desired destination');
+      }
+    },
 
 
 
@@ -316,22 +341,13 @@ export default {
 
     // TODO
 
-    /*
-     *  Listener to track when window view changes and update user location indicators accordingly.
-     */
-    initialiseUserOutOfBoundsTracking() {
-      let app = this;
-      // google.maps.event.addListener(app.map, 'bounds_changed', function () {
-      //   Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
-      // });
-    },
+
 
 
 
     //check each user if user's location has changed since last update
     //update user's location marker according to the geolocation update
     smooth() {
-      var app = this;
       var users = this.markersMap;
       var done = true;
 
@@ -346,7 +362,7 @@ export default {
       }
 
       if (done == false) {
-        requestAnimationFrame(app.smooth);
+        requestAnimationFrame(this.smooth);
       }
     },
 
@@ -408,9 +424,9 @@ export default {
 
         marker.addListener('click', function () {
           //the user can look up the direction to another user
-          if (app.choosingDirection) {
+          if (app.toggle.direction) {
             app.findMyRoute({ lat: app.markersMap[user.id].marker.getPosition().lat(), lng: app.markersMap[user.id].marker.getPosition().lng() });
-            app.choosingDirection = false;
+            app.toggle.direction = false;
             return;
           }
 
@@ -464,14 +480,10 @@ export default {
       }
     },
 
-    activateDirection() {
-      let app = this;
-      this.choosingDirection = true;
-      this.$message.info('click your desired destination');
-    },
+
 
     findMyRoute(destination) {
-
+      let user = UserHelper.getUser();
       var directionsDisplay;
       var directionsService = new google.maps.DirectionsService();
       let app = this;
@@ -483,7 +495,7 @@ export default {
 
       function initialize() {
         directionsDisplay = new google.maps.DirectionsRenderer();
-        original = { lat: app.user.lastLatitude, lng: app.user.lastLongitude };
+        original = { lat: user.lastLatitude, lng: user.lastLongitude };
         directionsDisplay.setMap(app.map);
       }
 
