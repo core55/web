@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
+import Helper from '.';
+import UserHelper from './user';
 
 export default class MarkerHelper {
   static attachMeetingPointMarkerOnClick(app, onDragend, onClick) {
@@ -59,5 +61,46 @@ export default class MarkerHelper {
       icon: PinUser,
       offset: '0%'
     })
+  }
+
+  /*
+   * Calculates and attaches user marker movement.
+   */
+  static calculateSmoothMarkerMovement(user, location) {
+    var previousLocation = user.marker.getPosition();
+    var steps = 1000;
+
+    var deltaLat = location.lat - previousLocation.lat();
+    var deltaLng = location.lng - previousLocation.lng();
+
+    var startingLat = previousLocation.lat();
+    var startingLng = previousLocation.lng();
+
+    user.moveTo = [];
+
+    for (var i = 0; i < steps; i++) {
+      startingLat += deltaLat / steps;
+      startingLng += deltaLng / steps;
+      user.moveTo[i] = { lat: startingLat, lng: startingLng };
+    }
+  }
+
+  static updateUserMarkerIcon(user, marker, map) {
+    let currentUser = UserHelper.getUser();
+
+    // abort if it's the current user or has no nickname
+    if (currentUser.id == user.id || user.nickname == null) {
+      return;
+    }
+
+    var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
+    var pin = Helper.getPin(timeSinceLastUpdate);
+
+    // Remove marker
+    marker.setMap(null);
+
+    // set new pin style and force refresh
+    marker.icon = pin;
+    marker.setMap(map);
   }
 }

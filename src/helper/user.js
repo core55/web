@@ -6,6 +6,11 @@ export default class UserHelper {
     return this.retrieveFromLocalStorage('user');
   }
 
+  static getUserCoordinates() {
+    let user = this.getUser();
+    return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
+  }
+
   static getUserMeetups() {
     return this.retrieveFromLocalStorage('userMeetups');
   }

@@ -102,7 +102,6 @@ export default {
     }
   },
   methods: {
-    // Setup Map, try to join event (if not already joined), prompt for nickname
     async initMap() {
       let app = this;
       this.meetup = await this.getMeetup();
@@ -313,41 +312,10 @@ export default {
       }
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // TODO
-
-
-
-
-
-    //check each user if user's location has changed since last update
-    //update user's location marker according to the geolocation update
-    smooth() {
+    /*
+     *  Checks all user markers if location has changed and moves them if necessary.
+     */
+    smoothlyMoveUserMarkers() {
       var users = this.markersMap;
       var done = true;
 
@@ -356,43 +324,45 @@ export default {
           continue;
         }
 
-        var update = users[i].moveTo.shift();
         done = false;
+        var update = users[i].moveTo.shift();
         users[i].marker.setPosition({ lat: update.lat, lng: update.lng });
       }
 
-      if (done == false) {
-        requestAnimationFrame(this.smooth);
+      if (!done) {
+        requestAnimationFrame(this.smoothlyMoveUserMarkers);
       }
     },
 
-    // Update users' pins including position and data (status, nickname, etc...)
+    /*
+     *  Update users' pins including position and data (status, nickname, etc...)
+     */
     async updateMarkers(users) {
-      var app = this;
-      var infowindow = null;
+      let app = this;
       let currentUser = UserHelper.getUser();
       for (var i in users) {
-
+        // check if user already has a marker
         var index = this.markersMap.findIndex(function (item) {
           if (!item) { return false; }
           return item.id === users[i].id;
         });
 
-        if (index != -1) { //the marker for that user exists already
-          if(currentUser.id != users[i].id && users[i].nickname != null) { //don't overwrite defaults
-            var timeSinceLastUpdate = Helper.timeSinceLastUpdate(users[i].updatedAt);
-            var pin = Helper.getPin(timeSinceLastUpdate); //get pin style
-            this.markersMap[index].marker.setMap(null); // Remove marker
-            this.markersMap[index].marker.icon = pin; // set new pin style
-            this.markersMap[index].marker.setMap(this.map); // Force refresh/reload
-          }
-          this.moveMarkerSmoothly(this.markersMap[index], {lat: users[i].lastLatitude, lng: users[i].lastLongitude});
-          window.requestAnimationFrame(app.smooth);
+        // user already has a marker, just move it
+        if (index != -1) {
+          MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map);
+          MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
+            lat: users[i].lastLatitude,
+            lng: users[i].lastLongitude
+          });
+
+          window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
         }
 
+        // choose pin for new user
         var pin = PinUser;
         var label = Helper.getInitials(users[i].nickname);
+
         if(currentUser && currentUser.id == users[i].id) {
           pin = PinUserYou;
           label = null;
@@ -401,84 +371,64 @@ export default {
           label = null;
         }
 
+        // spawn new marker
         this.markersMap.push({
+          id: users[i].id,
+          nickname: users[i].nickname,
           marker: new google.maps.Marker({ //We create a new marker
             position: { lat: users[i].lastLatitude, lng: users[i].lastLongitude },
             map: this.map,
             icon: pin,
-            //user's nickname is updated -> customized marker should be implemented
             label: label,
             title: users[i].nickname
           }),
-          nickname: users[i].nickname,
-          id: users[i].id,
           show: false,
           status: users[i].status,
           avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
         });
 
-        //status listener
-        var infowindow = null;
+        index = this.markersMap.length - 1;
+        let marker = this.markersMap[index].marker;
         let user = users[i];
-        let marker = this.markersMap[this.markersMap.length - 1].marker; //latest marker will always be last
-
         marker.addListener('click', function () {
           //the user can look up the direction to another user
           if (app.toggle.direction) {
-            app.findMyRoute({ lat: app.markersMap[user.id].marker.getPosition().lat(), lng: app.markersMap[user.id].marker.getPosition().lng() });
+            app.findMyRoute({
+              lat: marker.getPosition().lat(),
+              lng: marker.getPosition().lng()
+            });
+
             app.toggle.direction = false;
             return;
           }
 
-          if (infowindow) {
-            infowindow.close(app.map, marker);
-            infowindow = null
-          } else {
-            infowindow = new google.maps.InfoWindow({
-              content: 'User name: ' + user.nickname + '\r\n' + 'Status: ' + user.status,
-              position: {
-                lat: marker.getPosition().lat(),
-                lng: marker.getPosition().lng()
-              }
-            });
-            infowindow.open(app.map, marker);
+          // close info window if one is already open
+          if (app.infoWindow) {
+            app.infoWindow.close(app.map, marker);
+            app.infoWindow = null;
           }
+
+          // spawn new infowindow
+          app.infoWindow = new google.maps.InfoWindow({
+            content: 'User name: ' + user.nickname + '\r\n' + 'Status: ' + user.status,
+            position: {
+              lat: marker.getPosition().lat(),
+              lng: marker.getPosition().lng()
+            }
+          });
+
+          app.infoWindow.open(app.map, marker);
         });
       }
     },
 
-    async userCoordToLatLng(user) {
-      return new google.maps.LatLng(parseFloat(user.lastLatitude), parseFloat(user.lastLongitude));
-    },
+    // TODO
 
 
 
 
 
 
-
-
-
-    //collect user's change of location
-    //calculate steps in order to move marker smoothly
-    async moveMarkerSmoothly(user, location) {
-      var previousLocation = user.marker.getPosition();
-      var t = 1000;
-
-      var deltaLat = location.lat - previousLocation.lat();
-      var deltaLng = location.lng - previousLocation.lng();
-
-      var startingLat = previousLocation.lat();
-      var startingLng = previousLocation.lng();
-
-      user.moveTo = [];
-
-      for (var i = 0; i < t; i++) {
-        startingLat += deltaLat / t;
-        startingLng += deltaLng / t;
-        user.moveTo[i] = { lat: startingLat, lng: startingLng };
-      }
-    },
 
 
 
