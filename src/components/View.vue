@@ -31,7 +31,7 @@
     </div>
 
     <div id="switch-location-updates">
-      <el-switch v-model="button" on-color="#13ce66" off-color="#ff4949">
+      <el-switch v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949">
       </el-switch>
     </div>
   </section>
@@ -67,7 +67,8 @@ export default {
         nicknamePrompt: false,
         userList: false,
         requestState: false,
-        shareDialog: false
+        shareDialog: false,
+        locationUpdates: true
       },
       input: {
         nickname: ''
@@ -89,7 +90,7 @@ export default {
 
       on: true,
       choosingDirection: false,
-      button: true,
+      // button: true,
       requestState: 0,
       requestStateVisible: false,
       showUsers: false
@@ -170,7 +171,8 @@ export default {
      *  If nickname is not set, ask for input.
      */
     promptForNickname() {
-      if (!this.user || this.user.nickname == null) {
+      let user = UserHelper.getUser();
+      if (!user || user.nickname == null) {
         this.toggle.nicknamePrompt = true;
       }
     },
@@ -234,6 +236,56 @@ export default {
       this.updateMarkers(users);
     },
 
+    /*
+     *  Retrieve user's current coordinates and update location.
+     */
+    async updateMyLocation() {
+      if (!this.toggle.locationUpdates || this.updatingLocation) {
+        return;
+      }
+
+      this.updatingLocation = true;
+      UserHelper.updateUserLocation();
+      this.updatingLocation = false;
+    },
+
+    /*
+     *  Join a meetup if not already in. Use local storage to persist user data
+     */
+    async joinEvent() {
+      let user = UserHelper.getUser();
+      let userMeetups = UserHelper.getUserMeetups();
+      if (!userMeetups) { userMeetups = []; }
+
+      // check if already joined this meetup
+      if (userMeetups.indexOf(this.meetupHash) > -1) {
+        this.$message.info('Already joined the Meetup!');
+        return;
+      }
+
+      let position = await Api.getMyLocation();
+
+      let params = {
+        lastLatitude: position.lat,
+        lastLongitude: position.lng
+      };
+
+      if (user != null) {
+        params['id'] = user.id;
+      }
+
+      let response = await Api.joinMeetup(this.meetupHash, params);
+
+      if (response.ok == true) {
+        userMeetups.push(this.meetupHash);
+        UserHelper.updateUserMeetups(userMeetups);
+        this.$message.success('Successfuly joined the Meetup!');
+
+        user = response.body;
+        UserHelper.updateUser(user);
+      }
+    },
+
 
 
 
@@ -269,9 +321,9 @@ export default {
      */
     initialiseUserOutOfBoundsTracking() {
       let app = this;
-      google.maps.event.addListener(app.map, 'bounds_changed', function () {
-        Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
-      });
+      // google.maps.event.addListener(app.map, 'bounds_changed', function () {
+      //   Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
+      // });
     },
 
 
@@ -302,6 +354,7 @@ export default {
     async updateMarkers(users) {
       var app = this;
       var infowindow = null;
+      let currentUser = UserHelper.getUser();
       for (var i in users) {
 
         var index = this.markersMap.findIndex(function (item) {
@@ -310,7 +363,7 @@ export default {
         });
 
         if (index != -1) { //the marker for that user exists already
-          if(this.user.id != users[i].id && users[i].nickname != null) { //don't overwrite defaults
+          if(currentUser.id != users[i].id && users[i].nickname != null) { //don't overwrite defaults
             var timeSinceLastUpdate = Helper.timeSinceLastUpdate(users[i].updatedAt);
             var pin = Helper.getPin(timeSinceLastUpdate); //get pin style
             this.markersMap[index].marker.setMap(null); // Remove marker
@@ -324,7 +377,7 @@ export default {
 
         var pin = PinUser;
         var label = Helper.getInitials(users[i].nickname);
-        if(this.user && this.user.id == users[i].id) {
+        if(currentUser && currentUser.id == users[i].id) {
           pin = PinUserYou;
           label = null;
         } else if (users[i].nickname == null) {
@@ -386,61 +439,9 @@ export default {
 
 
 
-    // Retrieve user's current coordinates and update location
-    async updateMyLocation() {
-      if (!this.button) {
-        return;
-      }
-      if (this.updatingLocation) {
-        return;
-      }
-
-      this.updatingLocation = true;
-
-      let position = await Api.getMyLocation();
-      let response = await Api.updateUserLocation(this.user, {
-        lastLatitude: position.lat,
-        lastLongitude: position.lng
-      });
 
 
-      this.updatingLocation = false;
 
-    },
-
-    // Join a meetup if not already in. Use local storage to persist user data
-    async joinEvent() {
-      this.user = JSON.parse(localStorage.getItem('user'));
-      this.userMeetups = JSON.parse(localStorage.getItem('userMeetups'));
-      if (!this.userMeetups) { this.userMeetups = []; }
-
-      if (this.userMeetups.indexOf(this.meetupHash) > -1) {
-        // already joined
-        this.$message.info('Already joined the Meetup!');
-        return;
-      }
-
-      let position = await Api.getMyLocation();
-      let params = {
-        lastLatitude: position.lat,
-        lastLongitude: position.lng
-      };
-
-      if (this.user != null) {
-        params['id'] = this.user.id;
-      }
-
-      let response = await Api.joinMeetup(this.meetupHash, params);
-
-      if (response.ok == true) {
-        this.userMeetups.push(this.meetupHash);
-        localStorage.setItem('userMeetups', JSON.stringify(this.userMeetups));
-        this.$message.success('Successfuly joined the Meetup!');
-
-        this.user = response.body;
-        localStorage.setItem('user', JSON.stringify(this.user));
-      }
-    },
 
     //collect user's change of location
     //calculate steps in order to move marker smoothly
