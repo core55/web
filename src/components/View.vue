@@ -74,7 +74,8 @@ export default {
         requestState: false,
         shareDialog: false,
         locationUpdates: true,
-        direction: false
+        direction: false,
+        mapout: false
       },
       input: {
         nickname: ''
@@ -86,8 +87,7 @@ export default {
       updatingLocationInterval: null,
       shareUrl: '',
       requestState: 0,
-      showUsers: false,
-      mapout: false
+      showUsers: false
     }
   },
   methods: {
@@ -420,7 +420,7 @@ export default {
     // REFACTOR TODO
 
     //using GoogleMaps API, user can click the target-either a meeting point or another user-
-    //and the API will visualize the direction and informs users with direction
+    //and the API will visualize the direction and inform user with the direction
     findMyRoute(destination) {
       let user = UserHelper.getUser();
       var directionsDisplay;
