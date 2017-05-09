@@ -422,15 +422,7 @@ export default {
       }
     },
 
-    // TODO
-
-
-
-
-
-
-
-
+    // REFACTOR TODO
 
     findMyRoute(destination) {
       let user = UserHelper.getUser();
