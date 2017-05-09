@@ -87,7 +87,6 @@ export default class customInfobox extends google.maps.OverlayView {
     div.style.width = 150 + 'px';
     div.style.minHeight = 60+ 'px';
     this.element=document.getElementById(this.div_.id);
-
   }
 
   onRemove() {
@@ -95,6 +94,7 @@ export default class customInfobox extends google.maps.OverlayView {
     this.div_.className="bounce-leave-active";
     this.div_ = null;
   }
+
 //not useful
   hide() {
     if (this.div_) {
@@ -104,6 +104,7 @@ export default class customInfobox extends google.maps.OverlayView {
       console.log(this.div_);
     }
   }
+
 //not useful
   show() {
     if (this.div_) {
@@ -112,6 +113,7 @@ export default class customInfobox extends google.maps.OverlayView {
       console.log(this.div_);
     }
   }
+
 //not useful (further expierment required)
   toggle()  {
     if (this.div_) {
@@ -119,5 +121,4 @@ export default class customInfobox extends google.maps.OverlayView {
       console.log(this.div_);
     }
   };
-
 }
