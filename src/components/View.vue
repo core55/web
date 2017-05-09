@@ -393,7 +393,7 @@ export default {
             return;
           }
           // close info window if one is already open
-          if (app.infoWindow) {
+          if (app.infowindow) {
             app.infowindow.onRemove();
             app.infowindow=null;
           }
