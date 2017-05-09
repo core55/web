@@ -22,10 +22,10 @@
       </el-input>
     </el-dialog>
 
-    <div id="dialog" @keyup.enter="nicknameinput">
-      <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="NicknameDialog" :close-on-click-modal="false" :close-on-press-escape="false" size="small">
-        <el-input id="enter-name" v-model="nickname" placeholder="Type your name" size="large">
-          <el-button type="info" slot="append" @click="nicknameinput">Enter</el-button>
+    <div id="dialog" @keyup.enter="updateNickname">
+      <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="toggle.nicknamePrompt" :close-on-click-modal="false" :close-on-press-escape="false" size="small">
+        <el-input id="enter-name" v-model="input.nickname" placeholder="Type your name" size="large">
+          <el-button type="info" slot="append" @click="updateNickname">Enter</el-button>
         </el-input>
       </el-dialog>
     </div>
@@ -43,6 +43,7 @@ import Api from '../api';
 import Helper from '../helper';
 import MarkerHelper from '../helper/marker';
 import MapHelper from '../helper/map';
+import UserHelper from '../helper/user';
 import router from '../router';
 import UserList from './UserList';
 
@@ -61,7 +62,13 @@ export default {
     return {
       loading: true,
       markers: {},
-
+      toggle: {
+        nicknamePrompt: false,
+        userList: false
+      },
+      input: {
+        nickname: ''
+      },
 
 
       meetupId: null,
@@ -75,9 +82,9 @@ export default {
       updatingLocationInterval: null,
       shareButtonDialog: false,
       shareUrl: '',
-      nickname: '',
+      // nickname: '',
       pinmarker: null,
-      NicknameDialog: false,
+
       on: true,
       choosingDirection: false,
       button: true,
@@ -152,20 +159,26 @@ export default {
      */
     promptForNickname() {
       if (!this.user || this.user.nickname == null) {
-        this.NicknameDialog = true;
+        this.toggle.nicknamePrompt = true;
       }
     },
 
     /*
-     *  If nickname is not set, ask for input.
+     *  Update nickname of user in backend DB and local storage
      */
-    initialiseUserOutOfBoundsTracking() {
-      let app = this;
-      //Listener to track when window view changes and update user location indicators accordingly
-      google.maps.event.addListener(app.map, 'bounds_changed', function () {
-        Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
-      });
+    async updateNickname() {
+      let response = await Api.updateUsersNickname(UserHelper.getUser(), this.input.nickname);
+      if (response.ok == false) {
+        this.$message.error('Oops, Nickname could not be set!');
+        return;
+      };
+
+      UserHelper.updateUser(response.body);
+      this.toggle.nicknamePrompt = false;
+      this.updateUsersOnMap();
     },
+
+
 
 
 
@@ -174,6 +187,16 @@ export default {
 
     // TODO
 
+    /*
+     *  Listener to track when window view changes and update user location indicators accordingly.
+     */
+    initialiseUserOutOfBoundsTracking() {
+      let app = this;
+      google.maps.event.addListener(app.map, 'bounds_changed', function () {
+        Helper.trackUsers(app.map, document, app.markersMap, app.user.id);
+      });
+    },
+
 
 
     // Open and close user list panel
@@ -181,19 +204,7 @@ export default {
       this.showUsers = !this.showUsers;
     },
 
-    // Update nickname of user in backend DB and local storage
-    async nicknameinput() {
-      let response = await Api.updateUsersNickname(this.user, this.nickname);
-      if (response.ok == false) {
-        this.$message.error('Oops, Nickname can not been set!');
-        return;
-      };
 
-      this.user = response.body;
-      localStorage.setItem('user', JSON.stringify(this.user));
-      this.NicknameDialog = false;
-      this.updateUsersOnMap();
-    },
 
 
 
