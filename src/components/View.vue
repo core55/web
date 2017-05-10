@@ -133,7 +133,6 @@ export default {
       this.joinEvent();
       this.initialiseUserOutOfBoundsTracking();
       this.updateUsersOnMap();
-      this.promptForNickname();
     },
 
     /*
@@ -261,6 +260,7 @@ export default {
       // check if already joined this meetup
       if (userMeetups.indexOf(this.meetupHash) > -1) {
         this.$message.info('Already joined the Meetup!');
+        this.promptForNickname();
         return;
       }
 
@@ -287,6 +287,7 @@ export default {
       }
 
       this.updateUsersOnMap();
+      this.promptForNickname();
     },
 
     /*
