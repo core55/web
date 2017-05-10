@@ -309,7 +309,7 @@ export default {
       this.toggle.direction = !this.toggle.direction;
 
       if (this.toggle.direction) {
-        this.$message.info('click your desired destination');
+        this.$message.info('click either an user or a meeting point for directions');
       }
     },
 
