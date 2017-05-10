@@ -84,8 +84,10 @@ export default class Api {
   }
 
   static updateUsersNickname (user,nickname){
-    return Vue.http.patch(process.env.API_URL + 'users/' + user.id, {
-      nickname: nickname
+    return Vue.http.patch(process.env.API_URL + 'users/' + user.id, {nickname: nickname}).then(function(response) {
+      return response;
+    }, function(error) {
+      return error;
     });
   }
 
