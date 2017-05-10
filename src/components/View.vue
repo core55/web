@@ -6,7 +6,7 @@
 
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
 
-    <el-button class="app-btn-action" size="medium" id="btn-share" icon="share" @click="toggle.shareDialog = true"></el-button>
+    <el-button class="app-btn-action" size="medium" id="btn-share" data-clipboard-target="#share-url input" icon="share" @click="toggle.shareDialog = true"></el-button>
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
@@ -53,6 +53,7 @@ import MapHelper from '../helper/map';
 import UserHelper from '../helper/user';
 import router from '../router';
 import UserList from './UserList';
+import Clipboard from 'clipboard';
 
 import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
@@ -199,16 +200,6 @@ export default {
      */
     shareMeetup() {
       this.toggle.shareDialog = false;
-      var shareInput = document.querySelector('#share-url > input');
-
-      try {
-        shareInput.select();
-        document.execCommand('copy');
-      } catch (error) {
-        this.$message.error('Oops, Something went wrong: ' + error);
-        return;
-      }
-
       this.$message.success('Url copied and ready to share!');
     },
 
@@ -504,6 +495,8 @@ export default {
       app.updateMyLocation();
       app.updateUsersOnMap();
     }, twoMinutes);
+
+    this.clipboard = new Clipboard('#btn-share');
   },
   created: function() {
     //Update location sharing setting
