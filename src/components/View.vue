@@ -295,8 +295,10 @@ export default {
     initialiseUserOutOfBoundsTracking() {
       let app = this;
       let user = UserHelper.getUser();
+      let userId = user ? user.id : null;
+
       google.maps.event.addListener(app.map, 'bounds_changed', function () {
-        Helper.trackUsers(app.map, document, app.markersMap, user.id);
+        Helper.trackUsers(app.map, document, app.markersMap, userId);
       });
     },
 

@@ -71,9 +71,15 @@ export default class MarkerHelper {
    * Calculates and attaches user marker movement.
    */
   static calculateSmoothMarkerMovement(user, location) {
+    if (!location || typeof location == 'undefined' || location == null) { return; }
     var previousLocation = user.marker.getPosition();
-    var steps = 1000;
 
+    if (!previousLocation || typeof previousLocation == 'undefined' || previousLocation == null) {
+      user.moveTo = [{lat: location.lat, lng: location.lng}];
+      return;
+    }
+
+    var steps = 1000;
     var deltaLat = location.lat - previousLocation.lat();
     var deltaLng = location.lng - previousLocation.lng();
 
