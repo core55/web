@@ -20,9 +20,11 @@
       </el-switch>
     </div>
 
-    <transition-group name="fade">
-      <el-tag v-for="user in markersMap" v-bind:id="user.id" :key="user.id" v-show="user.show" class="tag">{{ user.nickname }}</el-tag>
-    </transition-group>
+    <div v-for="user in markersMap">
+      <transition name="fade">
+        <el-tag v-show="user.show" v-bind:id="user.id" class="tag">{{ user.nickname }}</el-tag>
+      </transition>
+    </div>
 
     <user-list :users="markersMap" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
@@ -131,7 +133,6 @@ export default {
       this.loading = false;
       this.customInfobox = require('../assets/js/customInfobox');
       this.joinEvent();
-      this.initialiseUserOutOfBoundsTracking();
       this.updateUsersOnMap();
     },
 
@@ -261,6 +262,7 @@ export default {
       if (userMeetups.indexOf(this.meetupHash) > -1) {
         this.$message.info('Already joined the Meetup!');
         this.promptForNickname();
+        this.initialiseUserOutOfBoundsTracking();
         return;
       }
 
@@ -288,6 +290,7 @@ export default {
 
       this.updateUsersOnMap();
       this.promptForNickname();
+      this.initialiseUserOutOfBoundsTracking();
     },
 
     /*
