@@ -92,7 +92,7 @@ export default class customInfobox extends google.maps.OverlayView {
   onRemove() {
     this.div_.className="bounce-leave-active";
     this.div_.parentNode.removeChild(this.div_);
-    this.div_ = null;
+    // this.div_ = null;
   }
 
   //not useful
