@@ -3,15 +3,15 @@
  */
 
 
-
-
+import Helper from '../../helper/index';
 //status listener version 2 (fits design)
 /** @constructor */
 
 export default class customInfobox extends google.maps.OverlayView {
-  constructor(myLatlng, username,status, map) {
+  constructor(myLatlng, username,status, map,marker) {
     super();
     // Initialize all properties.
+    this.marker_=marker;
     this.username_ = username;
     this.status_=status;
     this.myLatlng_ = myLatlng;
@@ -21,7 +21,6 @@ export default class customInfobox extends google.maps.OverlayView {
     // actually create this div upon receipt of the onAdd()
     // method so we'll leave it null for now
     this.div_ = null;
-    this.element = null;
     // Explicitly call setMap on this overlay.
     this.setMap(map);
   }
@@ -30,8 +29,18 @@ export default class customInfobox extends google.maps.OverlayView {
   onAdd() {
     var div = document.createElement('div');
     div.style.borderStyle = 'solid';
-    div.style.borderWidth = '4px';
-    div.style.borderColor='#3ED24C'
+    div.style.borderWidth = '2px';
+    var color=Helper.getStatus(this.marker_.icon);
+    if(color[0]=='green'){
+      div.style.borderColor='#3ED24C'
+    }else if(color[0]=='yellow'){
+      div.style.borderColor='#ffff00'
+    }else if(color[0]=='red'){
+      div.style.borderColor='#ff0000'
+    }else{
+      div.style.borderColor='#000000'
+    }
+
     div.style.borderRadius='20px'
     div.style.position = 'absolute';
     div.style.background='#FFFFFF';
@@ -52,7 +61,7 @@ export default class customInfobox extends google.maps.OverlayView {
     this.content1.style.top=7+'px';
     this.content1.style.left=13+'px';
     this.content1.style.letterSpacing='0';
-    this.content1.style.height=30+ 'px';
+    this.content1.style.height='30px';
     this.content1.style.fontFamily= 'Arial-BoldMT';
     this.content1.style.fontWeight="Bold"
     this.content1.appendChild(u);
@@ -63,8 +72,8 @@ export default class customInfobox extends google.maps.OverlayView {
     this.content2.style.top=26+'px';
     this.content2.style.left=13+'px';
     this.content2.style.letterSpacing='0';
-    this.content2.style.width= 140+ 'px';
-    this.content2.style.height=30+ 'px';
+    this.content2.style.width= 120+ 'px';
+    this.content2.style.minHeight='30px';
     this.content2.style.fontFamily= 'Arial';
     this.content2.style.fontWeight="Bold"
     this.content2.appendChild(s);
@@ -82,17 +91,17 @@ export default class customInfobox extends google.maps.OverlayView {
     var px = overlayProjection.fromLatLngToDivPixel(position);
     //postion
     var div = this.div_;
-    div.style.left = px.x+16+ 'px';
-    div.style.top = px.y -128+ 'px';
+    div.style.left = px.x+30+ 'px';
+    div.style.top = px.y -160+ 'px';
     div.style.width = 150 + 'px';
-    div.style.minHeight = 60+ 'px';
-    this.element=document.getElementById(this.div_.id);
+    var cont1height=parseInt(this.content1.style.height,10);
+    var cont2height=parseInt(this.content2.offsetHeight,10);
+    div.style.minHeight = cont1height+cont2height +20+ 'px';
   }
 
   onRemove() {
     this.div_.className="bounce-leave-active";
     this.div_.parentNode.removeChild(this.div_);
-    // this.div_ = null;
   }
 
   //not useful
@@ -117,7 +126,6 @@ export default class customInfobox extends google.maps.OverlayView {
  //not useful (further expierment required)
   toggle()  {
     if (this.div_) {
-      this.element.setAttribute("v-if", "show=!show");
       console.log(this.div_);
     }
   };
