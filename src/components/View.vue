@@ -133,7 +133,6 @@ export default {
       this.loading = false;
       this.customInfobox = require('../assets/js/customInfobox');
       this.joinEvent();
-      this.initialiseUserOutOfBoundsTracking();
       this.updateUsersOnMap();
     },
 
@@ -263,6 +262,7 @@ export default {
       if (userMeetups.indexOf(this.meetupHash) > -1) {
         this.$message.info('Already joined the Meetup!');
         this.promptForNickname();
+        this.initialiseUserOutOfBoundsTracking();
         return;
       }
 
@@ -290,6 +290,7 @@ export default {
 
       this.updateUsersOnMap();
       this.promptForNickname();
+      this.initialiseUserOutOfBoundsTracking();
     },
 
     /*
@@ -299,11 +300,6 @@ export default {
       let app = this;
       let user = UserHelper.getUser();
       let userId = user ? user.id : null;
-
-      //Make sure trackUsers is called once all users and markers have been loaded
-      setTimeout(function(){
-        Helper.trackUsers(app.map, document, app.markersMap, user.id);
-      }, 1000);
 
       google.maps.event.addListener(app.map, 'bounds_changed', function () {
         Helper.trackUsers(app.map, document, app.markersMap, userId);
