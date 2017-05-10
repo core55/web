@@ -36,7 +36,7 @@
 
     <div id="dialog" @keyup.enter="updateNickname">
       <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="toggle.nicknamePrompt" :close-on-click-modal="false" :close-on-press-escape="false" size="small">
-        <el-input id="enter-name" v-model="input.nickname" placeholder="Type your name" size="large">
+        <el-input v-model="input.nickname" placeholder="Type your name" size="large">
           <el-button type="info" slot="append" @click="updateNickname">Enter</el-button>
         </el-input>
       </el-dialog>
