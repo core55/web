@@ -184,6 +184,10 @@ export default {
      *  Update nickname of user in backend DB and local storage
      */
     async updateNickname() {
+      if (this.input.nickname.length == 0) {
+          this.$message.error('Please enter a name');
+          return;
+      }
       let response = await Api.updateUsersNickname(UserHelper.getUser(), this.input.nickname);
       if (response.ok == false) {
         this.$message.error('Oops, Nickname could not be set!');
