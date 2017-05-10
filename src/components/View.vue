@@ -273,6 +273,7 @@ export default {
 
       if (user != null) {
         params['id'] = user.id;
+        params['nickname'] = user.nickname;
       }
 
       let response = await Api.joinMeetup(this.meetupHash, params);
