@@ -91,8 +91,8 @@ export default class customInfobox extends google.maps.OverlayView {
     var px = overlayProjection.fromLatLngToDivPixel(position);
     //postion
     var div = this.div_;
-    div.style.left = px.x+30+ 'px';
-    div.style.top = px.y -160+ 'px';
+    div.style.left = px.x+15+ 'px';
+    div.style.top = px.y -145+ 'px';
     div.style.width = 150 + 'px';
     var cont1height=parseInt(this.content1.style.height,10);
     var cont2height=parseInt(this.content2.offsetHeight,10);
