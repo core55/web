@@ -90,8 +90,9 @@ export default {
       shareUrl: '',
       requestState: 0,
       showUsers: false,
-      custominfobox:null,
-      savemarker:null
+      custominfobox: null,
+      savemarker: null,
+      googleDirectionsRenderer: null
     }
   },
   watch: {
@@ -440,46 +441,44 @@ export default {
     //and the API will visualize the direction and inform user with the direction
     findMyRoute(destination) {
       let user = UserHelper.getUser();
-      var directionsDisplay;
       var directionsService = new google.maps.DirectionsService();
       let app = this;
       var original;
       var i = 0;
       var instructions = [];
 
-      initialize();
-
-      function initialize() {
-        directionsDisplay = new google.maps.DirectionsRenderer();
-        original = { lat: user.lastLatitude, lng: user.lastLongitude };
-        directionsDisplay.setMap(app.map);
+      if (this.googleDirectionsRenderer) {
+        this.googleDirectionsRenderer.setMap(null);
+      }else {
+        this.googleDirectionsRenderer = new google.maps.DirectionsRenderer();
       }
 
-      calcRoute();
+      original = { lat: user.lastLatitude, lng: user.lastLongitude };
+      this.googleDirectionsRenderer.setMap(app.map);
 
-      function calcRoute() {
-        var request = {
-          origin: original,
-          destination: destination,
-          travelMode: 'TRANSIT'
-        };
-        directionsService.route(request, function (result, status) {
-          if (status == 'OK') {
-            directionsDisplay.setDirections(result);
-            for (i in result.routes[0].legs[0].steps) {
-              if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
-                instructions[i] = i + "." + " " + result.routes[0].legs[0].steps[i].instructions;
-              }
-              if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
-                instructions[i] = i + "." + " " + "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
-              }
-              i++
+      var request = {
+        origin: original,
+        destination: destination,
+        travelMode: 'TRANSIT'
+      };
+
+      directionsService.route(request, function (result, status) {
+        if (status == 'OK') {
+          app.googleDirectionsRenderer.setDirections(result);
+
+          for (i in result.routes[0].legs[0].steps) {
+            if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
+              instructions[i] = i + "." + " " + result.routes[0].legs[0].steps[i].instructions;
             }
-            window.alert(instructions);
-
+            if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
+              instructions[i] = i + "." + " " + "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
+            }
+            i++
           }
-        });
-      }
+          window.alert(instructions);
+
+        }
+      });
     },
 
     //leaving button will direct users to leave the meetup
