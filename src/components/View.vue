@@ -399,6 +399,7 @@ export default {
             app.toggle.direction = false;
             return;
           }
+
           // close info window if one is already open
           if (app.infowindow) {
             app.infowindow.onRemove();
@@ -412,11 +413,11 @@ export default {
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
           var username=user.nickname;
-          var status ='"' + user.status +'"';
+          var status ='"'+user.status+'"'; // test case
+//          var status ='"' + user.status +'"';
           app.savemarker=marker;
-
           //call for custominfobox from asset/js
-          app.infowindow =new app.customInfobox.default(myLatlng, username,status, this.map);
+          app.infowindow =new app.customInfobox.default(myLatlng, username,status, this.map,marker);
           //integrate the infowindow.open sinide custominfobox. as soon as the box spawn the window open
         });
       }
