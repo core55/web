@@ -110,7 +110,6 @@ export default class customInfobox extends google.maps.OverlayView {
       // The visibility property must be a string enclosed in quotes.
       this.div_.setAttribute("v-if", "!show");
       this.div_.className="bounce-leave-active";
-      console.log(this.div_);
     }
   }
 
@@ -119,14 +118,12 @@ export default class customInfobox extends google.maps.OverlayView {
     if (this.div_) {
       this.div_.setAttribute("v-if", "show");
       this.div_.className="bounce-enter-active";
-      console.log(this.div_);
     }
   }
 
  //not useful (further expierment required)
   toggle()  {
     if (this.div_) {
-      console.log(this.div_);
     }
   };
 }

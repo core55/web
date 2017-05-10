@@ -412,7 +412,6 @@ export default {
 
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
-          console.log(marker.getPosition().lat(), marker.getPosition().lng())
           var username=user.nickname;
           var status ='"'+user.status+'"'; // test case
 //          var status ='"' + user.status +'"';
