@@ -55,11 +55,6 @@ import router from '../router';
 import UserList from './UserList';
 import Clipboard from 'clipboard';
 
-import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
-import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
-import PinUserYou from '../assets/svg/pin/user-you.svg';
-import PinUser from '../assets/svg/pin/user-black.svg';
-
 export default {
   name: 'view',
   components: {
@@ -346,7 +341,7 @@ export default {
      */
     async updateMarkers(users) {
       let app = this;
-      let currentUser = UserHelper.getUser();
+
       for (var i in users) {
         // check if user already has a marker
         var index = this.markersMap.findIndex(function (item) {
@@ -368,37 +363,10 @@ export default {
           continue;
         }
 
-        // choose pin for new user
-        var pin = PinUser;
-        var label = Helper.getInitials(users[i].nickname);
+        let user = users[i];
+        //Add new Marker and store it in markersMap for reference
+        var marker = MarkerHelper.createMarker(user,this.map, this.markersMap);
 
-        if(currentUser && currentUser.id == users[i].id) {
-          pin = PinUserYou;
-          label = null;
-        } else if (users[i].nickname == null) {
-          pin = PinAnonymous;
-          label = null;
-        }
-
-        // spawn new marker
-        this.markersMap.push({
-          id: users[i].id,
-          nickname: users[i].nickname,
-          marker: new google.maps.Marker({ //We create a new marker
-            position: { lat: users[i].lastLatitude, lng: users[i].lastLongitude },
-            map: this.map,
-            icon: pin,
-            label: label,
-            title: users[i].nickname
-          }),
-
-          show: false,
-          status: users[i].status,
-          avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
-        });
-
-        index = this.markersMap.length - 1;
-       let marker = this.markersMap[index].marker;
         app.user = users[i];
         marker.addListener('click', function () {
 

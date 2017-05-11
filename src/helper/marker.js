@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
+import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
+import PinUserYou from '../assets/svg/pin/user-you.svg';
 import Helper from '.';
 import UserHelper from './user';
 
@@ -98,19 +100,56 @@ export default class MarkerHelper {
   static updateUserMarkerIcon(user, marker, map) {
     let currentUser = UserHelper.getUser();
 
-    // abort if it's the current user or has no nickname
-    if (currentUser.id == user.id || user.nickname == null) {
-      return;
-    }
+    var pin;
 
-    var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-    var pin = Helper.getPin(timeSinceLastUpdate);
+    if (currentUser.id == user.id) {
+      pin = PinUserYou;
+      marker.label = null;
+    } else if (user.nickname == null) {
+      pin = PinAnonymous;
+      marker.label = null;
+    } else {
+      var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
+      pin = Helper.getPin(timeSinceLastUpdate);
+    }
 
     // Remove marker
     marker.setMap(null);
-
     // set new pin style and force refresh
     marker.icon = pin;
     marker.setMap(map);
   }
+
+
+
+
+  static createMarker(user, map, markersMap){
+    var label = Helper.getInitials(user.nickname);
+
+    //Create marker
+    var marker = new google.maps.Marker({
+      position: { lat: user.lastLatitude, lng: user.lastLongitude },
+      map: null,
+      icon: null,
+      label: label,
+      title: user.nickname
+    });
+
+    //Select appropriate pin
+    this.updateUserMarkerIcon(user,marker,map);
+
+    //Add marker to temporary storage
+    markersMap.push({
+      id: user.id,
+      nickname: user.nickname,
+      marker: marker,
+      show: false,
+      status: user.status,
+      avatar: user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
+    });
+
+    return marker;
+  }
+
+
 }
