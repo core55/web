@@ -187,6 +187,9 @@ export default {
       if (this.input.nickname.length == 0) {
           this.$message.error('Please enter a name');
           return;
+      } else if (this.input.nickname.length > 15) {
+        this.$message.error('Name is too long. Please choose a shorter name.');
+        return;
       }
       let response = await Api.updateUsersNickname(UserHelper.getUser(), this.input.nickname);
       if (response.ok == false) {
