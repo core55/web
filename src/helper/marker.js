@@ -120,9 +120,10 @@ export default class MarkerHelper {
 
 
 
-  static createMarker(user, map){
+  static createMarker(user, map, markersMap){
     var label = Helper.getInitials(user.nickname);
 
+    //Create marker
     var marker = new google.maps.Marker({
       position: { lat: user.lastLatitude, lng: user.lastLongitude },
       map: null,
@@ -131,7 +132,18 @@ export default class MarkerHelper {
       title: user.nickname
     });
 
+    //Select appropriate pin
     this.updateUserMarkerIcon(user,marker,map);
+
+    //Add marker to temporary storage
+    markersMap.push({
+      id: user.id,
+      nickname: user.nickname,
+      marker: marker,
+      show: false,
+      status: user.status,
+      avatar: user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
+    });
 
 
     return marker;
