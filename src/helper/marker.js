@@ -98,19 +98,44 @@ export default class MarkerHelper {
   static updateUserMarkerIcon(user, marker, map) {
     let currentUser = UserHelper.getUser();
 
-    // abort if it's the current user or has no nickname
-    if (currentUser.id == user.id || user.nickname == null) {
-      return;
-    }
+    var pin;
 
-    var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-    var pin = Helper.getPin(timeSinceLastUpdate);
+    // abort if it's the current user or has no nickname
+    if (currentUser.id == user.id) {
+      pin = PinUserYou;
+    } else if (user.nickname == null) {
+      pin = PinAnonymous;
+    } else {
+      var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
+      pin = Helper.getPin(timeSinceLastUpdate);
+    }
 
     // Remove marker
     marker.setMap(null);
-
     // set new pin style and force refresh
     marker.icon = pin;
     marker.setMap(map);
   }
+
+
+
+
+  static createMarker(user, map){
+    var label = Helper.getInitials(user.nickname);
+
+    var marker = new google.maps.Marker({
+      position: { lat: user.lastLatitude, lng: user.lastLongitude },
+      map: null,
+      icon: null,
+      label: label,
+      title: user.nickname
+    });
+
+    this.updateUserMarkerIcon(user,marker,map);
+
+
+    return marker;
+  }
+
+
 }

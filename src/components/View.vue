@@ -368,37 +368,21 @@ export default {
           continue;
         }
 
-        // choose pin for new user
-        var pin = PinUser;
-        var label = Helper.getInitials(users[i].nickname);
-
-        if(currentUser && currentUser.id == users[i].id) {
-          pin = PinUserYou;
-          label = null;
-        } else if (users[i].nickname == null) {
-          pin = PinAnonymous;
-          label = null;
-        }
+        //Add new Marker and store it in markersMap for reference
+        var marker = MarkerHelper.createMarker(users[i],this.map);
 
         // spawn new marker
         this.markersMap.push({
           id: users[i].id,
           nickname: users[i].nickname,
-          marker: new google.maps.Marker({ //We create a new marker
-            position: { lat: users[i].lastLatitude, lng: users[i].lastLongitude },
-            map: this.map,
-            icon: pin,
-            label: label,
-            title: users[i].nickname
-          }),
-
+          marker: marker,
           show: false,
           status: users[i].status,
           avatar: users[i].gravatarURI == null ? users[i].googlePictureURI : users[i].gravatarURI
         });
 
         index = this.markersMap.length - 1;
-       let marker = this.markersMap[index].marker;
+        let marker = this.markersMap[index].marker;
         app.user = users[i];
         marker.addListener('click', function () {
 
