@@ -93,7 +93,9 @@ export default {
       showUsers: false,
       custominfobox: null,
       savemarker: null,
-      googleDirectionsRenderer: null
+      googleDirectionsRenderer: null,
+      user:null,
+      userlist:null
     }
   },
   watch: {
@@ -196,6 +198,7 @@ export default {
         this.$message.error('Oops, Nickname could not be set!');
         return;
       };
+
 
       UserHelper.updateUser(response.body);
       this.toggle.nicknamePrompt = false;
@@ -353,12 +356,14 @@ export default {
 
         // user already has a marker, just move it
         if (index != -1) {
+          this.markersMap[index].nickname=users[i].nickname;
+          this.markersMap[index].status=users[i].status;
           MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map);
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
           });
-
+          app.user = users[i];
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
         }
@@ -393,9 +398,10 @@ export default {
         });
 
         index = this.markersMap.length - 1;
-        let marker = this.markersMap[index].marker;
-        let user = users[i];
+       let marker = this.markersMap[index].marker;
+        app.user = users[i];
         marker.addListener('click', function () {
+
           //the user can look up the direction to another user
           if (app.toggle.direction) {
             app.findMyRoute({
@@ -419,8 +425,8 @@ export default {
 
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
-          var username=user.nickname;
-          var status ='"'+user.status+'"'; // test case
+          var username= app.user.nickname;
+          var status ='"'+ app.user.status+'"'; // test case
 //          var status ='"' + user.status +'"';
           app.savemarker=marker;
           //call for custominfobox from asset/js
