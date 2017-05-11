@@ -55,11 +55,6 @@ import router from '../router';
 import UserList from './UserList';
 import Clipboard from 'clipboard';
 
-import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
-import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
-import PinUserYou from '../assets/svg/pin/user-you.svg';
-import PinUser from '../assets/svg/pin/user-black.svg';
-
 export default {
   name: 'view',
   components: {
@@ -368,12 +363,10 @@ export default {
           continue;
         }
 
+        let user = users[i];
         //Add new Marker and store it in markersMap for reference
-        var marker = MarkerHelper.createMarker(users[i],this.map, this.markersMap);
+        var marker = MarkerHelper.createMarker(user,this.map, this.markersMap);
 
-
-        index = this.markersMap.length - 1;
-        let marker = this.markersMap[index].marker;
         app.user = users[i];
         marker.addListener('click', function () {
 

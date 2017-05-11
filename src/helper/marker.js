@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
+import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
+import PinUserYou from '../assets/svg/pin/user-you.svg';
 import Helper from '.';
 import UserHelper from './user';
 
@@ -100,11 +102,12 @@ export default class MarkerHelper {
 
     var pin;
 
-    // abort if it's the current user or has no nickname
     if (currentUser.id == user.id) {
       pin = PinUserYou;
+      marker.label = null;
     } else if (user.nickname == null) {
       pin = PinAnonymous;
+      marker.label = null;
     } else {
       var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
       pin = Helper.getPin(timeSinceLastUpdate);
@@ -144,7 +147,6 @@ export default class MarkerHelper {
       status: user.status,
       avatar: user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
     });
-
 
     return marker;
   }
