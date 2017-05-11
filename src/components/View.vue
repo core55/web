@@ -36,7 +36,7 @@
 
     <div id="dialog" @keyup.enter="updateNickname">
       <el-dialog class="app-dialog app-dialog-nickname" top="46%" v-model="toggle.nicknamePrompt" :close-on-click-modal="false" :close-on-press-escape="false" size="small">
-        <el-input id="enter-name" v-model="input.nickname" placeholder="Type your name" size="large">
+        <el-input v-model="input.nickname" placeholder="Type your name" size="large">
           <el-button type="info" slot="append" @click="updateNickname">Enter</el-button>
         </el-input>
       </el-dialog>
@@ -184,6 +184,13 @@ export default {
      *  Update nickname of user in backend DB and local storage
      */
     async updateNickname() {
+      if (this.input.nickname.length == 0) {
+          this.$message.error('Please enter a name');
+          return;
+      } else if (this.input.nickname.length > 15) {
+        this.$message.error('Name is too long. Please choose a shorter name.');
+        return;
+      }
       let response = await Api.updateUsersNickname(UserHelper.getUser(), this.input.nickname);
       if (response.ok == false) {
         this.$message.error('Oops, Nickname could not be set!');
