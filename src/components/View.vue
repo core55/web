@@ -41,6 +41,17 @@
         </el-input>
       </el-dialog>
     </div>
+
+    <div id="status" @keyup.enter="updateStatus">
+    <el-input
+      placeholder="Update status"
+      icon="edit"
+      v-model="input.status"
+      :on-icon-click="updateStatus">
+    </el-input>
+</div>
+
+
   </section>
 </template>
 
@@ -90,7 +101,8 @@ export default {
       savemarker: null,
       googleDirectionsRenderer: null,
       user:null,
-      userlist:null
+      userlist:null,
+      updatesw:0,
     }
   },
   watch: {
@@ -180,6 +192,20 @@ export default {
     /*
      *  Update nickname of user in backend DB and local storage
      */
+    async updateStatus(){
+      let app =this;
+      let response = await Api.updateUsersStatus(UserHelper.getUser(), this.input.status);
+      if (response.ok == false) {
+        this.$message.error('Oops, Status could not be set!');
+        return;
+      }else{
+        this.$message.info('Status has been set!');
+        if(this.savemarker)
+        app.updatesw=1;
+      }
+      this.updateUsersOnMap();
+      },
+
     async updateNickname() {
       if (this.input.nickname.length == 0) {
           this.$message.error('Please enter a name');
@@ -359,6 +385,13 @@ export default {
             lng: users[i].lastLongitude
           });
           app.user = users[i];
+          if(app.updatesw==1){
+            app.infowindow.onRemove();
+            app.infowindow=null;
+            app.savemarker=null;
+            app.updatesw=0;
+            return;
+          };
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
         }
