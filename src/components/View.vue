@@ -20,6 +20,15 @@
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
+    <el-table :data="directions" width="100%" style="position: absolute; top: 200px; left: 0px;">
+      <el-table-column label="Directions" width="180">
+        <template scope="scope">
+          <el-icon name="time"></el-icon>
+          <span style="margin-left: 10px">{{ scope }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
       <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
@@ -80,6 +89,7 @@ import Menu from './Menu';
 export default {
   name: 'view',
   components: {
+//    ElTable,
     'google-map': GoogleMap,
     'user-list': UserList,
     'drawer-menu': Menu
@@ -116,6 +126,7 @@ export default {
       user:null,
       userlist:null,
       updatesw:0,
+      directions: []
     }
   },
   watch: {
@@ -455,7 +466,7 @@ export default {
     //using GoogleMaps API, user can click the target-either a meeting point or another user-
     //and the API will visualize the direction and inform user with the direction
     findMyRoute(destination) {
-      if (!this.locationUpdates) {
+      if (!this.toggle.locationUpdates) {
         this.$message.error('Please turn on location updates for directions');
         return;
       }
@@ -499,7 +510,7 @@ export default {
             }
             i++
           }
-          window.alert(instructions);
+          app.directions = instructions;
           console.log(instructions);
 
         }
