@@ -20,26 +20,40 @@
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
-    <el-table :data="directions" width="100%" style="top: 200px; left: 0px;">
-      <el-table-column label="Step" width="100%">
-        <template scope="scope">
-          <span>{{ scope.row.step }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Instruction" width="180">
-        <template scope="scope">
-          <span>{{ scope.row.instruction }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Transport Mode" width="180">
-        <template scope="scope">
-          <span>{{ scope.row.travel_mode }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
 
 
-    
+    <!--<el-table :data="directions" width="100%" style="background: none">-->
+      <!--<el-table-column label="Step" width="100%">-->
+        <!--<template scope="scope">-->
+          <!--<span>{{ scope.row.step }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <!--<el-table-column label="Instruction" width="180">-->
+        <!--<template scope="scope">-->
+          <!--<span>{{ scope.row.instruction }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <!--<el-table-column label="Transport Mode" width="180">-->
+        <!--<template scope="scope">-->
+          <!--<span>{{ scope.row.travel_mode }}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+    <!--</el-table>-->
+
+
+
+    <el-menu theme="dark" style="position: absolute; top: 200px;">
+      <!--<el-menu-item-group title="Travel Plan">-->
+      <h2 id="directionsTitle">Travel Plan</h2>
+        <ul class="directions">
+          <li v-for="direction in directions">
+            <img src="../assets/svg/icon/travel/bus.svg">
+            <span>{{ direction.instruction }}</span>
+          </li>
+        </ul>
+
+      <!--</el-menu-item-group>-->
+    </el-menu>
 
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
@@ -97,11 +111,18 @@ import router from '../router';
 import UserList from './UserList';
 import Clipboard from 'clipboard';
 import Menu from './Menu';
+import ElSubmenu from "../../node_modules/element-ui/packages/menu/src/submenu";
+import ElMenuItemGroup from "../../node_modules/element-ui/packages/menu/src/menu-item-group";
+import ElMenuItem from "../../node_modules/element-ui/packages/menu/src/menu-item";
 
 export default {
   name: 'view',
   components: {
 //    ElTable,
+//    ElMenu,
+    ElMenuItem,
+    ElMenuItemGroup,
+    ElSubmenu,
     'google-map': GoogleMap,
     'user-list': UserList,
     'drawer-menu': Menu
@@ -583,4 +604,32 @@ export default {
 }
 </script>
 
-<style lang="scss" type="text/scss"></style>
+<style lang="scss" type="text/scss">
+
+  .directions{
+    padding-left: 20px;
+    padding-right: 40px;
+  }
+
+  #directionsTitle{
+    padding-top: 20px;
+    color: white;
+    padding-left: 20px;
+  }
+
+  .directions li{
+    list-style-type: none;
+    margin-top: 30px;
+  }
+
+  .directions li:last-child{
+    margin-bottom: 30px;
+  }
+
+  .directions span{
+    color: white;
+    margin-left: 15px;
+  }
+
+
+</style>
