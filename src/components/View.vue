@@ -23,7 +23,7 @@
 
     <div class="travelPlan" style="position: absolute" v-if="directions.length != 0">
       <h2 id="directionsTitle">Travel Plan</h2>
-      <ul>
+      <ul class="instructionsList">
         <li v-for="direction in directions">
           <div class="steps">
             <div class="travelIcon">
@@ -610,6 +610,12 @@ export default {
 
   .steps{
     display: flex;
+  }
+
+  .instructionsList{
+    max-height: 400px;
+    overflow: hidden;
+    overflow-y: scroll;
   }
 
   .travelIcon {
