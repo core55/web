@@ -50,8 +50,6 @@
       :on-icon-click="updateStatus">
     </el-input>
 </div>
-
-
   </section>
 </template>
 
@@ -220,7 +218,6 @@ export default {
         return;
       };
 
-
       UserHelper.updateUser(response.body);
       this.toggle.nicknamePrompt = false;
       this.updateUsersOnMap();
@@ -355,6 +352,11 @@ export default {
         done = false;
         var update = users[i].moveTo.shift();
         users[i].marker.setPosition({ lat: update.lat, lng: update.lng });
+        if (this.infowindow) {
+          var nLatlng = new google.maps.LatLng(update.lat, update.lng);
+          this.infowindow.updateLatLng(nLatlng);
+
+        };
       }
 
       if (!done) {
@@ -377,21 +379,23 @@ export default {
 
         // user already has a marker, just move it
         if (index != -1) {
-          this.markersMap[index].nickname=users[i].nickname;
-          this.markersMap[index].status=users[i].status;
+          this.markersMap[index].nickname = users[i].nickname;
+          this.markersMap[index].status = users[i].status;
           MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map);
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
           });
           app.user = users[i];
-          if(app.updatesw==1){
+
+          if (app.updatesw == 1) {
             app.infowindow.onRemove();
-            app.infowindow=null;
-            app.savemarker=null;
-            app.updatesw=0;
+            app.infowindow = null;
+            app.savemarker = null;
+            app.updatesw = 0;
             return;
           };
+
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
         }
@@ -427,6 +431,9 @@ export default {
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
           var username= app.user.nickname;
+          if(!app.user.status){
+            app.user.status="No status";
+          };
           var status ='"'+ app.user.status+'"'; // test case
 //          var status ='"' + user.status +'"';
           app.savemarker=marker;

@@ -84,8 +84,24 @@ export default class customInfobox extends google.maps.OverlayView {
     var panes = this.getPanes();
     panes.overlayImage.appendChild(div);
   }
+
   //draw out the box
   draw() {
+    var overlayProjection = this.getProjection();
+    var position = this.myLatlng_;
+    var px = overlayProjection.fromLatLngToDivPixel(position);
+    //postion
+    var div = this.div_;
+    div.style.left = px.x+15+ 'px';
+    div.style.top = px.y -145+ 'px';
+    div.style.width = 150 + 'px';
+    var cont1height=parseInt(this.content1.style.height,10);
+    var cont2height=parseInt(this.content2.offsetHeight,10);
+    div.style.minHeight = cont1height+cont2height +20+ 'px';
+  }
+
+  updateLatLng(nLatlng){
+    this.myLatlng_=nLatlng;
     var overlayProjection = this.getProjection();
     var position = this.myLatlng_;
     var px = overlayProjection.fromLatLngToDivPixel(position);
