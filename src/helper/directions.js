@@ -8,11 +8,14 @@ export default class DirectionsHelper {
     var directionsService = new google.maps.DirectionsService();
     var sourceLocation;
     var instruction;
+    var renderingOptions = {
+      suppressMarkers: true
+    };
 
     if (app.googleDirectionsRenderer) {
       app.googleDirectionsRenderer.setMap(null);
     }else {
-      app.googleDirectionsRenderer = new google.maps.DirectionsRenderer();
+      app.googleDirectionsRenderer = new google.maps.DirectionsRenderer(renderingOptions);
     }
 
     sourceLocation = { lat: user.lastLatitude, lng: user.lastLongitude };
