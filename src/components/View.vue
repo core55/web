@@ -307,7 +307,6 @@ export default {
         return;
       }
 
-      console.log("udpating....");
       this.updatingLocation = true;
       UserHelper.updateUserLocation();
       this.updatingLocation = false;
@@ -490,7 +489,6 @@ export default {
         return;
       }
       let user = UserHelper.getUser(); //gets user from local storage.....
-      console.log(user);
       var directionsService = new google.maps.DirectionsService();
       let app = this;
       var original;
@@ -506,8 +504,6 @@ export default {
 
 
       original = { lat: user.lastLatitude, lng: user.lastLongitude };
-      console.log("USer original coordinates: " + original);
-      console.log(original);
       this.googleDirectionsRenderer.setMap(app.map);
 
       var request = {
@@ -533,9 +529,9 @@ export default {
             }
             if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
               var transport = result.routes[0].legs[0].steps[i].transit.line.vehicle.name;
-              instruction = "Take" + " " + result.routes[0].legs[0].steps[i].transit.line.vehicle.name;
+              instruction = "Take" + " " + result.routes[0].legs[0].steps[i].transit.line.vehicle.name.toLowerCase();
               if (result.routes[0].legs[0].steps[i].transit.line.short_name)
-                  instruction += " number " + result.routes[0].legs[0].steps[i].transit.line.short_name;
+                  instruction += " number " + result.routes[0].legs[0].steps[i].transit.line.short_name.toLowerCase();
               instruction += " towards " + result.routes[0].legs[0].steps[i].transit.headsign;
 
               directions.push({
@@ -572,7 +568,6 @@ export default {
 
     let twoMinutes = 30 * 1000;
     this.updatingLocationInterval = setInterval(function () {
-      console.log("Updating my location");
       app.updateMyLocation();
       app.updateUsersOnMap();
     }, twoMinutes);
