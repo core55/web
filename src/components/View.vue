@@ -27,8 +27,10 @@
         <li v-for="direction in directions">
           <div class="steps">
             <div class="travelIcon">
-              <img src="../assets/svg/icon/travel/bus.svg" v-if="direction.travel_mode == 'TRANSIT'">
-              <img src="../assets/svg/icon/travel/walk.svg" v-else-if="direction.travel_mode == 'WALKING'">
+              <img src="../assets/svg/icon/travel/subway.svg" v-if="direction.travel_mode == 'Subway'">
+              <img src="../assets/svg/icon/travel/walk.svg" v-else-if="direction.travel_mode == 'Walking'">
+              <img src="../assets/svg/icon/travel/bus.svg" v-else-if="direction.travel_mode == 'Bus'">
+              <img src="../assets/svg/icon/travel/train.svg" v-else-if="direction.travel_mode == 'Train' || 'High speed train'">
             </div>
             <div class="directions">{{ direction.instruction }}</div>
           </div>
@@ -493,7 +495,7 @@ export default {
       let app = this;
       var original;
       var i = 0;
-      var instructions = [];
+      var instruction;
       var directions = [];
 
       if (this.googleDirectionsRenderer) {
@@ -514,40 +516,38 @@ export default {
         travelMode: 'TRANSIT'
       };
 
-      var instruction;
-
       directionsService.route(request, function (result, status) {
         if (status == 'OK') {
           app.googleDirectionsRenderer.setDirections(result);
+          console.log(result);
 
           for (i in result.routes[0].legs[0].steps) {
             if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
 
-              instruction = result.routes[0].legs[0].steps[i].instructions;
+              instruction = result.routes[0].legs[0].steps[i].instructions.split(',')[0];
               directions.push({
                 step: i,
                 instruction: instruction,
-                travel_mode: result.routes[0].legs[0].steps[i].travel_mode
+                travel_mode: 'Walking'
               });
-
-              instructions[i] = i + "." + " " + result.routes[0].legs[0].steps[i].instructions;
             }
             if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
-              instructions[i] = i + "." + " " + "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
+              var transport = result.routes[0].legs[0].steps[i].transit.line.vehicle.name;
+              instruction = "Take" + " " + result.routes[0].legs[0].steps[i].transit.line.vehicle.name;
+              if (result.routes[0].legs[0].steps[i].transit.line.short_name)
+                  instruction += " number " + result.routes[0].legs[0].steps[i].transit.line.short_name;
+              instruction += " towards " + result.routes[0].legs[0].steps[i].transit.headsign;
 
-              instruction = "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
               directions.push({
                 step: i,
                 instruction: instruction,
-                travel_mode: result.routes[0].legs[0].steps[i].travel_mode
+                travel_mode: transport
               });
 
             }
             i++
           }
           app.directions = directions;
-          console.log(directions);
-
         }
       });
     },
