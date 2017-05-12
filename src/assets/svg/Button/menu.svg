@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="62px" height="62px" viewBox="0 0 62 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>button/menu</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M28.820107,57.3052406 C44.5520119,57.3052406 57.3052406,44.5520119 57.3052406,28.820107 C57.3052406,23.1875962 55.6704521,17.9369108 52.8494749,13.5166505 C47.7913111,5.59088632 38.9195012,0.334973262 28.820107,0.334973262 C13.088202,0.334973262 0.334973262,13.088202 0.334973262,28.820107 C0.334973262,44.5520119 13.088202,57.3052406 28.820107,57.3052406 Z" id="path-1"></path>
+        <filter x="-6.1%" y="-4.4%" width="112.3%" height="112.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Button/Menu" transform="translate(-9.000000, -10.000000)">
+            <g id="button/menu" transform="translate(11.000000, 11.000000)">
+                <g id="Oval-9">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <rect id="Rectangle-4-Copy-2" fill="#4A4A4A" x="17" y="21" width="25" height="3" rx="1.5"></rect>
+                <rect id="Rectangle-4-Copy-3" fill="#4A4A4A" x="17" y="27.8309091" width="25" height="3" rx="1.5"></rect>
+                <rect id="Rectangle-4-Copy-4" fill="#4A4A4A" x="17" y="34.6618182" width="25" height="3" rx="1.5"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

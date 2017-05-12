@@ -1,7 +1,7 @@
 <template>
   <section>
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <el-button class="app-btn-action" size="large" id="btn-action-create" icon="plus" v-on:click="createMeetup"></el-button>
+    <button class="image-button" size="large" id="button-right-bottom" v-on:click="createMeetup" ><img src="../assets/svg/button/create.svg"/></button>
     <input id="pac-input" class="controls" type="text" placeholder="Search a location...">
 
     <div class='area-indicator'></div>

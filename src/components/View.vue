@@ -6,6 +6,11 @@
 
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
 
+    <!-- Menu Button -->
+    <!-- .svg image with a transparent button on top (works in all browsers)  -->
+    <!-- TODO: -->
+    <button class="image-button" id="btn-menu" ><img src="../assets/svg/button/menu.svg"/></button>
+
     <!-- Share Button -->
     <!-- .svg image with a transparent button (works in all browsers) -->
     <button class="image-button" id="button-right-bottom" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
