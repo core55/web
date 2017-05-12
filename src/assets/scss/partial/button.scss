@@ -14,11 +14,35 @@
   text-align: center;
 }
 
+.image-button {
+    z-index: 1;
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    border-color: transparent;
+    margin-left: 0px;
+    border-width: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+#button-share  {
+  right: 24px;
+  bottom: 24px;
+}
+#button-create  {
+  right: 24px;
+  bottom: 24px;
+}
+#button-menu  {
+  left: 24px;
+  top: 24px;
+}
+
 #btn-action-create {
   font-size: 50px;
 }
-
-#btn-share {}
 
 #btn-direction {
   right: 24px;
