@@ -42,18 +42,17 @@
 
 
 
-    <el-menu theme="dark" style="position: absolute; top: 200px;">
-      <!--<el-menu-item-group title="Travel Plan">-->
+    <div class="travelPlan" style="position: absolute">
       <h2 id="directionsTitle">Travel Plan</h2>
-        <ul class="directions">
-          <li v-for="direction in directions">
+      <ul>
+        <li v-for="direction in directions">
+          <div class="steps">
             <img src="../assets/svg/icon/travel/bus.svg">
-            <span>{{ direction.instruction }}</span>
-          </li>
-        </ul>
-
-      <!--</el-menu-item-group>-->
-    </el-menu>
+            <div class="directions">{{ direction.instruction }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
 
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
@@ -606,29 +605,49 @@ export default {
 
 <style lang="scss" type="text/scss">
 
-  .directions{
-    padding-left: 20px;
-    padding-right: 40px;
+  .travelPlan{
+    padding-top: 115px;
+    width: 240px;
+    font-family: Roboto;
+    z-index: 100;
+    height: 100%;
+    float: left;
+    flex-direction: column;
+    background-color: #2489B0;
+  }
+
+  .travelPlan ul {
+    padding-top: 12px;
+    padding-left: 30px;
+    padding-bottom: 12px;
+    background-color: #2AA6D5;
+  }
+
+  .steps{
+    display: flex;
   }
 
   #directionsTitle{
     padding-top: 20px;
     color: white;
-    padding-left: 20px;
+    text-align: center;
+    margin-bottom: 17px;
   }
 
-  .directions li{
+  .travelPlan li{
     list-style-type: none;
     margin-top: 30px;
   }
 
-  .directions li:last-child{
-    margin-bottom: 30px;
+  .travelPlan li:first-child{
+    margin-top: 0px;
   }
 
-  .directions span{
+  .directions {
+    width:  125px;
+    float: right;
     color: white;
-    margin-left: 15px;
+    margin-left: 30px;
   }
 
 
