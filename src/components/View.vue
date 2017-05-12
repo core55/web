@@ -9,7 +9,9 @@
     <!-- Menu Button -->
     <!-- .svg image with a transparent button on top (works in all browsers)  -->
     <!-- TODO: -->
-    <button class="image-button" id="button-menu" ><img src="../assets/svg/button/menu.svg"/></button>
+    <button class="image-button" id="button-menu" v-on:click="toggle.showMenu = !toggle.showMenu" ><img src="../assets/svg/button/menu.svg"/></button>
+
+    <drawer-menu v-if="toggle.showMenu" v-on:toggleShow="toggle.showMenu = !toggle.showMenu"></drawer-menu>
 
     <!-- Share Button -->
     <!-- .svg image with a transparent button (works in all browsers) -->
@@ -73,12 +75,14 @@ import UserHelper from '../helper/user';
 import router from '../router';
 import UserList from './UserList';
 import Clipboard from 'clipboard';
+import Menu from './Menu';
 
 export default {
   name: 'view',
   components: {
     'google-map': GoogleMap,
-    'user-list': UserList
+    'user-list': UserList,
+    'drawer-menu': Menu
   },
   data() {
     return {
@@ -92,7 +96,8 @@ export default {
         shareDialog: false,
         locationUpdates: true,
         direction: false,
-        mapout: false
+        mapout: false,
+        showMenu: false,
       },
       input: {
         nickname: ''

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="50px" height="61px" viewBox="0 0 50 61" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="50px" height="62px" viewBox="0 0 50 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
-    <title>Pin/Anonymous</title>
+    <title>pin/user-anonymous</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="PinAnonymous">
-            <g id="Anon">
+        <g id="Pin/Anonymous">
+            <g id="pin/user-anonymous">
                 <g id="Pin">
                     <path d="M16.3944552,48.4794504 L25,61.71875 L33.6055448,48.4794504 C43.1730251,44.9718052 50,35.7831653 50,25 C50,11.1928813 38.8071187,0 25,0 C11.1928813,0 0,11.1928813 0,25 C0,35.7831653 6.82697486,44.9718052 16.3944552,48.4794504 Z" id="Combined-Shape" fill="#4A4A4A"></path>
                     <circle id="Oval-6" fill="#FFFFFF" cx="25" cy="25" r="23.4375"></circle>
