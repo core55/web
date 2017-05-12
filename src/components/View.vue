@@ -20,25 +20,6 @@
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
-
-    <div class="travelPlan" style="position: absolute" v-if="directions.length != 0">
-      <h2 id="directionsTitle">Travel Plan</h2>
-      <ul class="instructionsList">
-        <li v-for="direction in directions">
-          <div class="steps">
-            <div class="travelIcon">
-              <img src="../assets/svg/icon/travel/subway.svg" v-if="direction.travel_mode == 'Subway'">
-              <img src="../assets/svg/icon/travel/walk.svg" v-else-if="direction.travel_mode == 'Walking'">
-              <img src="../assets/svg/icon/travel/bus.svg" v-else-if="direction.travel_mode == 'Bus'">
-              <img src="../assets/svg/icon/travel/train.svg" v-else-if="direction.travel_mode == 'Train' || 'High speed train'">
-            </div>
-            <div class="directions">{{ direction.instruction }}</div>
-          </div>
-        </li>
-      </ul>
-      <el-button id="cancel" type="text" icon="close" @click="cancelTrip">Cancel Trip</el-button>
-    </div>
-
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
       <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
@@ -55,6 +36,7 @@
       </transition>
     </div>
 
+    <direction-view v-if="directions.length != 0" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
     <user-list :users="markersMap" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
@@ -94,15 +76,19 @@ import UserHelper from '../helper/user';
 import DirectionsHelper from '../helper/directions';
 import router from '../router';
 import UserList from './UserList';
+import Directions from './Directions.vue';
 import Clipboard from 'clipboard';
 import Menu from './Menu';
+import DirectionView from "./Directions";
 
 export default {
   name: 'view',
   components: {
+    DirectionView,
     'google-map': GoogleMap,
     'user-list': UserList,
-    'drawer-menu': Menu
+    'drawer-menu': Menu,
+    'direction-view': Directions
   },
   data() {
     return {
@@ -486,7 +472,6 @@ export default {
   mounted() {
     let app = this;
     this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
-    // let twoMinutes = 2 * 60 * 1000;
 
     let twoMinutes = 30 * 1000;
     this.updatingLocationInterval = setInterval(function () {
@@ -505,76 +490,4 @@ export default {
 }
 </script>
 
-<style lang="scss" type="text/scss">
-
-  .travelPlan{
-    padding-top: 115px;
-    width: 240px;
-    font-family: Roboto;
-    z-index: 100;
-    height: 100%;
-    float: left;
-    flex-direction: column;
-    background-color: #2489B0;
-  }
-
-  .travelPlan ul {
-    padding-top: 12px;
-    padding-left: 30px;
-    padding-bottom: 12px;
-    background-color: #2AA6D5;
-  }
-
-  .steps{
-    display: flex;
-  }
-
-  .instructionsList{
-    max-height: 400px;
-    overflow: hidden;
-    overflow-y: scroll;
-  }
-
-  .travelIcon {
-    height: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
-  }
-
-  #directionsTitle{
-    padding-top: 20px;
-    color: white;
-    text-align: center;
-    margin-bottom: 17px;
-  }
-
-  .travelPlan li{
-    list-style-type: none;
-    margin-top: 30px;
-  }
-
-  .travelPlan li:first-child{
-    margin-top: 0px;
-  }
-
-  .directions {
-    width:  125px;
-    float: right;
-    color: white;
-    margin-left: 30px;
-  }
-
-  #cancel {
-    position: absolute;
-    margin-left:30px;
-    bottom: 30px;
-    color: white;
-  }
-
-  #cancel span {
-    padding-left: 10px;
-    color: white;
-  }
-
-
-</style>
+<style lang="scss" type="text/scss"></style>
