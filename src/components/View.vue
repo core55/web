@@ -21,33 +21,15 @@
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
 
-
-    <!--<el-table :data="directions" width="100%" style="background: none">-->
-      <!--<el-table-column label="Step" width="100%">-->
-        <!--<template scope="scope">-->
-          <!--<span>{{ scope.row.step }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="Instruction" width="180">-->
-        <!--<template scope="scope">-->
-          <!--<span>{{ scope.row.instruction }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column label="Transport Mode" width="180">-->
-        <!--<template scope="scope">-->
-          <!--<span>{{ scope.row.travel_mode }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-    <!--</el-table>-->
-
-
-
     <div class="travelPlan" style="position: absolute" v-if="directions.length != 0">
       <h2 id="directionsTitle">Travel Plan</h2>
       <ul>
         <li v-for="direction in directions">
           <div class="steps">
-            <img src="../assets/svg/icon/travel/bus.svg">
+            <div class="travelIcon">
+              <img src="../assets/svg/icon/travel/bus.svg" v-if="direction.travel_mode == 'TRANSIT'">
+              <img src="../assets/svg/icon/travel/walk.svg" v-else-if="direction.travel_mode == 'WALKING'">
+            </div>
             <div class="directions">{{ direction.instruction }}</div>
           </div>
         </li>
@@ -628,6 +610,12 @@ export default {
 
   .steps{
     display: flex;
+  }
+
+  .travelIcon {
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   #directionsTitle{
