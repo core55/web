@@ -91,6 +91,14 @@ export default class Api {
     });
   }
 
+  static updateUsersStatus (user,status){
+    return Vue.http.patch(process.env.API_URL + 'users/' + user.id, {status: status}).then(function(response) {
+      return response;
+    }, function(error) {
+      return error;
+    });
+  }
+
   static letsLogin(payload){
     return Vue.http.post(process.env.API_URL + 'login', payload);
   }
