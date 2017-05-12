@@ -20,14 +20,26 @@
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
-    <el-table :data="directions" width="100%" style="position: absolute; top: 200px; left: 0px;">
-      <el-table-column label="Directions" width="180">
+    <el-table :data="directions" width="100%" style="top: 200px; left: 0px;">
+      <el-table-column label="Step" width="100%">
         <template scope="scope">
-          <el-icon name="time"></el-icon>
-          <span style="margin-left: 10px">{{ scope }}</span>
+          <span>{{ scope.row.step }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Instruction" width="180">
+        <template scope="scope">
+          <span>{{ scope.row.instruction }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Transport Mode" width="180">
+        <template scope="scope">
+          <span>{{ scope.row.travel_mode }}</span>
         </template>
       </el-table-column>
     </el-table>
+
+
+    
 
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
@@ -477,6 +489,7 @@ export default {
       var original;
       var i = 0;
       var instructions = [];
+      var directions = [];
 
       if (this.googleDirectionsRenderer) {
         this.googleDirectionsRenderer.setMap(null);
@@ -496,22 +509,39 @@ export default {
         travelMode: 'TRANSIT'
       };
 
+      var instruction;
+
       directionsService.route(request, function (result, status) {
         if (status == 'OK') {
           app.googleDirectionsRenderer.setDirections(result);
-          console.log(result);
 
           for (i in result.routes[0].legs[0].steps) {
             if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
+
+              instruction = result.routes[0].legs[0].steps[i].instructions;
+              directions.push({
+                step: i,
+                instruction: instruction,
+                travel_mode: result.routes[0].legs[0].steps[i].travel_mode
+              });
+
               instructions[i] = i + "." + " " + result.routes[0].legs[0].steps[i].instructions;
             }
             if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
               instructions[i] = i + "." + " " + "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
+
+              instruction = "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
+              directions.push({
+                step: i,
+                instruction: instruction,
+                travel_mode: result.routes[0].legs[0].steps[i].travel_mode
+              });
+
             }
             i++
           }
-          app.directions = instructions;
-          console.log(instructions);
+          app.directions = directions;
+          console.log(directions);
 
         }
       });
