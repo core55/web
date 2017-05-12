@@ -91,20 +91,15 @@ import Helper from '../helper';
 import MarkerHelper from '../helper/marker';
 import MapHelper from '../helper/map';
 import UserHelper from '../helper/user';
+import DirectionsHelper from '../helper/directions';
 import router from '../router';
 import UserList from './UserList';
 import Clipboard from 'clipboard';
 import Menu from './Menu';
-import ElSubmenu from "../../node_modules/element-ui/packages/menu/src/submenu";
-import ElMenuItemGroup from "../../node_modules/element-ui/packages/menu/src/menu-item-group";
-import ElMenuItem from "../../node_modules/element-ui/packages/menu/src/menu-item";
 
 export default {
   name: 'view',
   components: {
-    ElMenuItem,
-    ElMenuItemGroup,
-    ElSubmenu,
     'google-map': GoogleMap,
     'user-list': UserList,
     'drawer-menu': Menu
@@ -461,91 +456,21 @@ export default {
               return;
             }
           }
-
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
           var username= app.user.nickname;
           var status ='"'+ app.user.status+'"'; // test case
-//          var status ='"' + user.status +'"';
           app.savemarker=marker;
-          //call for custominfobox from asset/js
-          app.infowindow =new app.customInfobox.default(myLatlng, username,status, this.map,marker);
-          //integrate the infowindow.open sinide custominfobox. as soon as the box spawn the window open
+          app.infowindow = new app.customInfobox.default(myLatlng, username,status, this.map,marker);
         });
       }
     },
-
-
-
-
-
-    // REFACTOR TODO
-
-    //using GoogleMaps API, user can click the target-either a meeting point or another user-
-    //and the API will visualize the direction and inform user with the direction
     findMyRoute(destination) {
       if (!this.toggle.locationUpdates) {
         this.$message.error('Please turn on location updates for directions');
         return;
       }
-      let user = UserHelper.getUser(); //gets user from local storage.....
-      var directionsService = new google.maps.DirectionsService();
-      let app = this;
-      var original;
-      var i = 0;
-      var instruction;
-      var directions = [];
-
-      if (this.googleDirectionsRenderer) {
-        this.googleDirectionsRenderer.setMap(null);
-      }else {
-        this.googleDirectionsRenderer = new google.maps.DirectionsRenderer();
-      }
-
-
-      original = { lat: user.lastLatitude, lng: user.lastLongitude };
-      this.googleDirectionsRenderer.setMap(app.map);
-
-      var request = {
-        origin: original,
-        destination: destination,
-        travelMode: 'TRANSIT'
-      };
-
-      directionsService.route(request, function (result, status) {
-        if (status == 'OK') {
-          app.googleDirectionsRenderer.setDirections(result);
-          console.log(result);
-
-          for (i in result.routes[0].legs[0].steps) {
-            if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
-
-              instruction = result.routes[0].legs[0].steps[i].instructions.split(',')[0];
-              directions.push({
-                step: i,
-                instruction: instruction,
-                travel_mode: 'Walking'
-              });
-            }
-            if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
-              var transport = result.routes[0].legs[0].steps[i].transit.line.vehicle.name;
-              instruction = "Take" + " " + result.routes[0].legs[0].steps[i].transit.line.vehicle.name.toLowerCase();
-              if (result.routes[0].legs[0].steps[i].transit.line.short_name)
-                  instruction += " number " + result.routes[0].legs[0].steps[i].transit.line.short_name.toLowerCase();
-              instruction += " towards " + result.routes[0].legs[0].steps[i].transit.headsign;
-
-              directions.push({
-                step: i,
-                instruction: instruction,
-                travel_mode: transport
-              });
-
-            }
-            i++
-          }
-          app.directions = directions;
-        }
-      });
+      DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
 
     //leaving button will direct users to leave the meetup
@@ -555,10 +480,7 @@ export default {
       this.$message.info('you left the meetup');
       router.push({ name: 'LeftMeetup' });
     }
-
-
   },
-
   // When the View component is mounted start the timeout function to update
   // users every 2 minutes
   mounted() {
