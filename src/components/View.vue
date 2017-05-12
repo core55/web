@@ -36,6 +36,7 @@
       </transition>
     </div>
 
+    <direction-view v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
     <user-list :users="markersMap" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
@@ -72,17 +73,22 @@ import Helper from '../helper';
 import MarkerHelper from '../helper/marker';
 import MapHelper from '../helper/map';
 import UserHelper from '../helper/user';
+import DirectionsHelper from '../helper/directions';
 import router from '../router';
 import UserList from './UserList';
+import Directions from './Directions.vue';
 import Clipboard from 'clipboard';
 import Menu from './Menu';
+import DirectionView from "./Directions";
 
 export default {
   name: 'view',
   components: {
+    DirectionView,
     'google-map': GoogleMap,
     'user-list': UserList,
-    'drawer-menu': Menu
+    'drawer-menu': Menu,
+    'direction-view': Directions
   },
   data() {
     return {
@@ -98,6 +104,7 @@ export default {
         direction: false,
         mapout: false,
         showMenu: false,
+        showDirections: false
       },
       input: {
         nickname: ''
@@ -116,6 +123,7 @@ export default {
       user:null,
       userlist:null,
       updatesw:0,
+      directions: []
     }
   },
   watch: {
@@ -347,10 +355,11 @@ export default {
      */
     activateDirection() {
       this.toggle.direction = !this.toggle.direction;
-
-      if (this.toggle.direction) {
-        this.$message.info('click either an user or a meeting point for directions');
-      }
+    },
+    cancelTrip() {
+        this.directions = [];
+        this.toggle.showDirections = false;
+        this.googleDirectionsRenderer.setMap(null);
     },
 
     /*
@@ -415,7 +424,6 @@ export default {
 
         app.user = users[i];
         marker.addListener('click', function () {
-
           //the user can look up the direction to another user
           if (app.toggle.direction) {
             app.findMyRoute({
@@ -436,68 +444,22 @@ export default {
               return;
             }
           }
-
           // spawn new infowindow
           var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
           var username= app.user.nickname;
           var status ='"'+ app.user.status+'"'; // test case
-//          var status ='"' + user.status +'"';
           app.savemarker=marker;
-          //call for custominfobox from asset/js
-          app.infowindow =new app.customInfobox.default(myLatlng, username,status, this.map,marker);
-          //integrate the infowindow.open sinide custominfobox. as soon as the box spawn the window open
+          app.infowindow = new app.customInfobox.default(myLatlng, username,status, this.map,marker);
         });
       }
     },
-
-
-
-
-
-    // REFACTOR TODO
-
-    //using GoogleMaps API, user can click the target-either a meeting point or another user-
-    //and the API will visualize the direction and inform user with the direction
     findMyRoute(destination) {
-      let user = UserHelper.getUser();
-      var directionsService = new google.maps.DirectionsService();
-      let app = this;
-      var original;
-      var i = 0;
-      var instructions = [];
-
-      if (this.googleDirectionsRenderer) {
-        this.googleDirectionsRenderer.setMap(null);
-      }else {
-        this.googleDirectionsRenderer = new google.maps.DirectionsRenderer();
+      if (!this.toggle.locationUpdates) {
+        this.$message.error('Please turn on location updates for directions');
+        return;
       }
-
-      original = { lat: user.lastLatitude, lng: user.lastLongitude };
-      this.googleDirectionsRenderer.setMap(app.map);
-
-      var request = {
-        origin: original,
-        destination: destination,
-        travelMode: 'TRANSIT'
-      };
-
-      directionsService.route(request, function (result, status) {
-        if (status == 'OK') {
-          app.googleDirectionsRenderer.setDirections(result);
-
-          for (i in result.routes[0].legs[0].steps) {
-            if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
-              instructions[i] = i + "." + " " + result.routes[0].legs[0].steps[i].instructions;
-            }
-            if (result.routes[0].legs[0].steps[i].travel_mode != "WALKING") {
-              instructions[i] = i + "." + " " + "take" + " " + "number" + " " + result.routes[0].legs[0].steps[i].transit.line.short_name + " " + result.routes[0].legs[0].steps[i].instructions;
-            }
-            i++
-          }
-          window.alert(instructions);
-
-        }
-      });
+      this.toggle.showDirections = true;
+      DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
 
     //leaving button will direct users to leave the meetup
@@ -507,16 +469,12 @@ export default {
       this.$message.info('you left the meetup');
       router.push({ name: 'LeftMeetup' });
     }
-
-
   },
-
   // When the View component is mounted start the timeout function to update
   // users every 2 minutes
   mounted() {
     let app = this;
     this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
-    // let twoMinutes = 2 * 60 * 1000;
 
     let twoMinutes = 30 * 1000;
     this.updatingLocationInterval = setInterval(function () {
