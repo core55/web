@@ -281,6 +281,7 @@ export default {
         return;
       }
 
+      console.log("udpating....");
       this.updatingLocation = true;
       UserHelper.updateUserLocation();
       this.updatingLocation = false;
@@ -347,10 +348,6 @@ export default {
      */
     activateDirection() {
       this.toggle.direction = !this.toggle.direction;
-
-      if (this.toggle.direction) {
-        this.$message.info('click either an user or a meeting point for directions');
-      }
     },
 
     /*
@@ -415,7 +412,6 @@ export default {
 
         app.user = users[i];
         marker.addListener('click', function () {
-
           //the user can look up the direction to another user
           if (app.toggle.direction) {
             app.findMyRoute({
@@ -459,7 +455,12 @@ export default {
     //using GoogleMaps API, user can click the target-either a meeting point or another user-
     //and the API will visualize the direction and inform user with the direction
     findMyRoute(destination) {
-      let user = UserHelper.getUser();
+      if (!this.locationUpdates) {
+        this.$message.error('Please turn on location updates for directions');
+        return;
+      }
+      let user = UserHelper.getUser(); //gets user from local storage.....
+      console.log(user);
       var directionsService = new google.maps.DirectionsService();
       let app = this;
       var original;
@@ -472,7 +473,10 @@ export default {
         this.googleDirectionsRenderer = new google.maps.DirectionsRenderer();
       }
 
+
       original = { lat: user.lastLatitude, lng: user.lastLongitude };
+      console.log("USer original coordinates: " + original);
+      console.log(original);
       this.googleDirectionsRenderer.setMap(app.map);
 
       var request = {
@@ -484,6 +488,7 @@ export default {
       directionsService.route(request, function (result, status) {
         if (status == 'OK') {
           app.googleDirectionsRenderer.setDirections(result);
+          console.log(result);
 
           for (i in result.routes[0].legs[0].steps) {
             if (result.routes[0].legs[0].steps[i].travel_mode == "WALKING") {
@@ -495,6 +500,7 @@ export default {
             i++
           }
           window.alert(instructions);
+          console.log(instructions);
 
         }
       });
@@ -520,6 +526,7 @@ export default {
 
     let twoMinutes = 30 * 1000;
     this.updatingLocationInterval = setInterval(function () {
+      console.log("Updating my location");
       app.updateMyLocation();
       app.updateUsersOnMap();
     }, twoMinutes);
