@@ -6,7 +6,10 @@
 
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
 
-    <el-button class="app-btn-action" size="medium" id="btn-share" data-clipboard-target="#share-url input" icon="share" @click="toggle.shareDialog = true"></el-button>
+    <!-- Share Button -->
+    <!-- .svg image with a transparent button (works in all browsers) -->
+    <button class="image-button" id="test-share" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
+
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
     <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 

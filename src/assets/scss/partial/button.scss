@@ -14,6 +14,19 @@
   text-align: center;
 }
 
+.image-button {
+    z-index: 1;
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    border-color: transparent;
+    margin-left: 0px;
+    border-width: 0px;
+    padding: 0px;
+    background-color: transparent;
+}
+
 #btn-action-create {
   font-size: 50px;
 }

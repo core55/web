@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="62px" height="62px" viewBox="0 0 62 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>button/share</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="99.0214445%" id="linearGradient-1">
+            <stop stop-color="#000000" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.02" offset="80%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.04" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" stop-opacity="0.12" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.06" offset="20%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-3" cx="29" cy="29" r="29"></circle>
+        <filter x="-6.0%" y="-4.3%" width="112.1%" height="112.1%" filterUnits="objectBoundingBox" id="filter-4">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Button/Share" transform="translate(-9.000000, -10.000000)">
+            <g id="button/share" transform="translate(11.000000, 11.000000)">
+                <g id="button">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <circle stroke="url(#linearGradient-1)" stroke-width="0.517857143" cx="29" cy="29" r="28.7410714"></circle>
+                    <circle stroke="url(#linearGradient-2)" stroke-width="0.517857143" cx="29" cy="29" r="28.7410714"></circle>
+                </g>
+                <path d="M36.4732143,32.9806368 C35.6204762,32.9806368 34.8575,33.3081971 34.2740476,33.8213748 L26.2740179,29.2901248 C26.330119,29.0389953 26.375,28.7878657 26.375,28.5258176 C26.375,28.2637694 26.330119,28.0126398 26.2740179,27.7615103 L34.1842857,23.273935 C34.7901786,23.8198688 35.5868155,24.1583477 36.4732143,24.1583477 C38.3357738,24.1583477 39.8392857,22.6952453 39.8392857,20.8827453 C39.8392857,19.0702453 38.3357738,17.6071429 36.4732143,17.6071429 C34.6106548,17.6071429 33.1071429,19.0702453 33.1071429,20.8827453 C33.1071429,21.1447935 33.1520238,21.395923 33.208125,21.6470525 L25.2978571,26.1346278 C24.6919643,25.5886941 23.8953274,25.2502151 23.0089286,25.2502151 C21.146369,25.2502151 19.6428571,26.7133176 19.6428571,28.5258176 C19.6428571,30.3383176 21.146369,31.80142 23.0089286,31.80142 C23.8953274,31.80142 24.6919643,31.462941 25.2978571,30.9170073 L33.2866667,35.459176 C33.2305655,35.6884682 33.1969048,35.928679 33.1969048,36.1688898 C33.1969048,37.9267965 34.666756,39.3571429 36.4732143,39.3571429 C38.2796726,39.3571429 39.7495238,37.9267965 39.7495238,36.1688898 C39.7495238,34.4109832 38.2796726,32.9806368 36.4732143,32.9806368 L36.4732143,32.9806368 Z" id="Shape" fill="#4A4A4A"></path>
+            </g>
+        </g>
+    </g>
+</svg>
