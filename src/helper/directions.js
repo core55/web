@@ -11,6 +11,7 @@ export default class DirectionsHelper {
     var renderingOptions = {
       suppressMarkers: true
     };
+    steps.length = 0; //Clear existing directions
 
     if (app.googleDirectionsRenderer) {
       app.googleDirectionsRenderer.setMap(null);
