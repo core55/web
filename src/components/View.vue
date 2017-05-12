@@ -42,7 +42,7 @@
 
 
 
-    <div class="travelPlan" style="position: absolute">
+    <div class="travelPlan" style="position: absolute" v-if="directions.length != 0">
       <h2 id="directionsTitle">Travel Plan</h2>
       <ul>
         <li v-for="direction in directions">
@@ -52,6 +52,7 @@
           </div>
         </li>
       </ul>
+      <el-button id="cancel" type="text" icon="close" @click="cancelTrip">Cancel Trip</el-button>
     </div>
 
     <span>
@@ -117,8 +118,6 @@ import ElMenuItem from "../../node_modules/element-ui/packages/menu/src/menu-ite
 export default {
   name: 'view',
   components: {
-//    ElTable,
-//    ElMenu,
     ElMenuItem,
     ElMenuItemGroup,
     ElSubmenu,
@@ -392,6 +391,10 @@ export default {
     activateDirection() {
       this.toggle.direction = !this.toggle.direction;
     },
+    cancelTrip() {
+        this.directions = [];
+        this.googleDirectionsRenderer.setMap(null);
+    },
 
     /*
      *  Checks all user markers if location has changed and moves them if necessary.
@@ -648,6 +651,18 @@ export default {
     float: right;
     color: white;
     margin-left: 30px;
+  }
+
+  #cancel {
+    position: absolute;
+    margin-left:30px;
+    bottom: 30px;
+    color: white;
+  }
+
+  #cancel span {
+    padding-left: 10px;
+    color: white;
   }
 
 
