@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="64px" height="79px" viewBox="0 0 64 79" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
-    <title>Pin/Color/RecentlyOnline</title>
+    <title>pin/user-recently</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Pin/Color/RecentlyOnline">
-            <g id="Pin_Recently">
-                <path d="M20.9849027,62.0536965 L32,79 L43.0150973,62.0536965 C55.2614722,57.5639107 64,45.8024516 64,32 C64,14.326888 49.673112,0 32,0 C14.326888,0 0,14.326888 0,32 C0,45.8024516 8.73852782,57.5639107 20.9849027,62.0536965 Z" id="Combined-Shape" fill="#F8E81C"></path>
+            <g id="pin/user-recently">
+                <path d="M20.9849027,62.0536965 L32,79 L43.0150973,62.0536965 C55.2614722,57.5639107 64,45.8024516 64,32 C64,14.326888 49.673112,0 32,0 C14.326888,0 0,14.326888 0,32 C0,45.8024516 8.73852782,57.5639107 20.9849027,62.0536965 Z" id="Combined-Shape" fill="#FBCE16"></path>
                 <circle id="Oval-6" fill="#FFFFFF" cx="32" cy="32" r="30"></circle>
             </g>
         </g>
