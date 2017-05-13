@@ -36,6 +36,15 @@
       </li>
     </ul>
 
+      <button class="bottom-element">
+          <div class="icon-field">
+            <img src="../assets/svg/icon/menu/leave.svg" class="icon" > </img>
+          </div>
+            <div class="text-field">
+              <h1 class="list-title">Leave Meetup</h1>
+            </div>
+        </button>
+
 
   </div>
 </template>
@@ -79,7 +88,6 @@ import Helper from '../helper';
   }
 
 </script>
-
 
 <style lang="scss" type="text/scss">
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,100);
@@ -141,6 +149,7 @@ import Helper from '../helper';
 
 .bottom-element   {
   position: absolute;
+  bottom: 24px;
   width: 239px;
   height: 56px;
   background-color: #2489B0;
@@ -176,10 +185,11 @@ import Helper from '../helper';
   top: 50%;
   transform: translateY(-50%);
   text-align: left;
-  font-family: Roboto-Bold;
+  font-family: Roboto;
+  font-weight: 450;
   font-size: 14px;
   color: #FFFFFF;
-  letter-spacing: 0;
+  letter-spacing: 0.4px;
   margin: 0;
 }
 
