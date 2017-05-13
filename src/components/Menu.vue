@@ -120,9 +120,16 @@ import Helper from '../helper';
   padding-left: 0px;
   margin-bottom: 0px;
 }
+
+.drawer ul  {
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
 .list   {
-  position: relative;
   list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .menu-list-element  {
