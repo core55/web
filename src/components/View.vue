@@ -493,4 +493,6 @@ export default {
 }
 </script>
 
-<style lang="scss" type="text/scss"></style>
+<style lang="scss" type="text/scss">
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,100);
+</style>

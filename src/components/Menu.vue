@@ -3,16 +3,38 @@
     <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
 
     <!-- List Element -->
-    <div class="drawer-list-element">
-      <div class="drawer-icon" id="el-1">
-      </div>
-      <h1 class="list-title">Profile</h1>
-    </div>
-    <div class="drawer-list-element">
-      <div class="drawer-icon" id="el-2">
-      </div>
-      <h1 class="list-title">People</h1>
-    </div>
+    <ul class="menu-list">
+      <li class="list">
+        <div class="menu-list-element">
+          <div class="icon-field">
+            <img src="../assets/svg/icon/menu/default-icon.svg" class="icon" > </img>
+          </div>
+            <div class="text-field">
+              <h1 class="list-title">Profile</h1>
+            </div>
+        </div>
+      </li>
+      <li class="list">
+        <div class="menu-list-element">
+          <div class="icon-field">
+            <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
+          </div>
+            <div class="text-field">
+              <h1 class="list-title">People</h1>
+            </div>
+        </div>
+      </li>
+      <li class="list">
+        <div class="menu-list-element">
+          <div class="icon-field">
+            <img src="../assets/svg/icon/menu/settings-privacy.svg" class="icon" > </img>
+          </div>
+            <div class="text-field">
+              <h1 class="list-title">Settings &amp Privacy</h1>
+            </div>
+        </div>
+      </li>
+    </ul>
 
 
   </div>
@@ -89,38 +111,69 @@ import Helper from '../helper';
   top: 15px;
 }
 
-.Menu_Options   {
-
+.menu-list  {
+  position: absolute;
+  width: 100%;
+  height: 75%;
+  top: 10%;
+  background-color: white;
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+.list   {
+  position: relative;
+  list-style-type: none;
 }
 
-.drawer-list-element  {
-  position: absolute;
-  top: 20%;
+.menu-list-element  {
+  position: relative;
   width: 239px;
   height: 56px;
   background-color: #2489B0;
 }
 
-.drawer-icon  {
+.bottom-element   {
   position: absolute;
-  width: 18%;
+  width: 239px;
+  height: 56px;
+  background-color: #2489B0;
+}
+
+.icon-field  {
+  position: absolute;
+  width: 44px;
   height: 44px;
   border-radius: 100%;
-  background: white;
+  background: transparent;
   top: 6px;
   margin-left: 8%;
 }
 
-.list-title   {
+.icon   {
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.text-field   {
   position: absolute;
-  left: 34%;
-  bottom: 8px;
-  text-align: center;
+  width: 56%;
+  height: 100%;
+  left: 38%;
+}
+
+.list-title   {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: left;
   font-family: Roboto-Bold;
   font-size: 14px;
-  font-align: left;
-  color: white;
+  color: #FFFFFF;
   letter-spacing: 0;
+  margin: 0;
 }
 
 </style>
