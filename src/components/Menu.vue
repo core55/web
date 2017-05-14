@@ -36,14 +36,16 @@
       </li>
     </ul>
 
-      <button class="bottom-element">
+    <button class="bottom-element" style="padding:0px; margin:0; border-width:0;" v-on:click="outsideofMap">
+      <div class="bottom-element" style="bottom:0;">
           <div class="icon-field">
             <img src="../assets/svg/icon/menu/leave.svg" class="icon" > </img>
           </div>
             <div class="text-field">
               <h1 class="list-title">Leave Meetup</h1>
             </div>
-        </button>
+        </div>
+    </button>
 
 
   </div>
@@ -52,12 +54,17 @@
 <script>
 
 import Helper from '../helper';
+import MenuOption from './MenuOption';
+import Api from '../api';
+import router from '../router';
+
 
   export default {
     components: {},
     name: 'drawer-menu',
     data () {
       return {
+        mapout: false,
       }
     },
     props: {
@@ -71,6 +78,13 @@ import Helper from '../helper';
       }
     },
     methods: {
+      //leaving button will direct users to leave the meetup
+      async outsideofMap() {
+        let app = this;
+        this.mapout = true;
+        this.$message.info('you left the meetup');
+        router.push({ name: 'LeftMeetup' });
+      },
       toggleShow: function() {
           this.$emit('toggleShow');
       },

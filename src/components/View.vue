@@ -18,7 +18,6 @@
     <button class="image-button" id="button-share" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
 
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
-    <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
@@ -102,7 +101,6 @@ export default {
         shareDialog: false,
         locationUpdates: true,
         direction: false,
-        mapout: false,
         showMenu: false,
         showDirections: false
       },
@@ -461,14 +459,6 @@ export default {
       this.toggle.showDirections = true;
       DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
-
-    //leaving button will direct users to leave the meetup
-    outsideofMap() {
-      let app = this;
-      this.mapout = true;
-      this.$message.info('you left the meetup');
-      router.push({ name: 'LeftMeetup' });
-    }
   },
   // When the View component is mounted start the timeout function to update
   // users every 2 minutes
