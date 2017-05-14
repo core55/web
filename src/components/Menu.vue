@@ -54,7 +54,7 @@
 <script>
 
 import Helper from '../helper';
-import MenuOption from './MenuOption';
+import UserListElement from './UserListElement';
 import Api from '../api';
 import router from '../router';
 
