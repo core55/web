@@ -21,7 +21,6 @@ export default class DirectionsHelper {
 
     sourceLocation = new google.maps.LatLng(user.lastLatitude, user.lastLongitude);
     destination = new google.maps.LatLng(destination.lat, destination.lng);
-    app.googleDirectionsRenderer.setMap(app.map);
 
     var request = {
       origin: sourceLocation,
@@ -53,8 +52,12 @@ export default class DirectionsHelper {
             });
           }
         }
+        app.googleDirectionsRenderer.setMap(app.map);
+        app.toggle.showDirections = true;
+      } else {
+        app.toggle.showDirections = false;
+        app.$message.error('No directions available for that destination');
       }
-      app.$message.error('No directions available for that destination');
     });
   }
 

@@ -459,8 +459,6 @@ export default {
         return;
       }
       DirectionsHelper.calculateRoute(destination, this.directions, this);
-      if (this.directions.length != 0)
-          this.toggle.showDirections = true;
     },
 
     //leaving button will direct users to leave the meetup
