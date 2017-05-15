@@ -458,8 +458,9 @@ export default {
         this.$message.error('Please turn on location updates for directions');
         return;
       }
-      this.toggle.showDirections = true;
       DirectionsHelper.calculateRoute(destination, this.directions, this);
+      if (this.directions.length != 0)
+          this.toggle.showDirections = true;
     },
 
     //leaving button will direct users to leave the meetup
