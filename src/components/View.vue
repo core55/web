@@ -18,17 +18,11 @@
     <button class="image-button" id="button-share" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
 
     <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
-    <el-button class="app-btn-action" size="medium" id="mapoutbtn" icon="d-arrow-left" @click="outsideofMap"></el-button>
 
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
       <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
     </span>
-
-    <div id="switch-location-updates">
-      <el-switch v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949">
-      </el-switch>
-    </div>
 
     <div v-for="user in markersMap">
       <transition name="fade">
@@ -100,7 +94,6 @@ export default {
         shareDialog: false,
         locationUpdates: true,
         direction: false,
-        mapout: false,
         showMenu: false,
         showDirections: false
       },
@@ -468,14 +461,6 @@ export default {
       }
       DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
-
-    //leaving button will direct users to leave the meetup
-    outsideofMap() {
-      let app = this;
-      this.mapout = true;
-      this.$message.info('you left the meetup');
-      router.push({ name: 'LeftMeetup' });
-    }
   },
   // When the View component is mounted start the timeout function to update
   // users every 2 minutes
@@ -500,4 +485,6 @@ export default {
 }
 </script>
 
-<style lang="scss" type="text/scss"></style>
+<style lang="scss" type="text/scss">
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,100);
+</style>
