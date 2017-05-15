@@ -30,6 +30,10 @@
       width: 100%;
       text-align: center;
       padding: 72px 0;
+
+      .el-button span {
+        color: white;
+      }
     }
   }
 </style>

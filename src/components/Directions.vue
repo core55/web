@@ -46,7 +46,6 @@
   .travelPlan{
     padding-top: 115px;
     width: 240px;
-    font-family: Roboto;
     z-index: 100;
     height: 100%;
     float: left;

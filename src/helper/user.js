@@ -31,6 +31,10 @@ export default class UserHelper {
     return localStorage.setItem(key, JSON.stringify(value));
   }
 
+  static removeLocalStorageElement(key) {
+    return localStorage.removeItem(key);
+  }
+
   static async updateUserLocation() {
     let position = await Api.getMyLocation();
     let response = await Api.updateUserLocation(this.getUser(), {
