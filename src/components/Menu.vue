@@ -4,17 +4,21 @@
 
     <!-- List Element -->
     <ul class="menu-list">
-      <li class="list">
-        <div class="menu-list-element">
-          <div class="icon-field">
-            <img src="../assets/svg/icon/menu/default-icon.svg" class="icon" > </img>
-          </div>
-            <div class="text-field">
-              <h1 v-if="getSelfUserNickname() != null" class="list-title">{{selfnickname}}</h1>
-              <h1 v-else-if="getSelfUserNickname() == null " class="list-title"> Case 2</h1>
+
+      <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
+        <li class="list">
+          <div class="menu-list-element">
+            <div class="icon-field">
+              <img src="../assets/svg/icon/menu/default-icon.svg" class="icon" > </img>
             </div>
-        </div>
-      </li>
+              <div class="text-field">
+                <h1 v-if="getSelfUserNickname() != null" class="list-title">{{selfnickname}}</h1>
+                <h1 v-else-if="getSelfUserNickname() == null " class="list-title"> Case 2</h1>
+              </div>
+          </div>
+        </li>
+      </button>
+
       <li class="list">
         <div class="menu-list-element">
           <div class="icon-field">
@@ -95,6 +99,7 @@ import UserHelper from '../helper/user';
         selfnickname: 'Nickname',
         toggle: {
           showSettingsAndPrivacy: false,
+          showProfile: false,
           locationUpdates: true,
         },
       }
@@ -176,7 +181,7 @@ import UserHelper from '../helper/user';
   width: 100%;
   height: 75%;
   top: 10%;
-  background-color: white;
+  background-color: #2489B0;
   padding-left: 0px;
   margin-bottom: 0px;
 }
