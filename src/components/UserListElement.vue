@@ -62,8 +62,6 @@ import Menu from './Menu';
 </script>
 
 <style lang="scss" type="text/scss">
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,100);
-
 .user-list-element  {
   position: relative;
   width: 239px;

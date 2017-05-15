@@ -147,7 +147,6 @@ import UserHelper from '../helper/user';
 </script>
 
 <style lang="scss" type="text/scss">
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,100);
 
 .drawer   {
   position: absolute;
@@ -247,7 +246,6 @@ import UserHelper from '../helper/user';
   top: 50%;
   transform: translateY(-50%);
   text-align: left;
-  font-family: Roboto;
   font-weight: 450;
   font-size: 14px;
   color: #FFFFFF;
