@@ -24,11 +24,6 @@
       <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
     </span>
 
-    <div id="switch-location-updates">
-      <el-switch v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949">
-      </el-switch>
-    </div>
-
     <div v-for="user in markersMap">
       <transition name="fade">
         <el-tag v-show="user.show" v-bind:id="user.id" class="tag">{{ user.nickname }}</el-tag>

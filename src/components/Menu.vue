@@ -26,12 +26,38 @@
         </div>
       </li>
       <li class="list">
+        <button style="padding:0px; margin:0; border-width:0;position:relative;" v-on:click="toggle.showSettingsAndPrivacy = !toggle.showSettingsAndPrivacy">
+          <div class="menu-list-element">
+            <div class="icon-field">
+              <img src="../assets/svg/icon/menu/settings-privacy.svg" class="icon" > </img>
+            </div>
+              <div class="text-field">
+                <h1 class="list-title">Settings &amp Privacy</h1>
+              </div>
+          </div>
+        </button>
+
+        <ul class="sub-list" v-if="toggle.showSettingsAndPrivacy" v-on:subListShow="toggle.showSettingsAndPrivacy = !toggle.showSettingsAndPrivacy">
+          <li class="list">
+            <div class="menu-list-element">
+              <div class="icon-field">
+                <el-switch class="icon" v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949"></el-switch>
+              </div>
+              <div class="text-field">
+                <h1 class="list-title">Share Location</h1>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+      </li>
+      <li class="list">
         <div class="menu-list-element">
           <div class="icon-field">
-            <img src="../assets/svg/icon/menu/settings-privacy.svg" class="icon" > </img>
+            <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
           </div>
             <div class="text-field">
-              <h1 class="list-title">Settings &amp Privacy</h1>
+              <h1 class="list-title">Test</h1>
             </div>
         </div>
       </li>
@@ -67,7 +93,12 @@ import UserHelper from '../helper/user';
       return {
         mapout: false,
         selfnickname: 'Nickname',
+        toggle: {
+          showSettingsAndPrivacy: false,
+          locationUpdates: true,
+        },
       }
+
     },
     props: {
       show: {
@@ -85,6 +116,9 @@ import UserHelper from '../helper/user';
       },
       toggleShow: function() {
           this.$emit('toggleShow');
+      },
+      subListShow: function() {
+          this.$emit('subListShow');
       },
       getColor: function(pin) {
         var stat = Helper.getStatus(pin); //get color from pin
@@ -145,6 +179,11 @@ import UserHelper from '../helper/user';
   background-color: white;
   padding-left: 0px;
   margin-bottom: 0px;
+}
+
+.sub-list   {
+  list-style-type: none;
+  padding: 0;
 }
 
 .drawer ul  {
