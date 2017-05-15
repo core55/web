@@ -162,6 +162,7 @@ export default {
 
       this.loading = false;
       this.customInfobox = require('../assets/js/customInfobox');
+      this.customMarker = require('../assets/js/customMarker');
       this.joinEvent();
       this.updateUsersOnMap();
     },
@@ -403,7 +404,7 @@ export default {
         if (index != -1) {
           this.markersMap[index].nickname = users[i].nickname;
           this.markersMap[index].status = users[i].status;
-          MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map);
+          MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map, this);
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
@@ -424,7 +425,7 @@ export default {
 
         let user = users[i];
         //Add new Marker and store it in markersMap for reference
-        var marker = MarkerHelper.createMarker(user,this.map, this.markersMap);
+        var marker = MarkerHelper.createMarker(user,this.map, this.markersMap, this);
 
         app.user = users[i];
         marker.addListener('click', function () {
