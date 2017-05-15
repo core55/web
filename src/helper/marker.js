@@ -6,6 +6,7 @@ import PinUserYou from '../assets/svg/pin/user-you.svg';
 import Helper from '.';
 import UserHelper from './user';
 
+
 export default class MarkerHelper {
   static attachMeetingPointMarkerOnClick(app, onDragend, onClick) {
     let helper = this;
@@ -97,7 +98,7 @@ export default class MarkerHelper {
     }
   }
 
-  static updateUserMarkerIcon(user, marker, map) {
+  static updateUserMarkerIcon(user, marker, map, app) {
     let currentUser = UserHelper.getUser();
 
     var pin;
@@ -111,6 +112,12 @@ export default class MarkerHelper {
     } else {
       var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
       pin = Helper.getPin(timeSinceLastUpdate);
+
+      var maker = new app.customMarker.default(
+        {lat: user.lastLatitude, lng: user.lastLongitude},
+        map,
+        user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
+      );
     }
 
     // Remove marker
@@ -123,7 +130,7 @@ export default class MarkerHelper {
 
 
 
-  static createMarker(user, map, markersMap){
+  static createMarker(user, map, markersMap, app){
     var label = Helper.getInitials(user.nickname);
 
     //Create marker
@@ -136,7 +143,7 @@ export default class MarkerHelper {
     });
 
     //Select appropriate pin
-    this.updateUserMarkerIcon(user,marker,map);
+    this.updateUserMarkerIcon(user,marker,map, app);
 
     //Add marker to temporary storage
     markersMap.push({
