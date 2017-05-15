@@ -1,66 +1,64 @@
 <template>
-  <div class="flex-container">
-    <div class="panel auth-panel">
-      <h3>Register</h3>
-      <div>
-        <!-- email field -->
-        <el-input placeholder="Type your email" v-model="username"></el-input>
+  <section class="auth-box">
+    <el-form>
+      <h1>Register</h1>
+      <el-form-item label="Nickname">
+        <el-input placeholder="Nickname.." v-model="nickname"></el-input>
+      </el-form-item>
 
-        <!-- password field -->
-        <el-input placeholder="Type your password" v-model="password"></el-input>
+      <el-form-item label="Email">
+        <el-input placeholder="Type your email.." v-model="username"></el-input>
+      </el-form-item>
 
-        <!-- password comparison field -->
-        <el-input placeholder="Type your password again" v-model="password1"></el-input>
+      <el-form-item label="Password">
+        <el-input type="password" placeholder="Type your password.." v-model="password"></el-input>
+      </el-form-item>
 
-        <!-- Register button -->
-        <el-button @click="register"> Jiho = the BEST  </el-button>
+      <el-form-item>
+        <el-button @click="register" :loading="loading.register">Register</el-button>
+      </el-form-item>
 
-      </div>
-
-    </div>
-  </div>
+      <router-link class="link-auth" to="/login">Already a member?</router-link>
+    </el-form>
+  </section>
 </template>
 
 <script>
   import Api from '../api';
   import router from '../router';
-  import Vue from 'vue';
-  import VueResource from 'vue-resource';
-
-  Vue.use(VueResource);
 
   export default {
     name: 'register',
 
     data() {
       return {
+        nickname: '',
         username: '',
         password: '',
-        password1: ''
+        password1: '',
+        loading: {
+          register: false
+        }
       }
     },
 
     methods: {
       async register () {
-
         let registerInfo = {
           username: this.username,
           password: this.password,
-          password1: this.password1
+          nickname: this.nickname
         }
 
-        if (password.equals(password1)){
-          let register = await Api.letsRegister(registerInfo);
+        let register = await Api.letsRegister(registerInfo);
 
-          if (register.ok == true ) {
-            let hash = response.body.hash;
-            router.push({ name: 'View', params: { id: hash }});
-            return;
-          }
+        if (register.ok == true ) {
+          let hash = response.body.hash;
+          router.push({ name: 'View', params: { id: hash }});
+          return;
         }
-        else {
-          this.$message.info('password does not match');
-        }
+
+        this.$message.info('Oops, something went wrong.');
       }
     }
   }

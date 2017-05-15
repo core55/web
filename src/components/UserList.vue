@@ -200,13 +200,11 @@
 
   .infoTitle {
     margin: 0px;
-    font-family: roboto;
     font-size: 18px;
   }
 
   .status  {
     font-size: 12px;
-    font-family: roboto;
     width: 170px;
     height: 28px;
   }
@@ -219,7 +217,6 @@
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     line-height: 65%;
-    font-family: roboto;
     font-size: 13px;
   }
 </style>
