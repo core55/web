@@ -66,7 +66,8 @@
   }
 
   .instructionsList{
-    max-height: 400px;
+    max-height: 60%;
+    min-height: 200px;
     overflow: hidden;
     overflow-y: scroll;
   }
@@ -103,7 +104,7 @@
   #cancel {
     position: absolute;
     margin-left:30px;
-    bottom: 30px;
+    margin-top: 20%;
     color: white;
   }
 

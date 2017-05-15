@@ -19,12 +19,13 @@ export default class DirectionsHelper {
       app.googleDirectionsRenderer = new google.maps.DirectionsRenderer(renderingOptions);
     }
 
-    sourceLocation = { lat: user.lastLatitude, lng: user.lastLongitude };
-    app.googleDirectionsRenderer.setMap(app.map);
+    sourceLocation = new google.maps.LatLng(user.lastLatitude, user.lastLongitude);
+    destination = new google.maps.LatLng(destination.lat, destination.lng);
 
     var request = {
       origin: sourceLocation,
       destination: destination,
+      provideRouteAlternatives: false,
       travelMode: 'TRANSIT'
     };
 
@@ -51,6 +52,11 @@ export default class DirectionsHelper {
             });
           }
         }
+        app.googleDirectionsRenderer.setMap(app.map);
+        app.toggle.showDirections = true;
+      } else {
+        app.toggle.showDirections = false;
+        app.$message.error('No directions available for that destination');
       }
     });
   }

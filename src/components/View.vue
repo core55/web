@@ -466,7 +466,6 @@ export default {
         this.$message.error('Please turn on location updates for directions');
         return;
       }
-      this.toggle.showDirections = true;
       DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
 
