@@ -10,7 +10,8 @@
             <img src="../assets/svg/icon/menu/default-icon.svg" class="icon" > </img>
           </div>
             <div class="text-field">
-              <h1 class="list-title">Profile</h1>
+              <h1 v-if="getSelfUserNickname() != null" class="list-title">{{selfnickname}}</h1>
+              <h1 v-else-if="getSelfUserNickname() == null " class="list-title"> Case 2</h1>
             </div>
         </div>
       </li>
@@ -57,7 +58,7 @@ import Helper from '../helper';
 import UserListElement from './UserListElement';
 import Api from '../api';
 import router from '../router';
-
+import UserHelper from '../helper/user';
 
   export default {
     components: {},
@@ -65,13 +66,10 @@ import router from '../router';
     data () {
       return {
         mapout: false,
+        selfnickname: 'Nickname',
       }
     },
     props: {
-      users: {
-        type: Array,
-        default () { return {}; }
-      },
       show: {
         type: Boolean,
         default: false
@@ -94,7 +92,13 @@ import router from '../router';
         return {
             'border-color' : color //color of status
         };
-      }
+      },
+      async getSelfUserNickname() {
+        console.log("getSelfUserNickname called succesfully");
+        this.selfnickname = UserHelper.getUser().nickname;
+        console.log(nickname);
+        return this.selfnickname;
+      },
     },
     mounted () {
 
