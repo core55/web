@@ -8,10 +8,10 @@ import Helper from '../../helper/index';
 export default class customMarker extends google.maps.OverlayView {
   constructor(latLng, map, image) {
     super();
-    this.latLng = latLng;
-    this.image =image;
+    this.latLng_ = latLng;
+    this.image_ =image;
     this.setMap(map);
-    this.div = null;
+    this.div_ = null;
   }
 
   getPosition() {
@@ -28,11 +28,8 @@ export default class customMarker extends google.maps.OverlayView {
     var div = document.createElement('div');
 
     // marker.className = 'marker';
-
-
     div.style.borderStyle = 'solid';
     div.style.borderWidth = '2px';
-
     div.style.borderRadius='20px';
     div.style.borderColor = '#FFFFFF';
     div.style.position = 'absolute';
@@ -44,19 +41,12 @@ export default class customMarker extends google.maps.OverlayView {
     div.style.width = '60px';
     div.style.overflow = 'hidden';
 
-
-
-
     var img = document.createElement('img');
-    img.src =  this.image;
+    img.src =  this.image_;
     img.style.position = 'absolute';
     img.style.borderRadius = 50 + '%';
-
-
     div.appendChild(img);
-
-
-    this.div = div;
+    this.div_ = div;
 
     // Add the element to the "overlayLayer" pane.
     var panes = this.getPanes();
@@ -64,23 +54,20 @@ export default class customMarker extends google.maps.OverlayView {
   };
 
   draw(){
-
-    var div = this.div;
-    var position =  new google.maps.LatLng(this.latLng);
     var overlayProjection = this.getProjection();
-    var px = overlayProjection.fromLatLngToDivPixel(position);
-
-    // Resize the image's div to fit the indicated dimensions.
-    div.style.left = px.x - 30 +'px';
-    div.style.top = px.y - 76 + 'px';
-    div.style.borderRadius = 50 + '%';
-
-
+    var position = this.myLatlng_;
+    if(overlayProjection) {
+      var px = overlayProjection.fromLatLngToDivPixel(position);
+      //postion
+      var div = this.div_;
+      div.style.left = px.x - 30 + 'px';
+      div.style.top = px.y - 76 + 'px';
+      div.style.borderRadius = 50 + '%';
+    }
   };
 
   onRemove() {
-    this.div.parentNode.removeChild(this.div);
-    this.div = null;
+    this.div_.parentNode.removeChild(this.div_);
   };
 
 
