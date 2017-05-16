@@ -31,7 +31,7 @@
     </div>
 
     <direction-view v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
-    <user-list :users="markersMap" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
+    <user-list :users="markersMap" :maps="map" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
