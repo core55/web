@@ -1,22 +1,21 @@
 <template>
   <section >
-
-    <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
-    <button class="image-button" size="large" id="button-create" v-on:click="createMeetup" ><img src="../assets/svg/button/create.svg"/></button>
+    <google-map :callback="initMap" v-loading.fullscreen="loading"></google-map>
+    <button class="image-button" size="large" id="button-create" v-on:click="createMeetup"><img src="../assets/svg/button/create.svg"/></button>
     <input id="pac-input" class="controls" type="text" placeholder="Search a location...">
 
     <div class='area-indicator'></div>
 
+    <el-dialog class="modal-welcome" top="40%" :show-close="false" :visible.sync="toggle.welcomeWindow" size="small" :modal="false">
+      <h1>LOGO</h1>
 
-    <div id="loginwindow" v-if="toggle.userWindow" @keyup.esc="loginsw">
-      <i class='el-icon-close' @click="loginsw"> </i>
-    <div class='Login'>
-    </div>
-    <login></login>
-    </div>
+      <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua.</p>
 
+      <el-button @click="goToLogin">Login</el-button>
+      <a href="#" @click="toggle.welcomeWindow = false" class="link-auth">Skip</a>
+    </el-dialog>
   </section>
-
 </template>
 
 <script>
@@ -44,6 +43,7 @@ export default {
       markers: {},
       toggle: {
         userWindow: true,
+        welcomeWindow: true
       }
     }
   },
@@ -70,8 +70,8 @@ export default {
       MarkerHelper.attachMeetingPointMarkerOnClick(this);
       MarkerHelper.attachUserMarker(this, this.userLocation);
     },
-    async loginsw(){
-      this.toggle.userWindow=false
+    goToLogin() {
+      router.push({ name: 'Login' });
     },
     async createMeetup () {
       this.loading = true;
@@ -102,6 +102,12 @@ export default {
       this.$message.error('Oops, something went wrong.');
     }
   },
+  created() {
+    let token = localStorage.getItem('_token');
+    if (token) {
+      this.toggle.welcomeWindow = false;
+    }
+  }
 }
 </script>
 

@@ -3,7 +3,6 @@ import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
 import UserHelper from './user';
 
-
 export default class MarkerHelper {
   static attachMeetingPointMarkerOnClick(app, onDragend, onClick) {
     let helper = this;
@@ -88,7 +87,6 @@ export default class MarkerHelper {
     }
   }
 
-
   static createMarker(user, map, markersMap, app){
     let position = { lat: user.lastLatitude, lng: user.lastLongitude };
     let currentUser = UserHelper.getUser();
@@ -113,6 +111,4 @@ export default class MarkerHelper {
 
     return marker;
   }
-
-
 }

@@ -143,7 +143,6 @@ export default {
 
       this.loading = false;
       this.customInfobox = require('../assets/js/customInfobox');
-      this.customMarker = require('../assets/js/customMarker');
       this.avatarMarker = require('../assets/js/AvatarMarker');
       this.joinEvent();
       app.newUserFlag = false;

@@ -38,7 +38,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
     // Resize the image's div to fit the indicated dimensions.
     div.style.left = px.x - 35 +'px';
-    div.style.top = px.y - 35 + 'px';
+    div.style.top = px.y - 80 + 'px';
     // div.style.borderRadius = 50 + '%';
   }
 

@@ -1,30 +1,55 @@
 .Login, .Register {
-  position:absolute;
-  height:100%;
-  width:100%;
+  height: 100%;
+  width: 100%;
   display: flex;
   background-color: #2489B0;
-  opacity:0.5;
-  width: 100%;
-  height: 100%;
-  z-index: 9998;
 }
 
-.el-icon-close{
-  position:absolute;
-  right:0%;
-  top: 2%;
-  right: 3%;
-  left: 98%;
-  bottom:97%;
-  botton:100%;
-  height:100%;
-  width:100%;
-  z-index: 9999;
+.modal-welcome {
+  background-color: rgba(36, 137, 176, 0.8);
+
+  .el-dialog__header {
+    display: none;
+  }
+
+  .el-dialog {
+    margin: 0;
+    padding: 0;
+    margin-top: -100px;
+    min-width: 200px;
+    background: none;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+
+    .el-dialog__body {
+      padding: 0;
+    }
+
+    h1 {
+      font-weight: 100;
+      font-size: 90px;
+      margin-bottom: 24px;
+      color: white;
+    }
+
+    .lead {
+      color: white;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .link-auth {
+      margin-left: 24px;
+    }
+  }
+}
+
+.link-auth, .link-auth:visited {
+  color: white;
 }
 
 .auth-box {
-  position:absolute;
   opacity: 1;
   max-width: 420px;
   margin: 0 auto;
@@ -33,19 +58,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  top: 50%;
-  bottom: 50%;
-  left: 43%;
-  right: 50%;
-  z-index: 9999;
-  min-width: 200px;
-
 
   .el-form-item__label {
     display: none;
-  }
-
-  .link-auth, .link-auth:visited {
-    color: white;
   }
 }
