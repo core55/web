@@ -82,11 +82,11 @@ export default class MarkerHelper {
     }
 
     var steps = 1000;
-    var deltaLat = location.lat - previousLocation.lat();
-    var deltaLng = location.lng - previousLocation.lng();
+    var deltaLat = location.lat - previousLocation.lat;
+    var deltaLng = location.lng - previousLocation.lng;
 
-    var startingLat = previousLocation.lat();
-    var startingLng = previousLocation.lng();
+    var startingLat = previousLocation.lat;
+    var startingLng = previousLocation.lng;
 
     user.moveTo = [];
 
