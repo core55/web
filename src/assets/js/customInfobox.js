@@ -8,13 +8,12 @@ import Helper from '../../helper/index';
 /** @constructor */
 
 export default class customInfobox extends google.maps.OverlayView {
-  constructor(myLatlng, username,status, map,marker) {
+  constructor(userInformation) {
     super();
-    // Initialize all properties.
-    this.marker_= marker;
-    this.username_ = username;
-    this.status_=status;
-    this.myLatlng_ = myLatlng;
+    this.marker_= userInformation.marker;
+    this.username_ = userInformation.nickname;
+    this.status_= '"' + (userInformation.status || 'No status') + '"';
+    this.myLatlng_ = new google.maps.LatLng(userInformation.marker.getPosition().lat, userInformation.marker.getPosition().lng);
     this.content1=null;
     this.content2=null;
     // Define a property to hold the image's div. We'll
@@ -22,7 +21,7 @@ export default class customInfobox extends google.maps.OverlayView {
     // method so we'll leave it null for now
     this.div_ = null;
     // Explicitly call setMap on this overlay.
-    this.setMap(map);
+    this.setMap(userInformation.marker.map);
   }
 
   //add the div box into pane

@@ -412,14 +412,11 @@ export default {
         if (index != -1) {
           this.markersMap[index].nickname = users[i].nickname;
           this.markersMap[index].status = users[i].status;
-//          marker.updateMarkerStyle(currentUser);
           this.markersMap[index].marker.updateMarkerStyle(users[i]);
-//          MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map, this);
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
           });
-          app.user = users[i];
 
           if (app.updatesw == 1) {
             app.infowindow.onRemove();
@@ -436,10 +433,9 @@ export default {
 
         let user = users[i];
         //Add new Marker and store it in markersMap for reference
-
         if (user.nickname) {
-          let marker = MarkerHelper.createMarker(user, this.map, this.markersMap, this);
-          app.user = users[i];
+          let marker = MarkerHelper.createMarker(users[i], this.map, this.markersMap, this);
+          let indexOfMarker = this.markersMap.length - 1;
 
           //put new user into the list
           if (app.newUserFlag) {
@@ -449,6 +445,8 @@ export default {
 
           setTimeout(function () {
             google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
+              var userMarkerInformation = app.markersMap[indexOfMarker];
+              var marker = userMarkerInformation.marker;
               //the user can look up the direction to another user
               if (app.toggle.direction) {
                 app.findMyRoute({
@@ -467,18 +465,10 @@ export default {
                   return;
                 }
               }
-              // spawn new infowindow
-              var myLatlng = new google.maps.LatLng(marker.getPosition());
-              var username = app.user.nickname;
-              if (!app.user.status) {
-                app.user.status = "No status";
-              }
-              ;
-              var status = '"' + app.user.status + '"'; // test case
-
+              // Spawn new infoWindow
               app.savemarker = marker;
-              app.infowindow = new app.customInfobox.default(myLatlng, username, status, marker.map, marker);
-            });
+              app.infowindow = new app.customInfobox.default(userMarkerInformation);
+            })
           }, 300);
         }
 
