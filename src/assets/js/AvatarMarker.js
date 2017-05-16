@@ -8,12 +8,11 @@ export default class AvatarMarker extends google.maps.OverlayView {
     this.latLng = latLng;
     this.me = me;
     this.user = user;
+    this.checkUserAvatar();
     this.color = 'black'; //default pin color before update
   }
 
   onAdd() {
-    this.checkUserAvatar()
-
     let div = document.createElement('div');
     div.className = "avatar-marker";
 
@@ -37,7 +36,16 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
   checkUserAvatar() {
     if (this.user == null || typeof this.user == 'undefined') { return; }
-    this.avatar = this.user.gravatarURI == null ? this.user.googlePictureURI : this.user.gravatarURI;
+
+    if (this.user.googlePictureURI != null) {
+      this.avatar = this.user.googlePictureURI;
+      return;
+    }
+
+    if (this.user.gravatarURI != null) {
+      this.avatar = this.user.gravatarURI;
+      return;
+    }
   }
 
   draw() {
