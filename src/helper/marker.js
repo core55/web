@@ -3,7 +3,6 @@ import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
 import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
 import PinUserYou from '../assets/svg/pin/user-you.svg';
-import Helper from '.';
 import UserHelper from './user';
 
 
@@ -130,28 +129,16 @@ export default class MarkerHelper {
 
 
   static createMarker(user, map, markersMap, app){
-    // var label = Helper.getInitials(user.nickname);
-
     let position = { lat: user.lastLatitude, lng: user.lastLongitude };
     let currentUser = UserHelper.getUser();
     let me = currentUser.id == user.id;
     let avatar = user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI;
     let marker = new app.avatarMarker.default(map, position, me, avatar);
 
-
-    // marker.updateMarkerStyle(currentUser);
-
-    // //Create marker
-    // var marker = new google.maps.Marker({
-    //   position: { lat: user.lastLatitude, lng: user.lastLongitude },
-    //   map: null,
-    //   icon: null,
-    //   label: label,
-    //   title: user.nickname
-    // });
-
-    //Select appropriate pin
-    // this.updateUserMarkerIcon(user,marker,map, app);
+    //Wait until marker is drawn to update style
+    setTimeout(function () {
+      marker.updateMarkerStyle(user)
+    }, 300);
 
     //Add marker to temporary storage
     markersMap.push({

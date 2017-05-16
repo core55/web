@@ -1,3 +1,5 @@
+import Helper from '../../helper/';
+
 export default class AvatarMarker extends google.maps.OverlayView {
   constructor(map, latLng, me, avatar) {
     super();
@@ -21,7 +23,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
       div.appendChild(span);
     } else if (this.avatar) {
       div.style.backgroundImage = 'url(' + this.avatar + ')';
-      div.style.backgroundRepeat = none;
+      div.style.backgroundRepeat = 'none';
       div.style.backgroundPosition = 'center';
     }
 
@@ -46,36 +48,6 @@ export default class AvatarMarker extends google.maps.OverlayView {
   }
 
 
-  // static updateUserMarkerIcon(user, marker, map, app) {
-  //   let currentUser = UserHelper.getUser();
-  //
-  //   var pin;
-  //
-  //   if (currentUser.id == user.id) {
-  //     pin = PinUserYou;
-  //     marker.label = null;
-  //   } else if (user.nickname == null) {
-  //     pin = PinAnonymous;
-  //     marker.label = null;
-  //   } else {
-  //     var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-  //     pin = Helper.getPin(timeSinceLastUpdate);
-  //
-  //     var maker = new app.customMarker.default(
-  //       {lat: user.lastLatitude, lng: user.lastLongitude},
-  //       map,
-  //       user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
-  //     );
-  //   }
-  //
-  //   // Remove marker
-  //   marker.setMap(null);
-  //   // set new pin style and force refresh
-  //   marker.icon = pin;
-  //   marker.setMap(map);
-  // }
-
-
   getColor(timeSinceLastUpdate) {
     if (timeSinceLastUpdate < 5.1) {
       return 'green';
@@ -86,7 +58,6 @@ export default class AvatarMarker extends google.maps.OverlayView {
     }
   }
 
-
   updateMarkerStyle(user) {
     if (this.me) //if its my pin, then do not update
       return;
@@ -94,7 +65,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
     if (user.nickname == null) {
       let span = document.createElement('span');
       span.appendChild(document.createTextNode("?"));
-      this.div.appendChild(span);
+      this.div.appendChild(span); //Have to remove this if user later gets a nickname
     } else {
       var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
       var color = this.getColor(timeSinceLastUpdate);
