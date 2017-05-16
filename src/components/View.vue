@@ -114,6 +114,7 @@ export default {
       user:null,
       userlist:null,
       updatesw:0,
+      newUserFlag:false,
       directions: []
     }
   },
@@ -157,6 +158,7 @@ export default {
       this.customInfobox = require('../assets/js/customInfobox');
       this.customMarker = require('../assets/js/customMarker');
       this.joinEvent();
+      app.newUserFlag = false;
       this.updateUsersOnMap();
     },
 
@@ -235,6 +237,8 @@ export default {
 
       UserHelper.updateUser(response.body);
       this.toggle.nicknamePrompt = false;
+
+      this.newUserFlag=false;
       this.updateUsersOnMap();
     },
 
@@ -385,7 +389,8 @@ export default {
      */
     async updateMarkers(users) {
       let app = this;
-
+      var newUserList =[];
+      var userListIndex=0;
       for (var i in users) {
         // check if user already has a marker
         var index = this.markersMap.findIndex(function (item) {
@@ -418,9 +423,16 @@ export default {
 
         let user = users[i];
         //Add new Marker and store it in markersMap for reference
-        var marker = MarkerHelper.createMarker(user,this.map, this.markersMap, this);
-
+        if(user.nickname){
+        var marker = MarkerHelper.createMarker(user, this.map, this.markersMap);
         app.user = users[i];
+
+        //put new user into the list
+        if (app.newUserFlag) {
+          newUserList[userListIndex] = user.nickname;
+          userListIndex = userListIndex + 1;
+        }
+
         marker.addListener('click', function () {
           //the user can look up the direction to another user
           if (app.toggle.direction) {
@@ -453,6 +465,36 @@ export default {
           app.infowindow = new app.customInfobox.default(myLatlng, username,status, this.map,marker);
         });
       }
+      }
+
+      if (userListIndex!=0) {
+        if (app.newUserFlag) {
+          var displayStr= '';
+          var userStr = '';
+          var stopIndex=userListIndex-4;
+          if (userListIndex >3){
+            while (userListIndex != stopIndex) {
+              userListIndex = userListIndex - 1;
+              userStr = newUserList[userListIndex] + ', ' + userStr;
+            }
+            displayStr = userStr +' and '+ stopIndex+ ' others ' +' has just join the meetup'
+          }else {
+            while (userListIndex != 0) {
+              userListIndex = userListIndex - 1;
+              userStr = newUserList[userListIndex] + ', ' + userStr;
+            }
+            displayStr = userStr + ' has just join the meetup'
+          }
+
+          this.$notify({
+            title: 'New user just join the meetup!',
+            message: displayStr,
+            duration: 0
+          });
+        }
+      }
+
+
     },
     findMyRoute(destination) {
       if (!this.toggle.locationUpdates) {
@@ -467,9 +509,10 @@ export default {
   mounted() {
     let app = this;
     this.shareUrl = process.env.APP_DOMAIN + this.$route.path;
-
+    // let twoMinutes = 2 * 60 * 1000;
     let twoMinutes = 30 * 1000;
     this.updatingLocationInterval = setInterval(function () {
+      app.newUserFlag = true;
       app.updateMyLocation();
       app.updateUsersOnMap();
     }, twoMinutes);

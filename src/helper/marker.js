@@ -102,22 +102,26 @@ export default class MarkerHelper {
     let currentUser = UserHelper.getUser();
 
     var pin;
+    if(currentUser) {
+      if (currentUser.id == user.id) {
+        pin = PinUserYou;
+        marker.label = null;
+      } else if (user.nickname == null) {
+        pin = PinAnonymous;
+        marker.label = null;
+      } else {
+        var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
+        pin = Helper.getPin(timeSinceLastUpdate);
 
-    if (currentUser.id == user.id) {
-      pin = PinUserYou;
-      marker.label = null;
-    } else if (user.nickname == null) {
-      pin = PinAnonymous;
-      marker.label = null;
-    } else {
-      var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-      pin = Helper.getPin(timeSinceLastUpdate);
 
-      var maker = new app.customMarker.default(
-        {lat: user.lastLatitude, lng: user.lastLongitude},
-        map,
-        user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
-      );
+        //doesnt work and cause issues need review
+      /*  var maker = new app.customMarker.default(
+          {lat: user.lastLatitude, lng: user.lastLongitude},
+          map,
+          user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
+        );*/
+      }
+
     }
 
     // Remove marker
