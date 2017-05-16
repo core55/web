@@ -1,16 +1,28 @@
 <template>
-  <section>
+  <section >
+
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
     <button class="image-button" size="large" id="button-create" v-on:click="createMeetup" ><img src="../assets/svg/button/create.svg"/></button>
     <input id="pac-input" class="controls" type="text" placeholder="Search a location...">
 
     <div class='area-indicator'></div>
+
+
+    <div id="loginwindow" v-if="toggle.userWindow" @keyup.esc="loginsw">
+      <i class='el-icon-close' @click="loginsw"> </i>
+    <div class='Login'>
+    </div>
+    <login></login>
+    </div>
+
   </section>
+
 </template>
 
 <script>
 
 import router from '../router';
+import Login from './Login';
 import GoogleMap from './GoogleMap';
 import Api from '../api';
 import Helper from '../helper';
@@ -20,14 +32,19 @@ import MarkerHelper from '../helper/marker';
 export default {
   name: 'create',
   components: {
-    'google-map': GoogleMap
+    'google-map': GoogleMap,
+    'login': Login
   },
   data () {
     return {
+      loginWindow:true,
       map: null,
       loading: true,
       userLocation: null,
-      markers: {}
+      markers: {},
+      toggle: {
+        userWindow: true,
+      }
     }
   },
   methods: {
@@ -51,6 +68,9 @@ export default {
       MapHelper.initialiseSearchBox(this);
       MarkerHelper.attachMeetingPointMarkerOnClick(this);
       MarkerHelper.attachUserMarker(this, this.userLocation);
+    },
+    async loginsw(){
+      this.toggle.userWindow=false
     },
     async createMeetup () {
       this.loading = true;
