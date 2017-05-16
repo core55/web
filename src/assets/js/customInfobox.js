@@ -67,7 +67,6 @@ export default class customInfobox extends google.maps.OverlayView {
     div.appendChild(this.content1);
     div.appendChild(this.content2);
     this.div_ = div;
-    // Add the element to the "overlayLayer" pane.
     var panes = this.getPanes();
     panes.floatPane.appendChild(div);
   }
@@ -78,7 +77,6 @@ export default class customInfobox extends google.maps.OverlayView {
     var position = this.myLatlng_;
     if(overlayProjection) {
       var px = overlayProjection.fromLatLngToDivPixel(position);
-      //postion
       var div = this.div_;
       div.style.left = px.x + 25 + 'px';
       div.style.top = px.y - 100 + 'px';

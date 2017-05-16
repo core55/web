@@ -20,15 +20,12 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
     if (this.me) {
       let span = document.createElement('span');
+      span.className = "label";
       span.appendChild(document.createTextNode("YOU"));
       div.appendChild(span);
     } else if (this.avatar) {
       div.style.backgroundImage = 'url(' + this.avatar + ')';
-      div.style.backgroundRepeat = 'none';
-      div.style.backgroundPosition = 'center';
     }
-
-    // this.getPanes().overlayLayer.appendChild(div);
     this.getPanes().overlayMouseTarget.appendChild(div);
     this.div = div;
   }
