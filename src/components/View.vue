@@ -208,9 +208,9 @@ export default {
     async updateStatus(){
       let app =this;
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.input.status);
-      var msg=app.HTTPErrMessage(response);
       if (response.ok == false) {
-        this.$message.error(msg + ', Oops, Status could not be set!');
+        var msg=app.HTTPErrMessage(response);
+        this.$message.error(msg + ' , Oops, Status could not be set!');
         return;
       }else{
         this.$message.info('Status has been set!');
@@ -229,9 +229,8 @@ export default {
         return;
       }
       let response = await Api.updateUsersNickname(UserHelper.getUser(), this.input.nickname);
-      var msg=this.HTTPErrMessage(response);
-      console.log(msg);
       if (response.ok == false) {
+        var msg=this.HTTPErrMessage(response);
         this.$message.error(msg + ', Nickname could not be set!');
         return;
       }else{
@@ -267,9 +266,9 @@ export default {
         app.toggle.requestState = false;
         app.requestState = 0;
       }, 1000);
-var msg =app.HTTPErrMessage(response);
       if (response.ok == false) {
-        this.$message.error( msg + ', Oops, could not retrieve the Users!');
+        var msg =app.HTTPErrMessage(response);
+        this.$message.error( msg + ' , Oops, could not retrieve the Users!');
         return;
       }
 
@@ -321,13 +320,14 @@ var msg =app.HTTPErrMessage(response);
       if (response.ok == true) {
         userMeetups.push(this.meetupHash);
         UserHelper.updateUserMeetups(userMeetups);
-        var msg =this.HTTPErrMessage(response);
-        this.$message.info(msg + ', Welcome to JoinUp!');
+        this.$message.info('Welcome to JoinUp!');
 
         user = response.body;
         UserHelper.updateUser(user);
+      }else{
+        var msg =this.HTTPErrMessage(response);
+        this.$message.error('Something went wrong, Error: ' + msg);
       }
-
       this.updateUsersOnMap();
       this.promptForNickname();
       this.initialiseUserOutOfBoundsTracking();
@@ -463,7 +463,7 @@ var msg =app.HTTPErrMessage(response);
       var responseStat=response.status;
       var errMsg=null;
      if(responseStat==200){
-        return;
+        errMsg=null;
       }else if (responseStat==500){
        errMsg="Internal Server Error";
       }else if(responseStat==501){
@@ -491,7 +491,7 @@ var msg =app.HTTPErrMessage(response);
       }else if(responseStat==400){
         errMsg="Bad Request"
       }else if(responseStat==0){
-        errMsg="Server is not reachable,Check your Internet connection"
+        errMsg="Server is not reachable, Check your Internet connection"
       }
       else{
         errMsg="Unknown error has been detected. Error code: "+responseStat
