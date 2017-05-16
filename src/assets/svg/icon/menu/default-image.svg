@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="29px" viewBox="0 0 23 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>icon/menu/default-image</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon/menu/default-image" fill="#FFFFFF">
+            <path d="M-2.63017386e-12,24.4772811 C1.82862723,19.9748404 6.24601827,16.8 11.404933,16.8 C16.4208581,16.8 20.7357954,19.8012852 22.6518868,24.1059976 C19.689525,27.0278812 15.6211099,28.83125 11.1314955,28.83125 C6.83526272,28.83125 2.92472599,27.1798888 -2.64344102e-12,24.4772811 Z" id="Combined-Shape"></path>
+            <circle id="Oval-7" cx="11.5828125" cy="7.3828125" r="7.3828125"></circle>
+        </g>
+    </g>
+</svg>
