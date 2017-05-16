@@ -402,7 +402,9 @@ export default {
       for (var i in users) {
         // check if user already has a marker
         var index = this.markersMap.findIndex(function (item) {
-          if (!item) { return false; }
+          if (!item) {
+            return false;
+          }
           return item.id === users[i].id;
         });
 
@@ -425,7 +427,8 @@ export default {
             app.savemarker = null;
             app.updatesw = 0;
             return;
-          };
+          }
+          ;
 
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
@@ -434,8 +437,8 @@ export default {
         let user = users[i];
         //Add new Marker and store it in markersMap for reference
 
-        if(user.nickname){
-          var marker = MarkerHelper.createMarker(user,this.map, this.markersMap, this);
+        if (user.nickname) {
+          let marker = MarkerHelper.createMarker(user, this.map, this.markersMap, this);
           app.user = users[i];
 
           //put new user into the list
@@ -444,83 +447,68 @@ export default {
             userListIndex = userListIndex + 1;
           }
 
-
-          console.log(marker);
-
-
           setTimeout(function () {
-            var div = marker.getDiv();
-
-            google.maps.event.addDomListener(div, 'click', function(){
-              console.log("click");
-            })
-
-          }, 300);
-
-
-          marker.addListener('click', function () {
-            //the user can look up the direction to another user
-            if (app.toggle.direction) {
-              app.findMyRoute({
-                lat: marker.getPosition().lat(),
-                lng: marker.getPosition().lng()
-              });
-
-              app.toggle.direction = false;
-              return;
-            }
-
-            // close info window if one is already open
-            if (app.infowindow) {
-              app.infowindow.onRemove();
-              app.infowindow=null;
-              if(app.savemarker==marker) {
-                app.savemarker=null;
+            google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
+              //the user can look up the direction to another user
+              if (app.toggle.direction) {
+                app.findMyRoute({
+                  lat: marker.getPosition().lat,
+                  lng: marker.getPosition().lng
+                });
+                app.toggle.direction = false;
                 return;
               }
-            }
-            // spawn new infowindow
-            var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
-            var username= app.user.nickname;
-            if(!app.user.status){
-              app.user.status="No status";
-            };
-            var status ='"'+ app.user.status+'"'; // test case
-            app.savemarker=marker;
-            app.infowindow = new app.customInfobox.default(myLatlng, username,status, this.map,marker);
-          });
+              // close info window if one is already open
+              if (app.infowindow) {
+                app.infowindow.onRemove();
+                app.infowindow = null;
+                if (app.savemarker == marker) {
+                  app.savemarker = null;
+                  return;
+                }
+              }
+              // spawn new infowindow
+              var myLatlng = new google.maps.LatLng(marker.getPosition());
+              var username = app.user.nickname;
+              if (!app.user.status) {
+                app.user.status = "No status";
+              }
+              ;
+              var status = '"' + app.user.status + '"'; // test case
 
+              app.savemarker = marker;
+              app.infowindow = new app.customInfobox.default(myLatlng, username, status, marker.map, marker);
+            });
+          }, 300);
         }
-      }
 
-      if (userListIndex!=0) {
-        if (app.newUserFlag) {
-          var displayStr= '';
-          var userStr = '';
-          var stopIndex=userListIndex-4;
-          if (userListIndex >3){
-            while (userListIndex != stopIndex) {
-              userListIndex = userListIndex - 1;
-              userStr = newUserList[userListIndex] + ', ' + userStr;
+        if (userListIndex != 0) {
+          if (app.newUserFlag) {
+            var displayStr = '';
+            var userStr = '';
+            var stopIndex = userListIndex - 4;
+            if (userListIndex > 3) {
+              while (userListIndex != stopIndex) {
+                userListIndex = userListIndex - 1;
+                userStr = newUserList[userListIndex] + ', ' + userStr;
+              }
+              displayStr = userStr + ' and ' + stopIndex + ' others ' + ' has just join the meetup'
+            } else {
+              while (userListIndex != 0) {
+                userListIndex = userListIndex - 1;
+                userStr = newUserList[userListIndex] + ', ' + userStr;
+              }
+              displayStr = userStr + ' has just join the meetup'
             }
-            displayStr = userStr +' and '+ stopIndex+ ' others ' +' has just join the meetup'
-          }else {
-            while (userListIndex != 0) {
-              userListIndex = userListIndex - 1;
-              userStr = newUserList[userListIndex] + ', ' + userStr;
-            }
-            displayStr = userStr + ' has just join the meetup'
+
+            this.$notify({
+              title: 'New user just join the meetup!',
+              message: displayStr,
+              duration: 0
+            });
           }
-
-          this.$notify({
-            title: 'New user just join the meetup!',
-            message: displayStr,
-            duration: 0
-          });
         }
       }
-
-
     },
     HTTPErrMessage(response){
       var responseStat=response.status;

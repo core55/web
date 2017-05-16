@@ -11,7 +11,7 @@ export default class customInfobox extends google.maps.OverlayView {
   constructor(myLatlng, username,status, map,marker) {
     super();
     // Initialize all properties.
-    this.marker_=marker;
+    this.marker_= marker;
     this.username_ = username;
     this.status_=status;
     this.myLatlng_ = myLatlng;
@@ -30,7 +30,8 @@ export default class customInfobox extends google.maps.OverlayView {
     var div = document.createElement('div');
     div.style.borderStyle = 'solid';
     div.style.borderWidth = '2px';
-    var color=Helper.getStatus(this.marker_.icon);
+    // var color=Helper.getStatus(this.marker_.icon);
+    var color = 'green';
     if(color[0]=='green'){
       div.style.borderColor='#3ED24C'
     }else if(color[0]=='yellow'){
@@ -99,6 +100,7 @@ export default class customInfobox extends google.maps.OverlayView {
       var cont1height = parseInt(this.content1.style.height, 10);
       var cont2height = parseInt(this.content2.offsetHeight, 10);
       div.style.minHeight = cont1height + cont2height + 20 + 'px';
+      // console.log("Positioned info window");
     }
   }
 
