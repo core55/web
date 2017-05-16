@@ -88,11 +88,15 @@ export default class MarkerHelper {
   }
 
   static createMarker(user, map, markersMap, app){
+    if (!user.lastLatitude || !user.lastLongitude) {
+      //console.log("User has no location");
+      return false;
+    }
+
     let position = { lat: user.lastLatitude, lng: user.lastLongitude };
     let currentUser = UserHelper.getUser();
     let me = currentUser.id == user.id;
-    let avatar = user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI;
-    let marker = new app.avatarMarker.default(map, position, me, avatar);
+    let marker = new app.avatarMarker.default(map, position, me, user);
 
     //Wait until marker is drawn to update style
     setTimeout(function () {
@@ -110,5 +114,12 @@ export default class MarkerHelper {
     });
 
     return marker;
+  }
+
+  static generateMarkerLabel(str){
+    let span = document.createElement('span');
+    span.className = "label";
+    span.appendChild(document.createTextNode(str));
+    return span;
   }
 }

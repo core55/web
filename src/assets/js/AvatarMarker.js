@@ -1,16 +1,19 @@
 import Helper from '../../helper/';
+import MarkerHelper from '../../helper/marker';
 
 export default class AvatarMarker extends google.maps.OverlayView {
-  constructor(map, latLng, me, avatar) {
+  constructor(map, latLng, me, user) {
     super();
     this.setMap(map);
     this.latLng = latLng;
     this.me = me;
-    this.avatar = avatar;
+    this.user = user;
     this.color = 'black'; //default pin color before update
   }
 
   onAdd() {
+    this.checkUserAvatar()
+
     let div = document.createElement('div');
     div.className = "avatar-marker";
 
@@ -19,15 +22,22 @@ export default class AvatarMarker extends google.maps.OverlayView {
     div.appendChild(triangle);
 
     if (this.me) {
-      let span = document.createElement('span');
-      span.className = "label";
-      span.appendChild(document.createTextNode("YOU"));
-      div.appendChild(span);
+      div.appendChild(MarkerHelper.generateMarkerLabel("You"));
     } else if (this.avatar) {
       div.style.backgroundImage = 'url(' + this.avatar + ')';
+    }else if (this.user && this.user.nickname && this.user.nickname != "") {
+      div.appendChild(MarkerHelper.generateMarkerLabel(this.user.nickname));
+    }else {
+      div.appendChild(MarkerHelper.generateMarkerLabel("?"));
     }
+
     this.getPanes().overlayMouseTarget.appendChild(div);
     this.div = div;
+  }
+
+  checkUserAvatar() {
+    if (this.user == null || typeof this.user == 'undefined') { return; }
+    this.avatar = this.user.gravatarURI == null ? this.user.googlePictureURI : this.user.gravatarURI;
   }
 
   draw() {
@@ -36,10 +46,8 @@ export default class AvatarMarker extends google.maps.OverlayView {
     var overlayProjection = this.getProjection();
     var px = overlayProjection.fromLatLngToDivPixel(position);
 
-    // Resize the image's div to fit the indicated dimensions.
     div.style.left = px.x - 35 +'px';
     div.style.top = px.y - 80 + 'px';
-    // div.style.borderRadius = 50 + '%';
   }
 
   getDiv() {
@@ -61,29 +69,37 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
   calculateColor(timeSinceLastUpdate) {
     if (timeSinceLastUpdate < 5.1) {
-      return '#3ED24C';
+      return 'online';
     } else if (timeSinceLastUpdate < 20) {
-      return '#ffff00';
+      return 'recent';
     } else if (timeSinceLastUpdate > 20) {
-      return '#ff0000';
+      return 'idle';
+    }else {
+      return 'none';
     }
   }
 
   updateMarkerStyle(user) {
-    if (this.me) //if its my pin, then do not update
+    //if its my pin or div not drawn yet, then do not update
+    if (this.me || this.div == null) return;
+
+    this.user = user;
+    this.checkUserAvatar();
+
+    var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
+    this.color = this.calculateColor(timeSinceLastUpdate);
+    this.div.className = "avatar-marker avatar-marker-" + this.color;
+
+    if (this.user && this.user.nickname && this.user.nickname != "") {
+      let span = this.div.querySelector('.label');
+
+      if (span) {
+        span.innerHTML = this.user.nickname;
+      }
+
       return;
-
-    if (user.nickname == null) {
-      let span = document.createElement('span');
-      span.appendChild(document.createTextNode("?"));
-      this.div.appendChild(span); //Have to remove this if user later gets a nickname
-    } else {
-      var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-      var color = this.calculateColor(timeSinceLastUpdate);
-      this.div.style.borderColor = color;
-      this.color = color;
     }
+
+    // todo: update avatar?
   }
-
-
 }

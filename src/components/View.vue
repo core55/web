@@ -369,9 +369,7 @@ export default {
       for (var i in users) {
         // check if user already has a marker
         var index = this.markersMap.findIndex(function (item) {
-          if (!item) {
-            return false;
-          }
+          if (!item) { return false; }
           return item.id === users[i].id;
         });
 
@@ -380,64 +378,66 @@ export default {
           this.markersMap[index].nickname = users[i].nickname;
           this.markersMap[index].status = users[i].status;
           this.markersMap[index].marker.updateMarkerStyle(users[i]);
+
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
           });
 
-          if (app.updatesw == 1) {
-            app.infowindow.onRemove();
-            app.infowindow = null;
-            app.savemarker = null;
-            app.updatesw = 0;
-            return;
-          }
-          ;
+          // ???
+          // if (app.updatesw == 1) {
+          //   app.infowindow.onRemove();
+          //   app.infowindow = null;
+          //   app.savemarker = null;
+          //   app.updatesw = 0;
+          //   return;
+          // };
 
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
         }
 
+        // Create a new marker for the new user
         let user = users[i];
-        //Add new Marker and store it in markersMap for reference
-        if (user.nickname) {
-          let marker = MarkerHelper.createMarker(users[i], this.map, this.markersMap, this);
-          let indexOfMarker = this.markersMap.length - 1;
+        let marker = MarkerHelper.createMarker(users[i], this.map, this.markersMap, this);
 
-          //put new user into the list
-          if (app.newUserFlag) {
-            newUserList[userListIndex] = user.nickname;
-            userListIndex = userListIndex + 1;
-          }
+        if (!marker) {
+          // something went wrong creating the marker
+          continue;
+        }
 
-          setTimeout(function () {
-            google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
-              var userMarkerInformation = app.markersMap[indexOfMarker];
-              var marker = userMarkerInformation.marker;
-              //the user can look up the direction to another user
-              if (app.toggle.direction) {
-                app.findMyRoute({
-                  lat: marker.getPosition().lat,
-                  lng: marker.getPosition().lng
-                });
-                app.toggle.direction = false;
+        let indexOfMarker = this.markersMap.length - 1;
+
+        setTimeout(function () {
+          google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
+            var userMarkerInformation = app.markersMap[indexOfMarker];
+            var marker = userMarkerInformation.marker;
+            //the user can look up the direction to another user
+            if (app.toggle.direction) {
+              app.findMyRoute({
+                lat: marker.getPosition().lat,
+                lng: marker.getPosition().lng
+              });
+              app.toggle.direction = false;
+              return;
+            }
+            // close info window if one is already open
+            if (app.infowindow) {
+              app.infowindow.onRemove();
+              app.infowindow = null;
+              if (app.savemarker == marker) {
+                app.savemarker = null;
                 return;
               }
-              // close info window if one is already open
-              if (app.infowindow) {
-                app.infowindow.onRemove();
-                app.infowindow = null;
-                if (app.savemarker == marker) {
-                  app.savemarker = null;
-                  return;
-                }
-              }
-              // Spawn new infoWindow
-              app.savemarker = marker;
-              app.infowindow = new app.customInfobox.default(userMarkerInformation);
-            })
-          }, 300);
-        }
+            }
+            // Spawn new infoWindow
+            app.savemarker = marker;
+            app.infowindow = new app.customInfobox.default(userMarkerInformation);
+          })
+        }, 400);
+
+        // REFACTOR
+        continue;
 
         if (userListIndex != 0) {
           if (app.newUserFlag) {
