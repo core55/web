@@ -1,33 +1,74 @@
 <template>
   <div class="drawer">
+  <direction-view style="z-index:100;"v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
     <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
 
     <!-- List Element -->
     <ul class="menu-list">
-
-      <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
         <li class="list">
-          <div class="menu-list-element">
-            <div class="icon-field">
-              <img src="../assets/svg/icon/menu/default-icon.svg" class="icon" > </img>
-            </div>
-              <div class="text-field">
-                <h1 v-if="getSelfUserNickname() != null" class="list-title">{{selfnickname}}</h1>
-                <h1 v-else-if="getSelfUserNickname() == null " class="list-title"> Case 2</h1>
+          <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
+            <div class="menu-list-element">
+              <div class="icon-field">
+                <img v-if="hasPicture(user())" v-bind:src="this.avatar" class="picture" > </img>
+                  <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
-          </div>
+                <div class="text-field">
+                  <h1 class="list-title">My Profile</h1>
+                </div>
+            </div>
+          </button>
+
+          <ul class="sub-list" v-if="toggle.showProfile" v-on:profileShow="toggle.showProfile = !toggle.showProfile">
+          <li class="list">
+            <div class="change-status" @keyup.enter="updateStatus">
+              <el-input
+                class="edit-status"
+                :placeholder="statusBoxNotice"
+                icon="edit"
+                v-model="status"
+                :on-icon-click="updateStatus">
+              </el-input>
+            </div>
+          </li>
+        </ul>
+
         </li>
-      </button>
 
       <li class="list">
-        <div class="menu-list-element">
-          <div class="icon-field">
-            <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
-          </div>
-            <div class="text-field">
-              <h1 class="list-title">People</h1>
+        <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showPeople = !toggle.showPeople">
+          <div class="menu-list-element">
+            <div class="icon-field">
+              <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
             </div>
-        </div>
+              <div class="text-field">
+                <h1 class="list-title">People</h1>
+              </div>
+              <img v-if="toggle.showPeople" v-on:peopleListShow="toggle.showPeople = !toggle.showPeople" src="../assets/svg/icon/menu/drop-down.svg" class="drop" > </img>
+
+          </div>
+        </button>
+
+        <ul class="people-list" id="flexible-size"v-if="toggle.showPeople" v-on:peopleListShow="toggle.showPeople = !toggle.showPeople">
+
+          <li class="people-list-element" v-for="user in users" v-if="showInPeopleList(user)">
+            <div class="people-list-Content">
+              <div class="picture-field">
+                <img v-if="user.avatar != undefined" v-bind:src="user.avatar" class="picture" > </img>
+                <img v-else-if="!hasPicture(user)" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
+              </div>
+              <div class="text-area">
+                <h1 class="name-field"> {{user.nickname}}</h1>
+                <h2 v-if="hasStatus(user)" class="status-field">{{user.status}}</h2>
+                <h2 v-else-if="!hasStatus(user)" class="status-field">No Status</h2>
+              </div>
+              <button class="directions-button" v-on:click="findMyRoute(coordinates(user))">
+                <img src="../assets/svg/icon/menu/directions.svg" class="directions" > </img>
+              </button>
+            </div>
+          </li>
+
+        </ul>
+
       </li>
       <li class="list">
         <button style="padding:0px; margin:0; border-width:0;position:relative;" v-on:click="toggle.showSettingsAndPrivacy = !toggle.showSettingsAndPrivacy">
@@ -43,9 +84,9 @@
 
         <ul class="sub-list" v-if="toggle.showSettingsAndPrivacy" v-on:subListShow="toggle.showSettingsAndPrivacy = !toggle.showSettingsAndPrivacy">
           <li class="list">
-            <div class="menu-list-element">
+            <div class="sub-list-element">
               <div class="icon-field">
-                <el-switch class="icon" v-model="toggle.locationUpdates" on-color="#13ce66" off-color="#ff4949"></el-switch>
+                <el-switch class="icon" v-model="toggle.uselesslocationUpdates" on-color="#13ce66" off-color="#ff4949"></el-switch>
               </div>
               <div class="text-field">
                 <h1 class="list-title">Share Location</h1>
@@ -53,17 +94,6 @@
             </div>
           </li>
         </ul>
-
-      </li>
-      <li class="list">
-        <div class="menu-list-element">
-          <div class="icon-field">
-            <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
-          </div>
-            <div class="text-field">
-              <h1 class="list-title">Test</h1>
-            </div>
-        </div>
       </li>
     </ul>
 
@@ -85,31 +115,46 @@
 <script>
 
 import Helper from '../helper';
-import UserListElement from './UserListElement';
 import Api from '../api';
 import router from '../router';
 import UserHelper from '../helper/user';
+import Directions from './Directions';
+import DirectionsHelper from '../helper/directions';
+import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
   export default {
-    components: {},
     name: 'drawer-menu',
+    components: {
+    'direction-view': Directions,
+    },
+
     data () {
       return {
         mapout: false,
-        selfnickname: 'Nickname',
+        status: '',
+        directions: [],
+        statusBoxNotice: 'Update your status...',
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
-          locationUpdates: true,
+          showPeople: true,
+          uselesslocationUpdates: true,
+          showDirections: false,
         },
+        input: {
+        nickname: '',
+      },
       }
-
     },
     props: {
       show: {
         type: Boolean,
         default: false
-      }
+      },
+      users: {
+        type: Array,
+        default () { return {}; }
+      },
     },
     methods: {
       //leaving button will direct users to leave the meetup
@@ -125,6 +170,12 @@ import UserHelper from '../helper/user';
       subListShow: function() {
           this.$emit('subListShow');
       },
+      profileShow: function() {
+          this.$emit('profileShow');
+      },
+      peopleListShow: function() {
+        this.$emit('subListShow');
+      },
       getColor: function(pin) {
         var stat = Helper.getStatus(pin); //get color from pin
         var color = stat[0];
@@ -132,11 +183,61 @@ import UserHelper from '../helper/user';
             'border-color' : color //color of status
         };
       },
-      async getSelfUserNickname() {
-        console.log("getSelfUserNickname called succesfully");
-        this.selfnickname = UserHelper.getUser().nickname;
-        console.log(nickname);
-        return this.selfnickname;
+      hasPicture: function(user) {
+        var picture = false;
+        if(user.googlePictureURI || user.gravatarURI){
+          picture = true;
+        };
+        return picture;
+      },
+      hasStatus: function(user) {
+        var has = true;
+        if(user.status == null){
+          has = false;
+        }
+        return has;
+      },
+      async user() {
+        var user = UserHelper.getUser();
+        return user;
+      },
+
+      //Returns true iff user has a nickname and is not one self
+      showInPeopleList: function(user) {
+        var show = true
+        if(user.nickname == null || UserHelper.getUser().nickname == user.nickname){
+          show = false;
+        }
+        return show;
+      },
+      cancelTrip() {
+          this.directions = [];
+          this.toggle.showDirections = false;
+          this.googleDirectionsRenderer.setMap(null);
+      },
+      //Show the directions to the a Destination
+      // Requires destination {lat: ... , lng: ...}
+      findMyRoute(destination) {
+        DirectionsHelper.calculateRoute(destination, this.directions, this);
+      },
+      // returns the coordinates of a user in the form:
+      // {lat,lng}
+      coordinates(user) {
+        var coords = user.marker.getPosition();
+        return {lat: coords.lat(), lng: coords.lng()};
+      },
+
+      async updateStatus(){
+      let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
+      if (response.ok == false) {
+        this.statusBoxNotice = 'Oops, Status could not be set!' ;
+        return;
+      }else{
+        this.statusBoxNotice = 'Status has been set!';
+        if(this.savemarker)
+        app.updatesw=1;
+      }
+      this.status = null;
       },
     },
     mounted () {
@@ -188,7 +289,109 @@ import UserHelper from '../helper/user';
 .sub-list   {
   list-style-type: none;
   padding: 0;
+  background-color: #2AA6D5;
 }
+
+//People List Starts here:
+
+.people-list  {
+  padding: 0;
+  margin: 0;
+  background-color: #2AA6D5;
+  max-height: 320px;
+}
+
+.people-list-element  {
+  list-style-type: none;
+  position: relative;
+  width: 239px;
+  min-height: 80px;
+  background-color: #2AA6D5;
+}
+
+.people-list-content   {
+  position: absolute;
+  width: 239px;
+  min-height: 56px;
+  background-color: #2AA6D5;
+  display: flex;
+}
+
+.picture-field  {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 100%;
+  background: transparent;
+  top: 6px;
+  margin-left: 8%;
+}
+
+.picture  {
+  position: absolute;
+  float: left;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.text-area   {
+  position: absolute;
+  width: 56%;
+  height: 80px;
+  left: 38%;
+}
+
+.name-field {
+  position: relative;
+  top: 21px;
+  transform: translateY(-50%);
+  text-align: left;
+  font-weight: 450;
+  font-size: 13px;
+  color: #FFFFFF;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+
+.status-field   {
+  position: relative;
+  top: 20px;
+  text-align: left;
+  font-weight: 450;
+  font-size: 12px;
+  color: #FFFFFF;
+  letter-spacing: 0.4px;
+  margin: 0;
+  width: 110px;
+}
+
+.directions-button  {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  right: 0px;
+  bottom: 0px;
+  background-color: transparent;
+  border-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.directions   {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 9px;
+  left: 9px;
+  margin: 0;
+}
+
+//ENDENDENDENDENDENDENDENDENDENDENDENDENDENDEND
+//ENDENDENDENDENDENDENDENDENDENDENDENDENDENDEND
 
 .drawer ul  {
   overflow: hidden;
@@ -206,6 +409,12 @@ import UserHelper from '../helper/user';
   width: 239px;
   height: 56px;
   background-color: #2489B0;
+}
+.sub-list-element  {
+  position: relative;
+  width: 239px;
+  height: 56px;
+  background-color: transparent;
 }
 
 .bottom-element   {
@@ -247,10 +456,17 @@ import UserHelper from '../helper/user';
   transform: translateY(-50%);
   text-align: left;
   font-weight: 450;
-  font-size: 14px;
+  font-size: 13px;
   color: #FFFFFF;
   letter-spacing: 0.4px;
   margin: 0;
+}
+
+.drop   {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 12px;
 }
 
 </style>
