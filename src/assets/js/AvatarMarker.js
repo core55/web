@@ -52,6 +52,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
   setPosition(newPosition) {
     this.latLng = newPosition; //do we have to redraw/force div to move?
+    this.draw();
   }
 
   getColor() {
