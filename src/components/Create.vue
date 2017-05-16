@@ -64,6 +64,7 @@ export default {
         center: this.userLocation
       });
 
+      this.avatarMarker = require('../assets/js/AvatarMarker');
       this.loading = false;
       MapHelper.initialiseSearchBox(this);
       MarkerHelper.attachMeetingPointMarkerOnClick(this);

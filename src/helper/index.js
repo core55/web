@@ -24,8 +24,8 @@ export default class Helper {
   static findDeltas(map, pin) {
     var latCenter = map.getBounds().getCenter().lat();
     var lngCenter = map.getBounds().getCenter().lng();
-    var latPin = pin.getPosition().lat();
-    var lngPin = pin.getPosition().lng();
+    var latPin = pin.getPosition().lat;
+    var lngPin = pin.getPosition().lng;
     var deltaLng = lngPin - lngCenter;
     var deltaLat = latPin - latCenter;
     var slope = deltaLat / deltaLng;
