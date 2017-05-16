@@ -7,7 +7,7 @@
       </div>
       <ul>
         <li v-for="user in users" :key="user.id">
-          <div class="bigCircle">
+          <div class="bigCircle" @click=clickuser(user.marker,maps)>
             <div v-if="user.avatar != null" class = "photo" :style="{ 'background-image': 'url(' + user.avatar + ')' }">
               <div class = "statusCircle" :style="getColor(user.marker.icon)">
                 <span class="statusText">{{ user.marker.icon | getText }}</span>
@@ -50,6 +50,10 @@
         type: Array,
         default () { return {}; }
       },
+      maps:{
+        type:Object,
+        default(){return{};}
+      },
       show: {
         type: Boolean,
         default: false
@@ -58,6 +62,10 @@
     methods: {
       toggleShow: function() {
           this.$emit('toggleShow');
+      },
+      clickuser:function (marker,map) {
+        var myLatlng = new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng());
+        map.setCenter(myLatlng);
       },
       getColor: function(pin) {
         var stat = Helper.getStatus(pin); //get color from pin
