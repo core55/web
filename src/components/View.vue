@@ -395,8 +395,10 @@ export default {
      */
     async updateMarkers(users) {
       let app = this;
+
       var newUserList =[];
       var userListIndex=0;
+
       for (var i in users) {
         // check if user already has a marker
         var index = this.markersMap.findIndex(function (item) {
@@ -408,7 +410,9 @@ export default {
         if (index != -1) {
           this.markersMap[index].nickname = users[i].nickname;
           this.markersMap[index].status = users[i].status;
-          MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map, this);
+//          marker.updateMarkerStyle(currentUser);
+          this.markersMap[index].marker.updateMarkerStyle(users[i]);
+//          MarkerHelper.updateUserMarkerIcon(users[i], this.markersMap[index].marker, this.map, this);
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude

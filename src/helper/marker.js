@@ -98,56 +98,60 @@ export default class MarkerHelper {
     }
   }
 
-  static updateUserMarkerIcon(user, marker, map, app) {
-    let currentUser = UserHelper.getUser();
-
-    var pin;
-    if(currentUser) {
-      if (currentUser.id == user.id) {
-        pin = PinUserYou;
-        marker.label = null;
-      } else if (user.nickname == null) {
-        pin = PinAnonymous;
-        marker.label = null;
-      } else {
-        var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-        pin = Helper.getPin(timeSinceLastUpdate);
-
-
-        //doesnt work and cause issues need review
-      /*  var maker = new app.customMarker.default(
-          {lat: user.lastLatitude, lng: user.lastLongitude},
-          map,
-          user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
-        );*/
-      }
-
-    }
-
-    // Remove marker
-    marker.setMap(null);
-    // set new pin style and force refresh
-    marker.icon = pin;
-    marker.setMap(map);
-  }
-
+  // static updateUserMarkerIcon(user, marker, map, app) {
+  //   let currentUser = UserHelper.getUser();
+  //
+  //   var pin;
+  //
+  //   if (currentUser.id == user.id) {
+  //     pin = PinUserYou;
+  //     marker.label = null;
+  //   } else if (user.nickname == null) {
+  //     pin = PinAnonymous;
+  //     marker.label = null;
+  //   } else {
+  //     var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
+  //     pin = Helper.getPin(timeSinceLastUpdate);
+  //
+  //     var maker = new app.customMarker.default(
+  //       {lat: user.lastLatitude, lng: user.lastLongitude},
+  //       map,
+  //       user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
+  //     );
+  //   }
+  //
+  //   // Remove marker
+  //   marker.setMap(null);
+  //   // set new pin style and force refresh
+  //   marker.icon = pin;
+  //   marker.setMap(map);
+  // }
 
 
 
   static createMarker(user, map, markersMap, app){
-    var label = Helper.getInitials(user.nickname);
+    // var label = Helper.getInitials(user.nickname);
 
-    //Create marker
-    var marker = new google.maps.Marker({
-      position: { lat: user.lastLatitude, lng: user.lastLongitude },
-      map: null,
-      icon: null,
-      label: label,
-      title: user.nickname
-    });
+    let position = { lat: user.lastLatitude, lng: user.lastLongitude };
+    let currentUser = UserHelper.getUser();
+    let me = currentUser.id == user.id;
+    let avatar = user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI;
+    let marker = new app.avatarMarker.default(map, position, me, avatar);
+
+
+    // marker.updateMarkerStyle(currentUser);
+
+    // //Create marker
+    // var marker = new google.maps.Marker({
+    //   position: { lat: user.lastLatitude, lng: user.lastLongitude },
+    //   map: null,
+    //   icon: null,
+    //   label: label,
+    //   title: user.nickname
+    // });
 
     //Select appropriate pin
-    this.updateUserMarkerIcon(user,marker,map, app);
+    // this.updateUserMarkerIcon(user,marker,map, app);
 
     //Add marker to temporary storage
     markersMap.push({
