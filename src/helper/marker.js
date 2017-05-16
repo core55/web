@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
-import PinAnonymous from '../assets/svg/pin/user-anonymous.svg';
-import PinUserYou from '../assets/svg/pin/user-you.svg';
 import UserHelper from './user';
 
 
@@ -19,14 +17,13 @@ export default class MarkerHelper {
 
       helper.attachMeetingPointMarker(app, {
         lat: event.latLng.lat(),
-        lng:event.latLng.lng()
+        lng: event.latLng.lng()
       }, onDragend, onClick);
     });
   }
 
   static attachMeetingPointMarker(app, location, onDragend, onClick) {
     if (!app.map || typeof app.map == 'undefined') { return false; }
-
     //coordinate of a clicked place is obtained
     app.markers.meetup = new google.maps.Marker({
       draggable : true,
@@ -59,14 +56,8 @@ export default class MarkerHelper {
 
   static attachUserMarker(app, position) {
     if (!app.map || typeof app.map == 'undefined') { return false; }
-
-    app.markers.user = new google.maps.Marker({
-      draggable: false,
-      position: position,
-      map: app.map,
-      icon: PinUser,
-      offset: '0%'
-    })
+    let marker = new app.avatarMarker.default(app.map, position, true);
+    app.markers.user = marker; //Why is this useful? Seems like we are not making use of it.
   }
 
   /*
@@ -96,36 +87,6 @@ export default class MarkerHelper {
       user.moveTo[i] = { lat: startingLat, lng: startingLng };
     }
   }
-
-  // static updateUserMarkerIcon(user, marker, map, app) {
-  //   let currentUser = UserHelper.getUser();
-  //
-  //   var pin;
-  //
-  //   if (currentUser.id == user.id) {
-  //     pin = PinUserYou;
-  //     marker.label = null;
-  //   } else if (user.nickname == null) {
-  //     pin = PinAnonymous;
-  //     marker.label = null;
-  //   } else {
-  //     var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-  //     pin = Helper.getPin(timeSinceLastUpdate);
-  //
-  //     var maker = new app.customMarker.default(
-  //       {lat: user.lastLatitude, lng: user.lastLongitude},
-  //       map,
-  //       user.gravatarURI == null ? user.googlePictureURI : user.gravatarURI
-  //     );
-  //   }
-  //
-  //   // Remove marker
-  //   marker.setMap(null);
-  //   // set new pin style and force refresh
-  //   marker.icon = pin;
-  //   marker.setMap(map);
-  // }
-
 
 
   static createMarker(user, map, markersMap, app){

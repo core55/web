@@ -27,7 +27,8 @@ export default class AvatarMarker extends google.maps.OverlayView {
       div.style.backgroundPosition = 'center';
     }
 
-    this.getPanes().overlayLayer.appendChild(div);
+    // this.getPanes().overlayLayer.appendChild(div);
+    this.getPanes().overlayMouseTarget.appendChild(div);
     this.div = div;
   }
 
@@ -41,6 +42,10 @@ export default class AvatarMarker extends google.maps.OverlayView {
     div.style.left = px.x - 35 +'px';
     div.style.top = px.y - 35 + 'px';
     // div.style.borderRadius = 50 + '%';
+  }
+
+  getDiv() {
+    return this.div;
   }
 
   getPosition() {
