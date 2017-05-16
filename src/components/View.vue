@@ -47,13 +47,6 @@
       </el-dialog>
     </div>
 
-    <div id="status" @keyup.enter="updateStatus">
-    <el-input
-      placeholder="Update status"
-      icon="edit"
-      v-model="input.status"
-      :on-icon-click="updateStatus">
-    </el-input>
 </div>
   </section>
 </template>
@@ -204,25 +197,6 @@ export default {
         this.toggle.nicknamePrompt = true;
       }
     },
-
-    /*
-     *  Update nickname of user in backend DB and local storage
-     */
-    async updateStatus(){
-      let app =this;
-      let response = await Api.updateUsersStatus(UserHelper.getUser(), this.input.status);
-      if (response.ok == false) {
-        var msg=app.HTTPErrMessage(response);
-        this.$message.error(msg + ' , Oops, Status could not be set!');
-        return;
-      }else{
-        this.$message.info('Status has been set!');
-        if(this.savemarker)
-        app.updatesw=1;
-      }
-      this.updateUsersOnMap();
-      },
-
     async updateNickname() {
       if (this.input.nickname.length == 0) {
           this.$message.error('Name can not be empty! Please enter a name');
