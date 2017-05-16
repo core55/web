@@ -27,12 +27,10 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
     this.getPanes().overlayLayer.appendChild(div);
     this.div = div;
-    console.log("ADDING");
   }
 
   draw() {
     var div = this.div;
-    console.log(div);
     var position =  new google.maps.LatLng(this.latLng);
     var overlayProjection = this.getProjection();
     var px = overlayProjection.fromLatLngToDivPixel(position);
@@ -41,6 +39,10 @@ export default class AvatarMarker extends google.maps.OverlayView {
     div.style.left = px.x - 35 +'px';
     div.style.top = px.y - 35 + 'px';
     // div.style.borderRadius = 50 + '%';
+  }
+
+  getPosition() {
+    return this.latLng;
   }
 
 
@@ -86,7 +88,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
 
 
   updateMarkerStyle(user) {
-    if (me) //if its my pin, then do not update
+    if (this.me) //if its my pin, then do not update
       return;
 
     if (user.nickname == null) {
