@@ -130,7 +130,7 @@ export default {
 
       // Redirect if meetup does not exist
       if (this.meetup.ok == false) {
-        this.$message.error('Oops, could not retrieve the Meetup!');
+        this.$message.error('Oops, Meetup does not exist!');
         router.push({ name: 'NotFound' });
         return;
       }
@@ -211,7 +211,8 @@ export default {
       let app =this;
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.input.status);
       if (response.ok == false) {
-        this.$message.error('Oops, Status could not be set!');
+        var msg=app.HTTPErrMessage(response);
+        this.$message.error(msg + ' , Oops, Status could not be set!');
         return;
       }else{
         this.$message.info('Status has been set!');
@@ -223,16 +224,19 @@ export default {
 
     async updateNickname() {
       if (this.input.nickname.length == 0) {
-          this.$message.error('Please enter a name');
+          this.$message.error('Name can not be empty! Please enter a name');
           return;
       } else if (this.input.nickname.length > 15) {
-        this.$message.error('Name is too long. Please choose a shorter name.');
+        this.$message.error('Name is too long. Please choose a name with in 15 character!.');
         return;
       }
       let response = await Api.updateUsersNickname(UserHelper.getUser(), this.input.nickname);
       if (response.ok == false) {
-        this.$message.error('Oops, Nickname could not be set!');
+        var msg=this.HTTPErrMessage(response);
+        this.$message.error(msg + ', Nickname could not be set!');
         return;
+      }else{
+        this.$message.success('Successfuly joined the Meetup!');
       };
 
       UserHelper.updateUser(response.body);
@@ -266,9 +270,9 @@ export default {
         app.toggle.requestState = false;
         app.requestState = 0;
       }, 1000);
-
       if (response.ok == false) {
-        this.$message.error('Oops, could not retrieve the Users!');
+        var msg =app.HTTPErrMessage(response);
+        this.$message.error( msg + ' , Oops, could not retrieve the Users!');
         return;
       }
 
@@ -317,16 +321,17 @@ export default {
       }
 
       let response = await Api.joinMeetup(this.meetupHash, params);
-
       if (response.ok == true) {
         userMeetups.push(this.meetupHash);
         UserHelper.updateUserMeetups(userMeetups);
-        this.$message.success('Successfuly joined the Meetup!');
+        this.$message.info('Welcome to JoinUp!');
 
         user = response.body;
         UserHelper.updateUser(user);
+      }else{
+        var msg =this.HTTPErrMessage(response);
+        this.$message.error('Something went wrong, Error: ' + msg);
       }
-
       this.updateUsersOnMap();
       this.promptForNickname();
       this.initialiseUserOutOfBoundsTracking();
@@ -495,6 +500,45 @@ export default {
       }
 
 
+    },
+    HTTPErrMessage(response){
+      var responseStat=response.status;
+      var errMsg=null;
+     if(responseStat==200){
+        errMsg=null;
+      }else if (responseStat==500){
+       errMsg="Internal Server Error";
+      }else if(responseStat==501){
+        errMsg="Not Implemented";
+      }else if(responseStat==502){
+        errMsg="Bad Gateway";
+      }else if(responseStat==503){
+        errMsg="Service Unavailable";
+      }else if(responseStat==504){
+        errMsg="Gateway Timeout"
+      }else if(responseStat==505){
+        errMsg="HTTP Version Not Supported"
+      }else if(responseStat==506){
+        errMsg="Variant Also Negotiates"
+      }else if(responseStat==507){
+        errMsg="Insufficient Storage"
+      }else if(responseStat==507){
+        errMsg= " Loop Detected";
+      }else if(responseStat==510){
+        errMsg="Not Extended"
+      }else if(responseStat==403){
+        errMsg="Forbidden"
+      }else if(responseStat==404){
+        errMsg="Not Found"
+      }else if(responseStat==400){
+        errMsg="Bad Request"
+      }else if(responseStat==0){
+        errMsg="Server is not reachable, Check your Internet connection"
+      }
+      else{
+        errMsg="Unknown error has been detected. Error code: "+responseStat
+      }
+      return errMsg;
     },
     findMyRoute(destination) {
       if (!this.toggle.locationUpdates) {
