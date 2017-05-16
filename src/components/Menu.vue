@@ -23,7 +23,7 @@
             <div class="change-status" @keyup.enter="updateStatus">
               <el-input
                 class="edit-status"
-                placeholder="Update Status here..."
+                :placeholder="statusBoxNotice"
                 icon="edit"
                 v-model="status"
                 :on-icon-click="updateStatus">
@@ -133,6 +133,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         mapout: false,
         status: '',
         directions: [],
+        statusBoxNotice: 'Update your status...',
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -229,10 +230,10 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       async updateStatus(){
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
       if (response.ok == false) {
-        this.$message.error('Oops, Status could not be set!');
+        this.statusBoxNotice = 'Oops, Status could not be set!' ;
         return;
       }else{
-        this.$message.info('Status has been set!');
+        this.statusBoxNotice = 'Status has been set!';
         if(this.savemarker)
         app.updatesw=1;
       }
