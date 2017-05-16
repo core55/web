@@ -29,18 +29,7 @@ export default class customInfobox extends google.maps.OverlayView {
     var div = document.createElement('div');
     div.style.borderStyle = 'solid';
     div.style.borderWidth = '2px';
-    // var color=Helper.getStatus(this.marker_.icon);
-    var color = 'green';
-    if(color[0]=='green'){
-      div.style.borderColor='#3ED24C'
-    }else if(color[0]=='yellow'){
-      div.style.borderColor='#ffff00'
-    }else if(color[0]=='red'){
-      div.style.borderColor='#ff0000'
-    }else{
-      div.style.borderColor='#000000'
-    }
-
+    div.style.borderColor = this.marker_.getColor();
     div.style.borderRadius='20px'
     div.style.position = 'absolute';
     div.style.background='#FFFFFF';
@@ -57,7 +46,6 @@ export default class customInfobox extends google.maps.OverlayView {
     //name
     this.content1.style.position = 'absolute';
     this.content1.style.fontSize='15px';
-    this.content1.style.color='#0000';
     this.content1.style.top=7+'px';
     this.content1.style.left=13+'px';
     this.content1.style.letterSpacing='0';
@@ -68,7 +56,6 @@ export default class customInfobox extends google.maps.OverlayView {
     //status
     this.content2.style.position = 'absolute';
     this.content2.style.fontSize='13px';
-    this.content2.style.color='#0000';
     this.content2.style.top=26+'px';
     this.content2.style.left=13+'px';
     this.content2.style.letterSpacing='0';

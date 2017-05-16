@@ -7,6 +7,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
     this.latLng = latLng;
     this.me = me;
     this.avatar = avatar;
+    this.color = 'black'; //default pin color before update
   }
 
   onAdd() {
@@ -56,14 +57,17 @@ export default class AvatarMarker extends google.maps.OverlayView {
     this.latLng = newPosition; //do we have to redraw/force div to move?
   }
 
+  getColor() {
+    return this.color;
+  }
 
-  getColor(timeSinceLastUpdate) {
+  calculateColor(timeSinceLastUpdate) {
     if (timeSinceLastUpdate < 5.1) {
-      return 'green';
+      return '#3ED24C';
     } else if (timeSinceLastUpdate < 20) {
-      return 'yellow';
+      return '#ffff00';
     } else if (timeSinceLastUpdate > 20) {
-      return 'red';
+      return '#ff0000';
     }
   }
 
@@ -77,8 +81,9 @@ export default class AvatarMarker extends google.maps.OverlayView {
       this.div.appendChild(span); //Have to remove this if user later gets a nickname
     } else {
       var timeSinceLastUpdate = Helper.timeSinceLastUpdate(user.updatedAt);
-      var color = this.getColor(timeSinceLastUpdate);
+      var color = this.calculateColor(timeSinceLastUpdate);
       this.div.style.borderColor = color;
+      this.color = color;
     }
   }
 
