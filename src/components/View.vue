@@ -17,8 +17,6 @@
     <!-- .svg image with a transparent button (works in all browsers) -->
     <button class="image-button" id="button-share" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
 
-    <el-button class="app-btn-action" icon="information" id="showbtn" @click="toggle.userList = !toggle.userList"></el-button>
-
     <span>
       <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
       <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
@@ -31,7 +29,6 @@
     </div>
 
     <direction-view v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
-    <user-list :users="markersMap" :maps="map" :show="toggle.userList" v-on:toggleShow="toggle.userList = !toggle.userList"></user-list>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
@@ -60,7 +57,6 @@ import MapHelper from '../helper/map';
 import UserHelper from '../helper/user';
 import DirectionsHelper from '../helper/directions';
 import router from '../router';
-import UserList from './UserList';
 import Directions from './Directions.vue';
 import Clipboard from 'clipboard';
 import Menu from './Menu';
@@ -71,7 +67,6 @@ export default {
   components: {
     DirectionView,
     'google-map': GoogleMap,
-    'user-list': UserList,
     'drawer-menu': Menu,
     'direction-view': Directions
   },
@@ -82,7 +77,6 @@ export default {
       markers: {},
       toggle: {
         nicknamePrompt: false,
-        userList: false,
         requestState: false,
         shareDialog: false,
         locationUpdates: true,
