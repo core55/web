@@ -123,7 +123,10 @@
           <li class="list">
             <div class="sub-list-element">
               <div class="icon-field">
-                <el-switch class="icon" v-model="toggle.uselesslocationUpdates" on-color="#13ce66" off-color="#ff4949"></el-switch>
+                <label class="switch">
+                    <input type="checkbox">
+                    <div class="slider round"></div>
+                </label>
               </div>
               <div class="text-field">
                 <h1 class="list-title">Share Location</h1>
@@ -624,6 +627,74 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   margin:0;
   border-width:0;
   background-color:transparent;
+}
+//CSS for Custom Switch
+.switch {
+  position: relative;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 24px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  display:none;
+  }
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2EB10C;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider.round   {
+  -moz-box-shadow:    inset 0px 1px 1px #000000;
+   -webkit-box-shadow: inset 0px 1px 1px #000000;
+   box-shadow:         inset 0px 1px 1px #000000;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 0px;
+  bottom: 1px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #EE3C2E;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 
 </style>
