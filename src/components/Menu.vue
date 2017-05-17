@@ -124,7 +124,7 @@
             <div class="sub-list-element">
               <div class="icon-field">
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" @click="changeIncognitoMode()">
                     <div class="slider round"></div>
                 </label>
               </div>
@@ -364,11 +364,11 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         if(this.shareLocation == false){
           UserHelper.writeToLocalStorage('shareLocation', false);
           this.shareLocation = true;
-          return true;
+          return;
         }
         UserHelper.writeToLocalStorage('shareLocation', true);
         this.shareLocation = false;
-        return false;
+        return;
       }
     },
     mounted () {
