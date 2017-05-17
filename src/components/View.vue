@@ -6,9 +6,6 @@
 
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
 
-    <!-- Menu Button -->
-    <!-- .svg image with a transparent button on top (works in all browsers)  -->
-    <!-- TODO: -->
     <button class="image-button" id="button-menu" v-on:click="toggle.showMenu = !toggle.showMenu" ><img src="../assets/svg/button/menu.svg"/></button>
 
     <drawer-menu :users="markersMap" v-if="toggle.showMenu" v-on:toggleShow="toggle.showMenu = !toggle.showMenu"></drawer-menu>
