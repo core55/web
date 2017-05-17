@@ -161,6 +161,10 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       }
     },
     props: {
+      info:{
+        type:Object,
+        default() {return{};}
+      },
       show: {
         type: Boolean,
         default: false
@@ -271,6 +275,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
       async updateStatus(){
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
+      let app=this;
       if (response.ok == false) {
         this.statusBoxNotice = 'Oops, Status could not be set!' ;
         return;

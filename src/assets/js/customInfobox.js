@@ -79,7 +79,7 @@ export default class customInfobox extends google.maps.OverlayView {
       var px = overlayProjection.fromLatLngToDivPixel(position);
       var div = this.div_;
       div.style.left = px.x + 25 + 'px';
-      div.style.top = px.y - 100 + 'px';
+      div.style.top = px.y - 130 + 'px';
       div.style.width = 150 + 'px';
       var cont1height = parseInt(this.content1.style.height, 10);
       var cont2height = parseInt(this.content2.offsetHeight, 10);
@@ -95,7 +95,11 @@ export default class customInfobox extends google.maps.OverlayView {
 
   onRemove() {
     this.div_.className="bounce-leave-active";
-    this.div_.parentNode.removeChild(this.div_);
+    let app =this;
+    setTimeout(function () {
+      app.div_.parentNode.removeChild(app.div_);
+    }, 500);
+
   }
 
   //not useful
