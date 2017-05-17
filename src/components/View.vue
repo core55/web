@@ -221,6 +221,14 @@ export default {
      */
     shareMeetup() {
       this.toggle.shareDialog = false;
+      var shareInput = document.querySelector('#share-url > input');
+      try {
+        shareInput.select();
+        document.execCommand('copy');
+      } catch (error) {
+        this.$message.error('Oops, Something went wrong: ' + error);
+        return;
+      }
       this.$message.success('Url copied and ready to share!');
     },
 
