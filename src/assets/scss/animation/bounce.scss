@@ -1,16 +1,13 @@
-<<<<<<< HEAD
 //Author: Qi Li
 
 .bounce-enter-active  {
-=======
-
-.bounce-enter-active {
->>>>>>> c5c05c4da63fe361dd27fb45f9bdaef3bc9a0e24
   animation: bounce-in .5s;
 }
+
 .bounce-leave-active{
   animation: bounce-out .5s;
 }
+
 @keyframes bounce-in {
   0% {
     transform: scale(0);
@@ -22,6 +19,7 @@
     transform: scale(1);
   }
 }
+
 @keyframes bounce-out {
   0% {
     transform: scale(1);
@@ -33,5 +31,3 @@
     transform: scale(0);
   }
 }
-
-
