@@ -60,12 +60,12 @@
         </button>
 
         <ul class="people-list" id="flexible-size"v-if="toggle.showPeople" v-on:peopleListShow="toggle.showPeople = !toggle.showPeople">
-          <li class="people-list-element">
+          <li class="list">
               <div class="menu-list-element" style="background-color:#2AA6D5">
                 <div class="icon-field">
                   <img src="../assets/svg/icon/menu/meetup.svg" class="icon" > </img>
                 </div>
-                <div class="text-area">
+                <div class="text-field">
                   <h1 class="list-title">Meetup</h1>
                 </div>
                 <button class="directions-button" v-on:click="findMyRoute({lat: meetup.pinLatitude , lng:meetup.pinLongitude})">
