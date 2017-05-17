@@ -56,6 +56,7 @@ export default class DirectionsHelper {
         }
         app.googleDirectionsRenderer.setMap(app.map);
         app.toggle.showDirections = true;
+        this.$parent.currentlyTravelling = true;
       } else {
         app.toggle.showDirections = false;
         app.$message.error('No directions available for that destination');

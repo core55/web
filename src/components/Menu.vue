@@ -275,7 +275,6 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       //Show the directions to the a Destination
       // Requires destination {lat: ... , lng: ...}
       findMyRoute(destination) {
-        this.$parent.currentlyTravelling = true;
         DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
       },
 
