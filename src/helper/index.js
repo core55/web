@@ -17,6 +17,17 @@ export default class Helper {
     return result.toUpperCase();
   }
 
+  static getMarkerNickname(nickname) {
+    if (!nickname) { return '?'; }
+    var trimmed = nickname.trim().split(' ');
+
+    if (trimmed.length > 1 || nickname.length > 7) {
+      return Helper.getInitials(nickname);
+    }
+
+    return nickname;
+  }
+
   /*
     Helper method to find vector and slope between
     a map and a pin on the map.

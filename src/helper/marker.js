@@ -2,6 +2,7 @@ import Vue from 'vue';
 import PinMeetingPoint from '../assets/svg/pin/meetup.svg';
 import PinUser from '../assets/svg/pin/user-you.svg';
 import UserHelper from './user';
+import Helper from '.';
 
 export default class MarkerHelper {
   static attachMeetingPointMarkerOnClick(app, onDragend, onClick) {
@@ -88,14 +89,15 @@ export default class MarkerHelper {
   }
 
   static createMarker(user, map, markersMap, app){
-    if (!user.lastLatitude || !user.lastLongitude) {
+    if (user.lastLatitude == null || !user.lastLongitude == null) {
       //console.log("User has no location");
       return false;
     }
 
     let position = { lat: user.lastLatitude, lng: user.lastLongitude };
     let currentUser = UserHelper.getUser();
-    let me = currentUser.id == user.id;
+
+    let me = user != null && currentUser.id == user.id;
     let marker = new app.avatarMarker.default(map, position, me, user);
 
     //Wait until marker is drawn to update style
@@ -106,7 +108,7 @@ export default class MarkerHelper {
     //Add marker to temporary storage
     markersMap.push({
       id: user.id,
-      nickname: user.nickname,
+      nickname: Helper.getMarkerNickname(user.nickname),
       marker: marker,
       show: false,
       status: user.status,
