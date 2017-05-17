@@ -13,7 +13,7 @@
             <div class="menu-list-element">
               <div class="icon-field">
                 <img v-if="getSelfImage() != null" v-bind:src="getSelfImage()" class="picture" > </img>
-                  <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
+                  <img v-else-if="true" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
                 <div class="text-field">
                   <h1 v-model="nickname = user().nickname" class="list-title">{{this.nickname}}</h1>
@@ -91,7 +91,7 @@
             <div class="people-list-Content">
               <div class="picture-field">
                 <img v-if="user.avatar != undefined" v-bind:src="user.avatar" class="picture" > </img>
-                <img v-else-if="!hasPicture(user)" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
+                <img v-else-if="true" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
               <div class="text-area">
                 <h1 class="name-field"> {{user.nickname}}</h1>
@@ -289,14 +289,8 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
         this.$message.error('Oops, the user could not leave the meetup.');
       },
-      hasPicture(user) {
-        var picture = false;
-        if(user.googlePictureURI || user.gravatarURI){
-          picture = true;
-        };
-        return picture;
-      },
-      hasStatus: function(user) {
+      //Checks if a user has a status or not
+      hasStatus(user) {
         var has = true;
         if(user.status == null){
           has = false;
@@ -349,6 +343,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         this.$parent.currentlyTravelling = true;
       },
 
+      //Updates the Status of the Self if typing it in to the StatusUpdate
       async updateStatus(){
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
       let app=this;
