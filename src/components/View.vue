@@ -392,37 +392,31 @@ export default {
 
         // user already has a marker, just move it
         if (index != -1) {
-          if(app.infowindow){
-            if(this.markersMap[index].status != users[i].status){
-              app.infowindow.onRemove();
-              app.markersMap[index].nickname = users[i].nickname;
-              app.markersMap[index].status = users[i].status;
-              app.markersMap[index].marker.updateMarkerStyle(users[i]);
-              setTimeout(function () {
-                app.infowindow=null;
-                app.infowindow = new app.customInfobox.default(app.markersMap[index]);
-              }, 500);
-            }
-          }else {
-            this.markersMap[index].nickname = users[i].nickname;
-            this.markersMap[index].status = users[i].status;
-            this.markersMap[index].marker.updateMarkerStyle(users[i]);
+          var infoWindowHadOldInformation = false;
+
+          // remove the infowindow if it's showing old information
+          if (this.infowindow && this.markersMap[index].status != users[i].status) {
+            this.infowindow.onRemove();
+            infoWindowHadOldInformation = true;
           }
 
+          // update user information
+          this.markersMap[index].nickname = users[i].nickname;
+          this.markersMap[index].status = users[i].status;
+          this.markersMap[index].marker.updateMarkerStyle(users[i]);
+
+          // show popup again, if it was automatically closed before
+          if (infoWindowHadOldInformation) {
+            setTimeout(function () {
+              app.infowindow=null;
+              app.infowindow = new app.customInfobox.default(app.markersMap[index]);
+            }, 500);
+          }
 
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
           });
-
-          // ???
-          // if (app.updatesw == 1) {
-          //   app.infowindow.onRemove();
-          //   app.infowindow = null;
-          //   app.savemarker = null;
-          //   app.updatesw = 0;
-          //   return;
-          // };
 
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
