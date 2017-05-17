@@ -25,7 +25,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
     } else if (this.avatar) {
       div.style.backgroundImage = 'url(' + this.avatar + ')';
     }else if (this.user && this.user.nickname && this.user.nickname != "") {
-      div.appendChild(MarkerHelper.generateMarkerLabel(this.user.nickname));
+      div.appendChild(MarkerHelper.generateMarkerLabel(Helper.getMarkerNickname(this.user.nickname)));
     }else {
       div.appendChild(MarkerHelper.generateMarkerLabel("?"));
     }
@@ -102,7 +102,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
       let span = this.div.querySelector('.label');
 
       if (span) {
-        span.innerHTML = this.user.nickname;
+        span.innerHTML = Helper.getMarkerNickname(this.user.nickname);
       }
 
       return;

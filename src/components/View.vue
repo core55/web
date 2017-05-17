@@ -399,7 +399,7 @@ export default {
 
         // Create a new marker for the new user
         let user = users[i];
-        let marker = MarkerHelper.createMarker(users[i], this.map, this.markersMap, this);
+        let marker = MarkerHelper.createMarker(user, this.map, this.markersMap, this);
 
         if (!marker) {
           // something went wrong creating the marker
