@@ -9,7 +9,7 @@
     <el-dialog class="modal-welcome" top="40%" :show-close="false" :visible.sync="toggle.welcomeWindow" size="large" :modal="false">
       <p class="lead" style="font-size:320%; width:126px;">JoinUp</p>
       <span class="logo">
-        <img src="../assets/logo.png" alt=""  style="width:128px;height:128px;" align="middle">
+        <img src="../assets/svg/logo.svg" alt=""  style="width:128px;height:128px;" align="middle">
       </span>
       <p class="lead">Share your location and get together with friends. <br><br>This app provides an interactive map allowing you to share your location with friends. Find a place to meet and we’ll get you there.</p>
 
