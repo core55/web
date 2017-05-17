@@ -107,7 +107,7 @@ export default {
       updatesw:0,
       newUserFlag:false,
       directions: [],
-      currentDirectionTarget: {},
+      currentDirectionTarget: null,
       infowindow:null
     }
   },
@@ -176,15 +176,11 @@ export default {
      *  Show directions towards meetup pin.
      */
     onMeetupPinClick() {
-      if (this.toggle.direction) {
-        this.findMyRoute({
-          lat: this.markers.meetup.getPosition().lat(),
-          lng: this.markers.meetup.getPosition().lng()
-        });
-
-        this.toggle.direction = false;
-        return;
+      if (this.infowindow) {
+        this.infowindow.onRemove();
+        this.infowindow = null;
       }
+      this.checkDirection(this.markers.meetup);
     },
 
     /*
@@ -331,16 +327,31 @@ export default {
         Helper.trackUsers(app.map, document, app.markersMap, userId);
       });
     },
+    checkDirection(marker) {
+      if (marker == this.currentDirectionTarget || this.currentDirectionTarget == null || !this.toggle.direction)
+        this.toggle.direction = !this.toggle.direction; //Show directions button
+      this.currentDirectionTarget = marker; //store target destination
+    },
 
     /*
      *  Activates google direction api listener.
      */
     activateDirection() {
-        this.findMyRoute(this.currentDirectionTarget);
+        var targetLocation;
+        if (this.currentDirectionTarget instanceof google.maps.Marker) {
+          targetLocation = {lat: this.currentDirectionTarget.getPosition().lat(), lng: this.currentDirectionTarget.getPosition().lng()};
+        } else {
+            targetLocation = {lat: this.currentDirectionTarget.getPosition().lat, lng: this.currentDirectionTarget.getPosition().lng};
+        }
+
+        this.findMyRoute(targetLocation);
         this.toggle.direction = false;
+        this.currentDirectionTarget = null;
         //remove info-window if asking for directions
-        this.infowindow.onRemove();
-        this.infowindow = null;
+        if (this.infowindow) {
+          this.infowindow.onRemove();
+          this.infowindow = null;
+        }
     },
     cancelTrip() {
         this.directions = [];
@@ -440,9 +451,8 @@ export default {
           google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
             var userMarkerInformation = app.markersMap[indexOfMarker];
             var marker = userMarkerInformation.marker;
-
-            app.currentDirectionTarget = {lat: marker.getPosition().lat, lng: marker.getPosition().lng}; //store target destination
-            app.toggle.direction = !app.toggle.direction; //Show directions button
+            
+            app.checkDirection(marker);
 
             // close info window if one is already open
             if (app.infowindow) {
