@@ -41,7 +41,6 @@
         this.$emit('cancelTrip');
       },
       hideTravelPlan: function() {
-      console.log("Directions.vue in hideTravelPlan funtion");
       this.$emit('hideTravelPlan');
       },
     },
