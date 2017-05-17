@@ -20,6 +20,9 @@
 </template>
 
 <script>
+
+//Authors: Jiho Moon, Cedric Seger
+
   export default {
     components: {},
     name: 'directions-view',

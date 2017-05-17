@@ -31,6 +31,9 @@
 </template>
 
 <script>
+
+//Author: Cedric Seger
+
   import Helper from '../helper';
 
   export default {

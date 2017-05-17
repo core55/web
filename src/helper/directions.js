@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import UserHelper from './user';
 
+//Author: Jiho Moon, Cedric Seger
+
 export default class DirectionsHelper {
 
   static calculateRoute(destination, steps, app) {

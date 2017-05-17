@@ -1,6 +1,8 @@
 import Helper from '../../helper/';
 import MarkerHelper from '../../helper/marker';
 
+//Author: Jiho Moon, Cedric Seger
+
 export default class AvatarMarker extends google.maps.OverlayView {
   constructor(map, latLng, me, user) {
     super();

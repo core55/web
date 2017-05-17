@@ -4,6 +4,9 @@
 
 
 import Helper from '../../helper/index';
+
+//Author: Marcel Eschmann, Qi Li
+
 //status listener version 2 (fits design)
 /** @constructor */
 

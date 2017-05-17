@@ -3,6 +3,9 @@
 </template>
 
 <script>
+
+//Author :  Marcel Eshcmann
+
   export default {
     name: 'google-map',
     data () {

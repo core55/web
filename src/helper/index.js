@@ -4,6 +4,8 @@ import Pin_Online from '../assets/svg/pin/user-online.svg';
 import Pin_Recently_Online from '../assets/svg/pin/user-recently.svg';
 import Pin_LongTimeAgo_Online from '../assets/svg/pin/user-idle.svg';
 
+//Author: Marcel Eschmann, Jiho Moon, Cedric Seger, Dean Rauschenbusch
+
 export default class Helper {
   static getInitials(nickname) {
     if (!nickname) { return '?'; }

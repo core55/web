@@ -21,6 +21,9 @@
 </template>
 
 <script>
+
+// Author: Marcel Eschmann, Jiho Moon, Simone Stefani
+
 import Api from '../api';
 import router from '../router';
 import UserHelper from '../helper/user';

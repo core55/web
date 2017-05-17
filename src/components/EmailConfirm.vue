@@ -14,10 +14,12 @@
 </template>
 
 <script>
+
+//Author: Simone Stefani
+
   import Api from '../api';
   import router from '../router';
   import UserHelper from '../helper/user';
-
 
   export default {
     name: 'EmailConfirm',

@@ -49,6 +49,9 @@
 </template>
 
 <script>
+
+//Author: Marcel Eschmann, Qi Li, Jiho Moon, Simone Stefani, Cedric Seger, Dean Rauschenbusch,  Juan Luis Ruiz-Tagle
+
 import GoogleMap from './GoogleMap';
 import Api from '../api';
 import Helper from '../helper';

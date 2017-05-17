@@ -125,6 +125,8 @@
 
 <script>
 
+//Author: Dean Rauschenbusch
+
 import Helper from '../helper';
 import Api from '../api';
 import router from '../router';

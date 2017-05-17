@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Api from '../api';
 
+//Author: Marcel Eschmann
+
 export default class UserHelper {
   static getUser() {
     return this.retrieveFromLocalStorage('user');

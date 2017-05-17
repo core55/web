@@ -7,6 +7,9 @@
 </template>
 
 <script>
+
+//Author: Marcel Eschmann
+
 export default {
   name: 'app'
 }
