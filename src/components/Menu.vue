@@ -190,8 +190,6 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         if(user.googlePictureURI || user.gravatarURI){
           picture = true;
         };
-        console.log(user);
-        console.log(picture);
         return picture;
       },
       hasStatus: function(user) {
