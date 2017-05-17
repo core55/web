@@ -357,6 +357,16 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       }
       this.status = null;
       },
+      changeIncognitoMode() {
+        if(this.shareLocation == false){
+          UserHelper.writeToLocalStorage('shareLocation', false);
+          this.shareLocation = true;
+          return true;
+        }
+        UserHelper.writeToLocalStorage('shareLocation', true);
+        this.shareLocation = false;
+        return false;
+      }
     },
     mounted () {
 
