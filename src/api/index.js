@@ -104,4 +104,11 @@ export default class Api {
     return Vue.http.post(process.env.API_URL + 'register', registerInfo);
   }
 
+  static confirmEmail(authToken){
+    return Vue.http.get(process.env.API_URL + 'register/' + authToken);
+  }
+
+  static leaveMeetup(meetup, user){
+    return Vue.http.post(process.env.API_URL + 'meetups/' + meetup + '/users/remove', user);
+  }
 }

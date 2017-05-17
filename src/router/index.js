@@ -7,6 +7,7 @@ import Login from '@/components/Login'
 import NotFound from '@/components/NotFound'
 import LeftMeetup from '@/components/LeftMeetup'
 import Register from '@/components/Register'
+import EmailConfirm from '@/components/EmailConfirm'
 
 Vue.use(Router)
 
@@ -21,6 +22,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register/:token',
+      name: 'EmailConfirm',
+      component: EmailConfirm
     },
     {
       path: '/404',
