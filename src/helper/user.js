@@ -37,15 +37,14 @@ export default class UserHelper {
     return localStorage.removeItem(key);
   }
 
+  //Updates the Selfs Location
+  // If the user is in incogito mode we simply return.
   static async updateUserLocation() {
 
-    if(this.retrieveFromLocalStorage('shareLocation') == true){
-      let position = await Api.getMyLocation();
-      console.log(" Wants to share location: " + position.lat + " | " + position.lng);
-    } else {
-      var position = {lat: this.getUser().lastLatitude , lng: this.getUser().lastLongitude};
-      console.log(" Doesn't want to share location: " + position.lat + " | " + position.lng);
+    if(this.retrieveFromLocalStorage('shareLocation') != true){
+      return;
     }
+    let position = await Api.getMyLocation();
     let response = await Api.updateUserLocation(this.getUser(), {
       lastLatitude: position.lat,
       lastLongitude: position.lng
