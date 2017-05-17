@@ -60,6 +60,19 @@
         </button>
 
         <ul class="people-list" id="flexible-size"v-if="toggle.showPeople" v-on:peopleListShow="toggle.showPeople = !toggle.showPeople">
+          <li class="people-list-element">
+              <div class="menu-list-element" style="background-color:#2AA6D5">
+                <div class="icon-field">
+                  <img src="../assets/svg/icon/menu/meetup.svg" class="icon" > </img>
+                </div>
+                <div class="text-area">
+                  <h1 class="list-title">Meetup</h1>
+                </div>
+                <button class="directions-button" v-on:click="findMyRoute({lat: meetup.pinLatitude , lng:meetup.pinLongitude})">
+                  <img src="../assets/svg/icon/menu/directions.svg" class="-field" > </img>
+                </button>
+              </div>
+            </li>
 
           <li class="people-list-element" v-for="user in users" v-if="showInPeopleList(user)">
             <div class="people-list-Content">
@@ -175,6 +188,10 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         type: Array,
         default () { return {}; }
       },
+      meetup: {
+        type: Object,
+        default () { return {}; }
+      },
     },
     methods: {
       //leaving button will direct users to leave the meetup
@@ -215,13 +232,6 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       peopleListShow: function() {
         this.$emit('subListShow');
       },
-      getColor: function(pin) {
-        var stat = Helper.getStatus(pin); //get color from pin
-        var color = stat[0];
-        return {
-            'border-color' : color //color of status
-        };
-      },
       hasPicture: function(user) {
         var picture = false;
         if(user.googlePictureURI || user.gravatarURI){
@@ -254,7 +264,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
       //Returns true iff user has a nickname and is not one self
       showInPeopleList: function(user) {
-        var show = true
+        var show = true;
         if(user.nickname == null || UserHelper.getUser().nickname == user.nickname){
           show = false;
         }
