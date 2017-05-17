@@ -107,7 +107,7 @@ export default {
       updatesw:0,
       newUserFlag:false,
       directions: [],
-      currentDirectionTarget: {},
+      currentDirectionTarget: null,
       infowindow:null
     }
   },
@@ -336,8 +336,10 @@ export default {
      *  Activates google direction api listener.
      */
     activateDirection() {
-        this.findMyRoute(this.currentDirectionTarget);
+        var targetLocation = {lat: this.currentDirectionTarget.getPosition().lat, lng: this.currentDirectionTarget.getPosition().lng};
+        this.findMyRoute(targetLocation);
         this.toggle.direction = false;
+        this.currentDirectionTarget = null;
         //remove info-window if asking for directions
         this.infowindow.onRemove();
         this.infowindow = null;
@@ -440,9 +442,11 @@ export default {
           google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
             var userMarkerInformation = app.markersMap[indexOfMarker];
             var marker = userMarkerInformation.marker;
+            
+            if (marker == app.currentDirectionTarget || app.currentDirectionTarget == null || !app.toggle.direction)
+                app.toggle.direction = !app.toggle.direction; //Show directions button
+            app.currentDirectionTarget = marker; //store target destination
 
-            app.currentDirectionTarget = {lat: marker.getPosition().lat, lng: marker.getPosition().lng}; //store target destination
-            app.toggle.direction = !app.toggle.direction; //Show directions button
 
             // close info window if one is already open
             if (app.infowindow) {
