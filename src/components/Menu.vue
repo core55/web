@@ -2,6 +2,8 @@
   <div class="drawer">
     <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
 
+    <img class="logo-in-drawer" src="../assets/svg/logo-drawer.svg"> </img>
+
     <!-- List Element -->
     <ul class="menu-list">
         <li class="list">
@@ -335,6 +337,14 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   top: 15px;
 }
 
+.logo-in-drawer   {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 125px;
+}
+
 .menu-list  {
   position: absolute;
   width: 100%;
@@ -357,7 +367,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   padding: 0;
   margin: 0;
   background-color: #2AA6D5;
-  max-height: 320px;
+  max-height: 260px;
 }
 
 .people-list-element  {
