@@ -38,7 +38,14 @@ export default class UserHelper {
   }
 
   static async updateUserLocation() {
-    let position = await Api.getMyLocation();
+
+    if(this.retrieveFromLocalStorage('shareLocation') == true){
+      let position = await Api.getMyLocation();
+      console.log(" Wants to share location: " + position.lat + " | " + position.lng);
+    } else {
+      var position = {lat: this.getUser().lastLatitude , lng: this.getUser().lastLongitude};
+      console.log(" Doesn't want to share location: " + position.lat + " | " + position.lng);
+    }
     let response = await Api.updateUserLocation(this.getUser(), {
       lastLatitude: position.lat,
       lastLongitude: position.lng
