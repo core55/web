@@ -101,7 +101,7 @@ export default class Api {
   }
 
   static letsRegister(registerInfo){
-    return Vue.http.post(process.env.API_URL + 'register', registerInfo);
+    return Vue.http.post(process.env.API_URL + 'register/send', registerInfo);
   }
 
   static confirmEmail(authToken){
