@@ -7,6 +7,7 @@
     <!-- List Element -->
     <ul class="menu-list">
 
+        <!-- If the user is logged Show the nickname and let update status-->
         <li v-if="selfIsLoggedIn()"class="list">
           <button class="menu-button" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
@@ -35,6 +36,7 @@
         </ul>
       </li>
 
+      <!-- If the user is NOT logged in give opportunity to log in-->
       <li v-else-if="!selfIsLoggedIn()" class="list">
         <button class="menu-button" v-on:click="redirectToLogin()">
             <div class="menu-list-element">
@@ -128,6 +130,8 @@
               </div>
             </div>
           </li>
+
+          <!-- If the user is logged in it should be given the opportunity to log out -->
           <li v-if="selfIsLoggedIn()"class="list">
           <button class="menu-button" v-on:click="redirectToLogout()">
             <div class="sub-list-element">
@@ -221,9 +225,14 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
       /*
       Dummy Function
-      Should check if self is logged in and return a boolean and change the data "loggedIn accordingly"
+      Should check if self is logged in and return a boolean and change the boolean of "loggedIn"" accordingly
       */
       selfIsLoggedIn(){
+        if(this.loggedIn == true){
+          console.log("You are Logged in");
+        } else{
+          console.log("You are not Logged in")
+        }
         return this.loggedIn;
       },
 
@@ -273,15 +282,6 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       },
       toggleShow: function() {
           this.$emit('toggleShow');
-      },
-      subListShow: function() {
-          this.$emit('subListShow');
-      },
-      profileShow: function() {
-          this.$emit('profileShow');
-      },
-      peopleListShow: function() {
-        this.$emit('subListShow');
       },
       hasPicture: function(user) {
         var picture = false;
