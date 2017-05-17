@@ -214,8 +214,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       Should check if self is logged in and return a boolean and change the data "loggedIn accordingly"
       */
       selfIsLoggedIn(){
-        this.loggedIn = false;
-        return false;
+        return this.loggedIn;
       },
 
       /*
@@ -224,6 +223,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       */
       redirectToLogin() {
         console.log("Login Dummy");
+        this.loggedIn = true;
       },
 
       /*
