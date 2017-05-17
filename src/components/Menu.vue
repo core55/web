@@ -343,7 +343,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         this.$parent.currentlyTravelling = true;
       },
 
-      //Updates the Status of the Self if typing it in to the StatusUpdate
+      //Updates the Status of the Self if typing it in to the StatusUpdatecurrentlyTravelling
       async updateStatus(){
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
       let app=this;
