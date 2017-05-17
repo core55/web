@@ -1,10 +1,13 @@
 {
- "name": "joinupnu",
- "version": "0.1.0",
- "description": "joinup.nu",
- "author": "Core55",
- "private": true,
- "scripts": {
-   "postinstall": "npm install express"
- }
+  "name": "joinupnu",
+  "version": "0.1.0",
+  "description": "joinup.nu",
+  "author": "Core55",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install express"
+  },
+  "dependencies": {
+    "express-sslify": "^1.2.0"
+  }
 }
