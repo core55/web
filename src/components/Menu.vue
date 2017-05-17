@@ -130,6 +130,18 @@
               </div>
             </div>
           </li>
+          <li v-if="selfIsLoggedIn()"class="list">
+          <button style="padding:0; margin:0; border-width:0; background-color:transparent;" v-on:click="redirectToLogout()">
+            <div class="sub-list-element">
+                <div class="icon-field">
+                  <img src="../assets/svg/icon/menu/leave.svg" class="icon" > </img>
+                </div>
+                <div class="text-field">
+                  <h1 class="list-title">Logout and Leave</h1>
+                </div>
+              </div>
+            </button>
+          </li>
         </ul>
       </li>
     </ul>
@@ -222,7 +234,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       Should re-route the user to the Login view
       */
       redirectToLogin() {
-        console.log("Login Dummy");
+        console.log("Login Dummy: You logged in Successfully");
         this.loggedIn = true;
       },
 
@@ -231,7 +243,8 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       Should re-route the user to the Login view
       */
       redirectToLogout() {
-        console.log("Logout Dummy");
+        console.log("Logout Dummy: You loged out Succesfully");
+        this.loggedIn = false;
       },
 
       //leaving button will direct users to leave the meetup
