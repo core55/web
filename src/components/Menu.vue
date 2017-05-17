@@ -34,7 +34,7 @@
 
       <li class="list" v-if="this.$parent.currentlyTravelling">
           <button style="padding:0; margin:0; border-width:0;" @click="showTravelPlan">
-            <div class="menu-list-element">
+            <div class="menu-list-element" style="background-color:#2AA6D5;">
               <div class="icon-field">
                   <img src="../assets/svg/icon/menu/directions.svg" class="icon" > </img>
               </div>
