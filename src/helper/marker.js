@@ -92,7 +92,6 @@ export default class MarkerHelper {
 
   static createMarker(user, map, markersMap, app){
     if (user.lastLatitude == null || !user.lastLongitude == null) {
-      //console.log("User has no location");
       return false;
     }
 
