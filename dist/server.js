@@ -15,7 +15,7 @@ function enforceHttps(req, res, next) {
 }
 
 // enable ssl redirect
-app.use(enforceHttps());
+app.use(enforceHttps);
 
 var port = process.env.PORT || 5000;
 app.listen(port);
