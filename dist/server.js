@@ -5,11 +5,9 @@ var serveStatic = require('serve-static');
 app = express();
 app.use(serveStatic(__dirname));
 
-function enforceHttps(req, res, next) {
-  console.log('PEWPEWPEW: '+ 'https://' + req.hostname + req.originalUrl);
+var enforceHttps = function(req, res, next) {
   if (req.headers['x-forwarded-proto'] != 'https') {
-    res.redirect(302, 'https://' + req.hostname + req.originalUrl);
-    return;
+    return res.redirect('https://' + req.headers.host + req.url);
   }
 
   next();
