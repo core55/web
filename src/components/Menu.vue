@@ -30,8 +30,20 @@
             </div>
           </li>
         </ul>
-
         </li>
+
+      <li class="list" v-if="this.$parent.currentlyTravelling">
+          <button style="padding:0; margin:0; border-width:0;" @click="showTravelPlan">
+            <div class="menu-list-element">
+              <div class="icon-field">
+                  <img src="../assets/svg/icon/menu/directions.svg" class="icon" > </img>
+              </div>
+                <div class="text-field">
+                  <h1 class="list-title">Travelplan</h1>
+                </div>
+            </div>
+          </button>
+      </li>
 
       <li class="list">
         <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showPeople = !toggle.showPeople">
@@ -141,6 +153,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
           showPeople: true,
           uselesslocationUpdates: true,
           showDirections: false,
+          showTravelPlanItem: true,
         },
         input: {
         nickname: '',
@@ -244,19 +257,16 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       //Show the directions to the a Destination
       // Requires destination {lat: ... , lng: ...}
       findMyRoute(destination) {
+        this.$parent.currentlyTravelling = true;
         DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
       },
 
       closeTravelPlan() {
-        console.log("works?");
         this.toggle.showDirections;
       },
 
-      // returns the coordinates of a user in the form:
-      // {lat,lng}
-      coordinates(user) {
-        var coords = user.marker.getPosition();
-        return coords;
+      showTravelPlan() {
+      this.$parent.toggle.showDirections = true;
       },
 
       async updateStatus(){

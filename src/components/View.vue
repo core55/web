@@ -25,7 +25,7 @@
       </transition>
     </div>
 
-    <direction-view v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
+    <direction-view v-if="toggle.showDirections" :directions="directions" v-on:hideTravelPlan="toggle.showDirections = !toggle.showDirections" v-on:cancelTrip="cancelTrip"></direction-view>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
@@ -84,6 +84,7 @@ export default {
       input: {
         nickname: ''
       },
+      currentlyTravelling: false,
       meetup: null,
       map: null,
       markersMap: [],
@@ -324,6 +325,7 @@ export default {
     cancelTrip() {
         this.directions = [];
         this.toggle.showDirections = false;
+        this.currentlyTravelling = false;
         this.googleDirectionsRenderer.setMap(null);
     },
 
@@ -508,6 +510,7 @@ export default {
         this.$message.error('Please turn on location updates for directions');
         return;
       }
+      this.currentlyTravelling = true;
       DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
   },
