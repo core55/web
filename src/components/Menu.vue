@@ -13,7 +13,7 @@
                   <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
                 <div class="text-field">
-                  <h1 class="list-title">My Profile</h1>
+                  <h1 v-model="nickname = user().nickname" class="list-title">{{this.nickname}}</h1>
                 </div>
             </div>
           </button>
@@ -134,6 +134,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         status: '',
         directions: [],
         statusBoxNotice: 'Update your status...',
+        nickname: 'Should Show',
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -197,9 +198,9 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return has;
       },
-      async user() {
-        var user = UserHelper.getUser();
-        return user;
+      user() {
+        var self = UserHelper.getUser();
+        return self;
       },
 
       //Returns true iff user has a nickname and is not one self
