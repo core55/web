@@ -1,6 +1,6 @@
 <template>
   <div class="drawer">
-  <direction-view style="z-index:100;"v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
+  <direction-view style="z-index:100;"v-if="toggle.showDirections" v-on:closeTravelPlan="closeTravelPlan"directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
     <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
 
     <!-- List Element -->
@@ -171,7 +171,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
         // If successful redirect to LeftMetup page
         if (response.ok) {
-          
+
           // Remove meetup from local storage
           var meetups = UserHelper.getUserMeetups();
           meetups = meetups.filter(e => e !== hash)
@@ -242,15 +242,15 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return show;
       },
-      cancelTrip() {
-          this.directions = [];
-          this.toggle.showDirections = false;
-          this.googleDirectionsRenderer.setMap(null);
-      },
       //Show the directions to the a Destination
       // Requires destination {lat: ... , lng: ...}
       findMyRoute(destination) {
-        DirectionsHelper.calculateRoute(destination, this.directions, this);
+        DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
+      },
+
+      closeTravelPlan() {
+        console.log("works?");
+        this.toggle.showDirections;
       },
 
       // returns the coordinates of a user in the form:
