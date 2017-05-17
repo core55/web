@@ -413,7 +413,7 @@ export default {
             setTimeout(function () {
               app.infowindow=null;
               app.infowindow = new app.customInfobox.default(app.markersMap[index]);
-            }, 500);
+            }, 750);
           }
 
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
