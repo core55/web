@@ -328,7 +328,7 @@ export default {
     activateDirection() {
         this.findMyRoute(this.currentDirectionTarget);
         this.toggle.direction = false;
-        //remove info-window...
+        //remove info-window if asking for directions
         this.infowindow.onRemove();
         this.infowindow = null;
     },

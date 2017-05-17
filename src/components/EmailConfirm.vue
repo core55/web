@@ -4,7 +4,7 @@
       <h1>Email Confirmation</h1>
 
       <h3 v-show="!confirmed">Confirming your email...</h3>
-      
+
       <div v-show="confirmed">
         <h3>Your email has been confirmed!</h3>
         <router-link class="link-auth" to="/create">Create a new meetup!</router-link>
@@ -38,6 +38,7 @@
           UserHelper.updateUser(user);
           this.confirmed = true
           router.push({ name: 'Create' });
+          return
         }
 
         this.$message.info('Oops, the confirmation link is not valid!');
