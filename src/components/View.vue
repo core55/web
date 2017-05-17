@@ -17,10 +17,13 @@
     <!-- .svg image with a transparent button (works in all browsers) -->
     <button class="image-button" id="button-share" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
 
+
     <span>
-      <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
-      <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
+      <transition name="bounce">
+      <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
+      </transition>
     </span>
+
 
     <div v-for="user in markersMap">
       <transition name="fade">
@@ -102,7 +105,8 @@ export default {
       userlist:null,
       updatesw:0,
       newUserFlag:false,
-      directions: []
+      directions: [],
+      currentDirectionTarget: {}
     }
   },
   watch: {
@@ -322,7 +326,11 @@ export default {
      *  Activates google direction api listener.
      */
     activateDirection() {
-      this.toggle.direction = !this.toggle.direction;
+        this.findMyRoute(this.currentDirectionTarget);
+        this.toggle.direction = false;
+        //remove info-window...
+        this.infowindow.onRemove();
+        this.infowindow = null;
     },
     cancelTrip() {
         this.directions = [];
@@ -412,15 +420,10 @@ export default {
           google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
             var userMarkerInformation = app.markersMap[indexOfMarker];
             var marker = userMarkerInformation.marker;
-            //the user can look up the direction to another user
-            if (app.toggle.direction) {
-              app.findMyRoute({
-                lat: marker.getPosition().lat,
-                lng: marker.getPosition().lng
-              });
-              app.toggle.direction = false;
-              return;
-            }
+
+            app.currentDirectionTarget = {lat: marker.getPosition().lat, lng: marker.getPosition().lng}; //store target destination
+            app.toggle.direction = !app.toggle.direction; //Show directions button
+
             // close info window if one is already open
             if (app.infowindow) {
               app.infowindow.onRemove();
