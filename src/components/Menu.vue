@@ -9,7 +9,7 @@
           <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
-                <img v-if="hasPicture(user())" v-bind:src="this.avatar" class="picture" > </img>
+                <img v-if="hasPicture(user())" v-bind:src="this.selfImageSource" class="picture" > </img>
                   <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
                 <div class="text-field">
@@ -62,7 +62,7 @@
                 <h2 v-else-if="!hasStatus(user)" class="status-field">No Status</h2>
               </div>
               <button class="directions-button" v-on:click="findMyRoute(coordinates(user))">
-                <img src="../assets/svg/icon/menu/directions.svg" class="directions" > </img>
+                <img src="../assets/svg/icon/menu/directions.svg" class="-field" > </img>
               </button>
             </div>
           </li>
@@ -135,6 +135,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         directions: [],
         statusBoxNotice: 'Update your status...',
         nickname: 'Should Show',
+        selfImageSource: '',
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -189,6 +190,8 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         if(user.googlePictureURI || user.gravatarURI){
           picture = true;
         };
+        console.log(user);
+        console.log(picture);
         return picture;
       },
       hasStatus: function(user) {
@@ -382,7 +385,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   padding: 0;
 }
 
-.directions   {
+.directions-field   {
   position: absolute;
   width: 25px;
   height: 25px;
