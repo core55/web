@@ -1,6 +1,6 @@
 <template>
   <section class="auth-box">
-    <el-form>
+    <el-form v-show="!messageSent">
       <h1>Register</h1>
       <el-form-item label="Nickname">
         <el-input placeholder="Nickname.." v-model="nickname"></el-input>
@@ -20,6 +20,10 @@
 
       <router-link class="link-auth" to="/login">Already a member?</router-link>
     </el-form>
+    <div v-show="messageSent">
+      <h1>We have sent you a message. Check your email!</h1>
+      <router-link class="link-auth" to="/">Go back to welcome page</router-link>
+    </div>
   </section>
 </template>
 
@@ -38,7 +42,8 @@
         password1: '',
         loading: {
           register: false
-        }
+        },
+        messageSent: false
       }
     },
 
@@ -53,8 +58,7 @@
         let register = await Api.letsRegister(registerInfo);
 
         if (register.ok == true ) {
-          let hash = response.body.hash;
-          router.push({ name: 'View', params: { id: hash }});
+          this.messageSent = true
           return;
         }
 

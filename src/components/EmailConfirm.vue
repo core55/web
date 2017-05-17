@@ -16,6 +16,8 @@
 <script>
   import Api from '../api';
   import router from '../router';
+  import UserHelper from '../helper/user';
+
 
   export default {
     name: 'EmailConfirm',
@@ -32,12 +34,13 @@
         let confirm = await Api.confirmEmail(token);
 
         if (confirm.ok == true ) {
-          let user = response.body;
+          let user = confirm.body;
           UserHelper.updateUser(user);
           this.confirmed = true
+          router.push({ name: 'Create' });
         }
 
-        this.$message.info('Oops, something went wrong.');
+        this.$message.info('Oops, the confirmation link is not valid!');
       }
     },
 
