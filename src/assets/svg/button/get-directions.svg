@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="62px" height="62px" viewBox="0 0 62 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44 (41411) - http://www.bohemiancoding.com/sketch -->
+    <title>button/get-directions</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M28.820107,57.3052406 C44.5520119,57.3052406 57.3052406,44.5520119 57.3052406,28.820107 C57.3052406,23.1875962 55.6704521,17.9369108 52.8494749,13.5166505 C47.7913111,5.59088632 38.9195012,0.334973262 28.820107,0.334973262 C13.088202,0.334973262 0.334973262,13.088202 0.334973262,28.820107 C0.334973262,44.5520119 13.088202,57.3052406 28.820107,57.3052406 Z" id="path-1"></path>
+        <filter x="-6.1%" y="-4.4%" width="112.3%" height="112.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Button/Directions/unclicked" transform="translate(-9.000000, -10.000000)">
+            <g id="button/get-directions" transform="translate(11.000000, 11.000000)">
+                <g id="Oval-9">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <path d="M31,29.5384615 L31,33 L37.2106181,28.1202286 C37.6432453,27.7803072 37.6465817,27.2223142 37.2106181,26.8797714 L31,22 L31,25.6153846 L24.2796347,25.6153846 C23.5739401,25.6153846 23,26.1807955 23,26.8782652 L23,27.926252 L23,35 L26.8181818,35 L26.8181818,29.5384615 L31,29.5384615 Z M27.590016,12.4411529 C28.3687286,11.6624402 29.6395202,11.6706891 30.409984,12.4411529 L45.5588471,27.590016 C46.3375598,28.3687286 46.3293109,29.6395202 45.5588471,30.409984 L30.409984,45.5588471 C29.6312714,46.3375598 28.3604798,46.3293109 27.590016,45.5588471 L12.4411529,30.409984 C11.6624402,29.6312714 11.6706891,28.3604798 12.4411529,27.590016 L27.590016,12.4411529 Z" id="Combined-Shape" fill="#4A4A4A"></path>
+            </g>
+        </g>
+    </g>
+</svg>
