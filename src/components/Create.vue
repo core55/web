@@ -21,6 +21,9 @@
 
 <script>
 
+
+//Authors: Marcel Eschmann, Jiho Moon, Juan Luis Ruiz-Tagle , Cedric Seger
+
 import router from '../router';
 import Login from './Login';
 import GoogleMap from './GoogleMap';

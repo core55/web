@@ -114,6 +114,8 @@
 
 <script>
 
+//Author: Dean Rauschenbusch
+
 import Helper from '../helper';
 import Api from '../api';
 import router from '../router';
@@ -171,7 +173,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
         // If successful redirect to LeftMetup page
         if (response.ok) {
-          
+
           // Remove meetup from local storage
           var meetups = UserHelper.getUserMeetups();
           meetups = meetups.filter(e => e !== hash)

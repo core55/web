@@ -1,3 +1,6 @@
+//Authors :  Marcel Eschmann, Jiho Moon, Simone Stefani , Cedric Seger
+
+
 import Vue from 'vue';
 import router from './../router';
 

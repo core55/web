@@ -4,6 +4,8 @@ import PinUser from '../assets/svg/pin/user-you.svg';
 import UserHelper from './user';
 import Helper from '.';
 
+//Author: Marcel Eschmann, Jiho Moon, Cedric Seger
+
 export default class MarkerHelper {
   static attachMeetingPointMarkerOnClick(app, onDragend, onClick) {
     let helper = this;

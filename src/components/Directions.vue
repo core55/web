@@ -19,6 +19,9 @@
 </template>
 
 <script>
+
+//Jiho Moon, Cedric Seger
+
   export default {
     components: {},
     name: 'directions-view',

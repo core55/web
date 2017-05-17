@@ -1,5 +1,7 @@
 import Vue from 'vue';
 
+//Author: Marcel Eschmann, Juan Luis Ruiz-Tagle
+
 export default class MapHelper {
   /*
    *  Initialises input with google places suggestions.

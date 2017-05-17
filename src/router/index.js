@@ -11,6 +11,8 @@ import EmailConfirm from '@/components/EmailConfirm'
 
 Vue.use(Router)
 
+//Author: Marcel Eschmann, Jiho Moon, Simone Stefani
+
 export default new Router({
   routes: [
     {

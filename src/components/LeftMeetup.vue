@@ -7,6 +7,9 @@
 </template>
 
 <script>
+
+//Author: Jiho Moon
+
   import router from '../router';
 
   export default {
