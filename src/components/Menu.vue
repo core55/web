@@ -8,7 +8,7 @@
     <ul class="menu-list">
 
         <li v-if="selfIsLoggedIn()"class="list">
-          <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
+          <button class="menu-button" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
                 <img v-if="getSelfImage() != null" v-bind:src="getSelfImage()" class="picture" > </img>
@@ -36,17 +36,15 @@
       </li>
 
       <li v-else-if="!selfIsLoggedIn()" class="list">
-        <button style="padding:0; margin:0; border-width:0;" v-on:click="redirectToLogin()">
+        <button class="menu-button" v-on:click="redirectToLogin()">
             <div class="menu-list-element">
                   <h1 class="login-promt"> Login or Register </h1>
             </div>
         </button>
       </list>
 
-
-
       <li class="list" v-if="this.$parent.currentlyTravelling">
-          <button style="padding:0; margin:0; border-width:0;" @click="showTravelPlan">
+          <button class="menu-button" @click="showTravelPlan">
             <div class="menu-list-element" style="background-color:#2AA6D5;">
               <div class="icon-field">
                   <img src="../assets/svg/icon/menu/directions.svg" class="icon" > </img>
@@ -59,7 +57,7 @@
       </li>
 
       <li class="list">
-        <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showPeople = !toggle.showPeople">
+        <button class="menu-button" v-on:click="toggle.showPeople = !toggle.showPeople">
           <div class="menu-list-element">
             <div class="icon-field">
               <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
@@ -108,7 +106,7 @@
 
       </li>
       <li class="list">
-        <button style="padding:0px; margin:0; border-width:0;position:relative;" v-on:click="showSettings()">
+        <button class="menu-button" v-on:click="showSettings()">
           <div class="menu-list-element">
             <div class="icon-field">
               <img src="../assets/svg/icon/menu/settings-privacy.svg" class="icon" > </img>
@@ -131,7 +129,7 @@
             </div>
           </li>
           <li v-if="selfIsLoggedIn()"class="list">
-          <button style="padding:0; margin:0; border-width:0; background-color:transparent;" v-on:click="redirectToLogout()">
+          <button class="menu-button" v-on:click="redirectToLogout()">
             <div class="sub-list-element">
                 <div class="icon-field">
                   <img src="../assets/svg/icon/menu/leave.svg" class="icon" > </img>
@@ -334,6 +332,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       // Requires destination {lat: ... , lng: ...}
       findMyRoute(destination) {
         DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
+        this.$parent.currentlyTravelling = true;
       },
 
       closeTravelPlan() {
@@ -607,6 +606,13 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   letter-spacing: 0.4px;
   text-decoration: underline;
   margin: 0;
+}
+.menu-button {
+  position: relative;
+  padding:0;
+  margin:0;
+  border-width:0;
+  background-color:transparent;
 }
 
 </style>
