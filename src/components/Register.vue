@@ -7,11 +7,11 @@
       </el-form-item>
 
       <el-form-item label="Email">
-        <el-input placeholder="Type your email.." v-model="username"></el-input>
+        <el-input placeholder="Email.." v-model="username"></el-input>
       </el-form-item>
 
       <el-form-item label="Password">
-        <el-input type="password" placeholder="Type your password.." v-model="password"></el-input>
+        <el-input type="password" placeholder="Password.." v-model="password"></el-input>
       </el-form-item>
 
       <el-form-item>

@@ -82,7 +82,7 @@ export default class AvatarMarker extends google.maps.OverlayView {
       return 'recent';
     } else if (timeSinceLastUpdate > 20) {
       return 'idle';
-    }else {
+    } else {
       return 'none';
     }
   }
