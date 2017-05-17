@@ -104,7 +104,8 @@ export default {
       updatesw:0,
       newUserFlag:false,
       directions: [],
-      currentDirectionTarget: {}
+      currentDirectionTarget: {},
+      infowindow:null
     }
   },
   watch: {
@@ -352,10 +353,11 @@ export default {
         done = false;
         var update = users[i].moveTo.shift();
         users[i].marker.setPosition({ lat: update.lat, lng: update.lng });
+
         if (this.infowindow) {
           var nLatlng = new google.maps.LatLng(update.lat, update.lng);
           this.infowindow.updateLatLng(nLatlng);
-
+          this.infowindow.draw();
         };
       }
 
@@ -382,9 +384,23 @@ export default {
 
         // user already has a marker, just move it
         if (index != -1) {
-          this.markersMap[index].nickname = users[i].nickname;
-          this.markersMap[index].status = users[i].status;
-          this.markersMap[index].marker.updateMarkerStyle(users[i]);
+          if(app.infowindow){
+            if(this.markersMap[index].status != users[i].status){
+              app.infowindow.onRemove();
+              app.markersMap[index].nickname = users[i].nickname;
+              app.markersMap[index].status = users[i].status;
+              app.markersMap[index].marker.updateMarkerStyle(users[i]);
+              setTimeout(function () {
+                app.infowindow=null;
+                app.infowindow = new app.customInfobox.default(app.markersMap[index]);
+              }, 500);
+            }
+          }else {
+            this.markersMap[index].nickname = users[i].nickname;
+            this.markersMap[index].status = users[i].status;
+            this.markersMap[index].marker.updateMarkerStyle(users[i]);
+          }
+
 
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
