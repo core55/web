@@ -1,6 +1,5 @@
 <template>
   <div class="drawer">
-  <direction-view style="z-index:100;"v-if="toggle.showDirections" v-on:closeTravelPlan="closeTravelPlan"directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
     <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
 
     <!-- List Element -->
