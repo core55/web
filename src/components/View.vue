@@ -181,16 +181,6 @@ export default {
         this.infowindow = null;
       }
       this.checkDirection(this.markers.meetup);
-
-//      if (this.toggle.direction) {
-//        this.findMyRoute({
-//          lat: this.markers.meetup.getPosition().lat(),
-//          lng: this.markers.meetup.getPosition().lng()
-//        });
-//
-//        this.toggle.direction = false;
-//        return;
-//      }
     },
 
     /*
@@ -461,8 +451,7 @@ export default {
           google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
             var userMarkerInformation = app.markersMap[indexOfMarker];
             var marker = userMarkerInformation.marker;
-
-//            var position = {lat: marker.getPosition().lat, lng: marker.getPosition().lng};
+            
             app.checkDirection(marker);
 
             // close info window if one is already open
