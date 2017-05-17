@@ -1,6 +1,6 @@
 <template>
   <div class="drawer">
-    <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
+    <button class="drawer-buttons" id="button-close" v-on:click="closeMenu" ><img src="../assets/svg/button/close.svg"/></button>
 
     <img class="logo-in-drawer" src="../assets/svg/logo-drawer.svg"> </img>
 
@@ -253,6 +253,15 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         console.log("Logout Dummy: You loged out Succesfully");
         this.loggedIn = false;
       },
+      closeMenu() {
+          this.$emit('toggleShow');
+      },
+      closeTravelPlan() {
+        this.toggle.showDirections;
+      },
+      showTravelPlan() {
+      this.$parent.toggle.showDirections = true;
+      },
 
       //leaving button will direct users to leave the meetup
       async outsideofMap() {
@@ -280,10 +289,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
         this.$message.error('Oops, the user could not leave the meetup.');
       },
-      toggleShow: function() {
-          this.$emit('toggleShow');
-      },
-      hasPicture: function(user) {
+      hasPicture(user) {
         var picture = false;
         if(user.googlePictureURI || user.gravatarURI){
           picture = true;
@@ -297,11 +303,17 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return has;
       },
+      // Returns the self opject from Local Storage (is up to date with user data)
       user() {
         var self = UserHelper.getUser();
         return self;
       },
 
+      /*
+      This funtion checks if the list of people is open
+      If it is opend it will close the list and open the Settings&Security Tab
+      Else it will keep it close and open the Settings&Security Tab
+      */
       showSettings() {
         if(this.toggle.showPeople == true){
           this.toggle.showPeople = false;
@@ -309,6 +321,8 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         this.toggle.showSettingsAndPrivacy = !this.toggle.showSettingsAndPrivacy;
       },
 
+      // Returns the Selfs Image
+      // Priority 1.GooglePicture 2.Gravatar 3.null (=defaultImage)
       getSelfImage() {
         var self = UserHelper.getUser();
         if(self.googlePictureURI != null){
@@ -328,19 +342,11 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return show;
       },
-      //Show the directions to the a Destination
-      // Requires destination {lat: ... , lng: ...}
+      //Show the directions to a Destination
+      // Requires an object of the form {lat: ... , lng: ...}
       findMyRoute(destination) {
         DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
         this.$parent.currentlyTravelling = true;
-      },
-
-      closeTravelPlan() {
-        this.toggle.showDirections;
-      },
-
-      showTravelPlan() {
-      this.$parent.toggle.showDirections = true;
       },
 
       async updateStatus(){
