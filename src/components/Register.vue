@@ -14,6 +14,10 @@
         <el-input type="password" placeholder="Password.." v-model="password"></el-input>
       </el-form-item>
 
+      <el-form-item label="Password">
+        <el-input type="password1" placeholder="Retype your password" v-model="password"></el-input>
+      </el-form-item>
+
       <el-form-item>
         <el-button @click="register" :loading="loading.register">Register</el-button>
       </el-form-item>
