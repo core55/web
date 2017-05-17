@@ -1,8 +1,9 @@
 # Web App
 
 ## Intro
-Front-end web app used in the ***[JoinUp](https://www.joinup.nu)*** App.
+Front-end web app used in the ***[JoinUp](https://www.joinup.nu)*** App.<br><br>
 Provides an interactive map allowing users to share their location with friends and set a meetup point.
+<br><br>
 Team website: [Core 55](https://core55.github.io/)
 
 ## Requirements
