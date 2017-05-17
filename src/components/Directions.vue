@@ -1,5 +1,6 @@
 <template>
   <div class="travelPlan" style="position: absolute">
+    <button class="drawer-buttons" id="button-hide" @click="hideTravelPlan" ><img src="../assets/svg/button/back.svg"/></button>
     <h2 id="directionsTitle">Travel Plan</h2>
     <ul class="instructionsList">
       <li v-for="direction in directions">
@@ -20,7 +21,7 @@
 
 <script>
 
-//Jiho Moon, Cedric Seger
+//Authors: Jiho Moon, Cedric Seger
 
   export default {
     components: {},
@@ -38,6 +39,10 @@
     methods: {
       cancelTrip: function() {
         this.$emit('cancelTrip');
+      },
+      hideTravelPlan: function() {
+      console.log("Directions.vue in hideTravelPlan funtion");
+      this.$emit('hideTravelPlan');
       },
     },
     mounted () {
@@ -114,4 +119,11 @@
     padding-left: 10px;
     color: white;
   }
+
+  #button-hide {
+    right: 15px;
+    top: 15px;
+    z-index: 100;
+  }
+
 </style>

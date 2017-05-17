@@ -40,6 +40,7 @@
           UserHelper.updateUser(user);
           this.confirmed = true
           router.push({ name: 'Create' });
+          return
         }
 
         this.$message.info('Oops, the confirmation link is not valid!');

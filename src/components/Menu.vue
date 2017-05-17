@@ -1,6 +1,5 @@
 <template>
   <div class="drawer">
-  <direction-view style="z-index:100;"v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
     <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
 
     <!-- List Element -->
@@ -31,8 +30,20 @@
             </div>
           </li>
         </ul>
-
         </li>
+
+      <li class="list" v-if="this.$parent.currentlyTravelling">
+          <button style="padding:0; margin:0; border-width:0;" @click="showTravelPlan">
+            <div class="menu-list-element">
+              <div class="icon-field">
+                  <img src="../assets/svg/icon/menu/directions.svg" class="icon" > </img>
+              </div>
+                <div class="text-field">
+                  <h1 class="list-title">Travelplan</h1>
+                </div>
+            </div>
+          </button>
+      </li>
 
       <li class="list">
         <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showPeople = !toggle.showPeople">
@@ -144,6 +155,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
           showPeople: true,
           uselesslocationUpdates: true,
           showDirections: false,
+          showTravelPlanItem: true,
         },
         input: {
         nickname: '',
@@ -151,6 +163,10 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       }
     },
     props: {
+      info:{
+        type:Object,
+        default() {return{};}
+      },
       show: {
         type: Boolean,
         default: false
@@ -244,26 +260,24 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return show;
       },
-      cancelTrip() {
-          this.directions = [];
-          this.toggle.showDirections = false;
-          this.googleDirectionsRenderer.setMap(null);
-      },
       //Show the directions to the a Destination
       // Requires destination {lat: ... , lng: ...}
       findMyRoute(destination) {
-        DirectionsHelper.calculateRoute(destination, this.directions, this);
+        this.$parent.currentlyTravelling = true;
+        DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
       },
 
-      // returns the coordinates of a user in the form:
-      // {lat,lng}
-      coordinates(user) {
-        var coords = user.marker.getPosition();
-        return coords;
+      closeTravelPlan() {
+        this.toggle.showDirections;
+      },
+
+      showTravelPlan() {
+      this.$parent.toggle.showDirections = true;
       },
 
       async updateStatus(){
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
+      let app=this;
       if (response.ok == false) {
         this.statusBoxNotice = 'Oops, Status could not be set!' ;
         return;

@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 //Author: Qi Li
 
 .bounce-enter-active  {
+=======
+
+.bounce-enter-active {
+>>>>>>> c5c05c4da63fe361dd27fb45f9bdaef3bc9a0e24
   animation: bounce-in .5s;
 }
-.bounce-leave-active {
+.bounce-leave-active{
   animation: bounce-out .5s;
 }
 @keyframes bounce-in {

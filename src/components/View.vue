@@ -6,9 +6,6 @@
 
     <google-map :callback="initMap" v-loading.fullscreen.lock="loading"></google-map>
 
-    <!-- Menu Button -->
-    <!-- .svg image with a transparent button on top (works in all browsers)  -->
-    <!-- TODO: -->
     <button class="image-button" id="button-menu" v-on:click="toggle.showMenu = !toggle.showMenu" ><img src="../assets/svg/button/menu.svg"/></button>
 
     <drawer-menu :users="markersMap" v-if="toggle.showMenu" v-on:toggleShow="toggle.showMenu = !toggle.showMenu"></drawer-menu>
@@ -17,10 +14,13 @@
     <!-- .svg image with a transparent button (works in all browsers) -->
     <button class="image-button" id="button-share" v-on:click="toggle.shareDialog = true"><img src="../assets/svg/button/share.svg" /></button>
 
+
     <span>
-      <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="close" @click="activateDirection"></el-button>
-      <el-button v-else class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
+      <transition name="bounce">
+      <button v-if="toggle.direction" class="image-button" id="button-directions" @click="activateDirection"><img src="../assets/svg/button/get-directions.svg" /></button>
+      </transition>
     </span>
+
 
     <div v-for="user in markersMap">
       <transition name="fade">
@@ -28,7 +28,7 @@
       </transition>
     </div>
 
-    <direction-view v-if="toggle.showDirections" :directions="directions" v-on:cancelTrip="cancelTrip"></direction-view>
+    <direction-view v-if="toggle.showDirections" :directions="directions" v-on:hideTravelPlan="toggle.showDirections = !toggle.showDirections" v-on:cancelTrip="cancelTrip"></direction-view>
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
@@ -90,6 +90,7 @@ export default {
       input: {
         nickname: ''
       },
+      currentlyTravelling: false,
       meetup: null,
       map: null,
       markersMap: [],
@@ -105,7 +106,9 @@ export default {
       userlist:null,
       updatesw:0,
       newUserFlag:false,
-      directions: []
+      directions: [],
+      currentDirectionTarget: {},
+      infowindow:null
     }
   },
   watch: {
@@ -222,6 +225,14 @@ export default {
      */
     shareMeetup() {
       this.toggle.shareDialog = false;
+      var shareInput = document.querySelector('#share-url > input');
+      try {
+        shareInput.select();
+        document.execCommand('copy');
+      } catch (error) {
+        this.$message.error('Oops, Something went wrong: ' + error);
+        return;
+      }
       this.$message.success('Url copied and ready to share!');
     },
 
@@ -325,11 +336,16 @@ export default {
      *  Activates google direction api listener.
      */
     activateDirection() {
-      this.toggle.direction = !this.toggle.direction;
+        this.findMyRoute(this.currentDirectionTarget);
+        this.toggle.direction = false;
+        //remove info-window if asking for directions
+        this.infowindow.onRemove();
+        this.infowindow = null;
     },
     cancelTrip() {
         this.directions = [];
         this.toggle.showDirections = false;
+        this.currentlyTravelling = false;
         this.googleDirectionsRenderer.setMap(null);
     },
 
@@ -348,10 +364,11 @@ export default {
         done = false;
         var update = users[i].moveTo.shift();
         users[i].marker.setPosition({ lat: update.lat, lng: update.lng });
+
         if (this.infowindow) {
           var nLatlng = new google.maps.LatLng(update.lat, update.lng);
           this.infowindow.updateLatLng(nLatlng);
-
+          this.infowindow.draw();
         };
       }
 
@@ -378,23 +395,31 @@ export default {
 
         // user already has a marker, just move it
         if (index != -1) {
+          var infoWindowHadOldInformation = false;
+
+          // remove the infowindow if it's showing old information
+          if (this.infowindow && this.markersMap[index].status != users[i].status) {
+            this.infowindow.onRemove();
+            infoWindowHadOldInformation = true;
+          }
+
+          // update user information
           this.markersMap[index].nickname = users[i].nickname;
           this.markersMap[index].status = users[i].status;
           this.markersMap[index].marker.updateMarkerStyle(users[i]);
+
+          // show popup again, if it was automatically closed before
+          if (infoWindowHadOldInformation) {
+            setTimeout(function () {
+              app.infowindow=null;
+              app.infowindow = new app.customInfobox.default(app.markersMap[index]);
+            }, 500);
+          }
 
           MarkerHelper.calculateSmoothMarkerMovement(this.markersMap[index], {
             lat: users[i].lastLatitude,
             lng: users[i].lastLongitude
           });
-
-          // ???
-          // if (app.updatesw == 1) {
-          //   app.infowindow.onRemove();
-          //   app.infowindow = null;
-          //   app.savemarker = null;
-          //   app.updatesw = 0;
-          //   return;
-          // };
 
           window.requestAnimationFrame(app.smoothlyMoveUserMarkers);
           continue;
@@ -415,15 +440,10 @@ export default {
           google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
             var userMarkerInformation = app.markersMap[indexOfMarker];
             var marker = userMarkerInformation.marker;
-            //the user can look up the direction to another user
-            if (app.toggle.direction) {
-              app.findMyRoute({
-                lat: marker.getPosition().lat,
-                lng: marker.getPosition().lng
-              });
-              app.toggle.direction = false;
-              return;
-            }
+
+            app.currentDirectionTarget = {lat: marker.getPosition().lat, lng: marker.getPosition().lng}; //store target destination
+            app.toggle.direction = !app.toggle.direction; //Show directions button
+
             // close info window if one is already open
             if (app.infowindow) {
               app.infowindow.onRemove();
@@ -514,6 +534,7 @@ export default {
         this.$message.error('Please turn on location updates for directions');
         return;
       }
+      this.currentlyTravelling = true;
       DirectionsHelper.calculateRoute(destination, this.directions, this);
     },
   },

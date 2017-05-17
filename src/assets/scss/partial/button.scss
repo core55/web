@@ -37,6 +37,12 @@
   right: 24px;
   bottom: 24px;
 }
+
+#button-directions  {
+  left: 24px;
+  bottom: 24px;
+}
+
 #button-menu  {
   left: 24px;
   top: 24px;
@@ -47,9 +53,9 @@
 }
 
 #btn-direction {
-  right: 24px;
-  top: 24px;
-  bottom: auto;
+  left: 24px;
+  bottom: 24px;
+  //bottom: auto;
 }
 
 #showbtn {
