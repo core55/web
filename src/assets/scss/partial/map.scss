@@ -61,6 +61,11 @@
 //  AvatarMarker
 //
 
+$color-marker-default: #3a3737;
+$color-marker-online: #2eb10c;
+$color-marker-recent: #fbce16;
+$color-marker-idle: #ee3c2e;
+
 .avatar-marker {
   display: block;
   position: absolute;
@@ -68,33 +73,33 @@
   width: 70px;
   height: 70px;
   background-color: rgba(255,255,255,0.7);
-  border: 3px solid #3a3737;
+  border: 3px solid $color-marker-default;
   z-index: 9999;
   background-repeat: no-repeat;
   background-position: center;
   text-align: center;
 
   &.avatar-marker-online {
-    border: 3px solid #3ED24C;
+    border: 3px solid $color-marker-online;
 
     &:before {
-      border-color: #3ED24C transparent transparent transparent;
+      border-color: $color-marker-online transparent transparent transparent;
     }
   }
 
   &.avatar-marker-recent {
-    border: 3px solid #ffff00;
+    border: 3px solid $color-marker-recent;
 
     &:before {
-      border-color: #ffff00 transparent transparent transparent;
+      border-color: $color-marker-recent transparent transparent transparent;
     }
   }
 
   &.avatar-marker-recent {
-    border: 3px solid #ff0000;
+    border: 3px solid $color-marker-idle;
 
     &:before {
-      border-color: #ff0000 transparent transparent transparent;
+      border-color: $color-marker-idle transparent transparent transparent;
     }
   }
 
@@ -113,6 +118,6 @@
     margin-left: 17.5px;
     border-style: solid;
     border-width: 12px 15px 0 15px;
-    border-color: #3a3737 transparent transparent transparent;
+    border-color: $color-marker-default transparent transparent transparent;
   }
 }
