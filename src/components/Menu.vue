@@ -61,7 +61,7 @@
                 <h2 v-if="hasStatus(user)" class="status-field">{{user.status}}</h2>
                 <h2 v-else-if="!hasStatus(user)" class="status-field">No Status</h2>
               </div>
-              <button class="directions-button" v-on:click="findMyRoute(coordinates(user))">
+              <button class="directions-button" v-on:click="findMyRoute(user.marker.getPosition())">
                 <img src="../assets/svg/icon/menu/directions.svg" class="-field" > </img>
               </button>
             </div>
@@ -224,11 +224,12 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       findMyRoute(destination) {
         DirectionsHelper.calculateRoute(destination, this.directions, this);
       },
+
       // returns the coordinates of a user in the form:
       // {lat,lng}
       coordinates(user) {
         var coords = user.marker.getPosition();
-        return {lat: coords.lat(), lng: coords.lng()};
+        return coords;
       },
 
       async updateStatus(){
