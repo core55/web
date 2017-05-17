@@ -169,6 +169,12 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
         // If successful redirect to LeftMetup page
         if (response.ok) {
+          
+          // Remove meetup from local storage
+          var meetups = UserHelper.getUserMeetups();
+          meetups = meetups.filter(e => e !== hash)
+          localStorage.setItem("userMeetups", JSON.stringify(meetups));
+
           let app = this;
           this.mapout = true;
           router.push({ name: 'LeftMeetup' });
