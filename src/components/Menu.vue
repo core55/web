@@ -9,11 +9,11 @@
           <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
-                <img v-if="hasPicture(user())" v-bind:src="this.avatar" class="picture" > </img>
+                <img v-if="getSelfImage() != null" v-bind:src="getSelfImage()" class="picture" > </img>
                   <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
                 <div class="text-field">
-                  <h1 class="list-title">My Profile</h1>
+                  <h1 v-model="nickname = user().nickname" class="list-title">{{this.nickname}}</h1>
                 </div>
             </div>
           </button>
@@ -61,8 +61,8 @@
                 <h2 v-if="hasStatus(user)" class="status-field">{{user.status}}</h2>
                 <h2 v-else-if="!hasStatus(user)" class="status-field">No Status</h2>
               </div>
-              <button class="directions-button" v-on:click="findMyRoute(coordinates(user))">
-                <img src="../assets/svg/icon/menu/directions.svg" class="directions" > </img>
+              <button class="directions-button" v-on:click="findMyRoute(user.marker.getPosition())">
+                <img src="../assets/svg/icon/menu/directions.svg" class="-field" > </img>
               </button>
             </div>
           </li>
@@ -134,6 +134,8 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         status: '',
         directions: [],
         statusBoxNotice: 'Update your status...',
+        nickname: 'Should Show',
+        selfImageSource: '',
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -216,9 +218,20 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return has;
       },
-      async user() {
-        var user = UserHelper.getUser();
-        return user;
+      user() {
+        var self = UserHelper.getUser();
+        return self;
+      },
+
+      getSelfImage() {
+        var self = UserHelper.getUser();
+        if(self.googlePictureURI != null){
+          return self.googlePictureURI;
+        }
+        else if(self.gravatarURI != null){
+          return self.gravatarURI;
+        }
+        return null;
       },
 
       //Returns true iff user has a nickname and is not one self
@@ -239,11 +252,12 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       findMyRoute(destination) {
         DirectionsHelper.calculateRoute(destination, this.directions, this);
       },
+
       // returns the coordinates of a user in the form:
       // {lat,lng}
       coordinates(user) {
         var coords = user.marker.getPosition();
-        return {lat: coords.lat(), lng: coords.lng()};
+        return coords;
       },
 
       async updateStatus(){
@@ -400,7 +414,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   padding: 0;
 }
 
-.directions   {
+.directions-field   {
   position: absolute;
   width: 25px;
   height: 25px;
