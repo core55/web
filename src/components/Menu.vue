@@ -9,7 +9,7 @@
           <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
-                <img v-if="hasPicture(user())" v-bind:src="this.selfImageSource" class="picture" > </img>
+                <img v-if="getSelfImage() != null" v-bind:src="getSelfImage()" class="picture" > </img>
                   <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
                 <div class="text-field">
@@ -202,6 +202,17 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       user() {
         var self = UserHelper.getUser();
         return self;
+      },
+
+      getSelfImage() {
+        var self = UserHelper.getUser();
+        if(self.googlePictureURI != null){
+          return self.googlePictureURI;
+        }
+        else if(self.gravatarURI != null){
+          return self.gravatarURI;
+        }
+        return null;
       },
 
       //Returns true iff user has a nickname and is not one self
