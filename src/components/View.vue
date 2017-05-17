@@ -8,7 +8,7 @@
 
     <button class="image-button" id="button-menu" v-on:click="toggle.showMenu = !toggle.showMenu" ><img src="../assets/svg/button/menu.svg"/></button>
 
-    <drawer-menu :users="markersMap" v-if="toggle.showMenu" v-on:toggleShow="toggle.showMenu = !toggle.showMenu"></drawer-menu>
+    <drawer-menu :meetup="meetup" :users="markersMap" v-if="toggle.showMenu" v-on:toggleShow="toggle.showMenu = !toggle.showMenu"></drawer-menu>
 
     <!-- Share Button -->
     <!-- .svg image with a transparent button (works in all browsers) -->
