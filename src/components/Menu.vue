@@ -97,7 +97,7 @@
 
       </li>
       <li class="list">
-        <button style="padding:0px; margin:0; border-width:0;position:relative;" v-on:click="toggle.showSettingsAndPrivacy = !toggle.showSettingsAndPrivacy">
+        <button style="padding:0px; margin:0; border-width:0;position:relative;" v-on:click="showSettings()">
           <div class="menu-list-element">
             <div class="icon-field">
               <img src="../assets/svg/icon/menu/settings-privacy.svg" class="icon" > </img>
@@ -251,6 +251,13 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       user() {
         var self = UserHelper.getUser();
         return self;
+      },
+
+      showSettings() {
+        if(this.toggle.showPeople == true){
+          this.toggle.showPeople = false;
+        };
+        this.toggle.showSettingsAndPrivacy = !this.toggle.showSettingsAndPrivacy;
       },
 
       getSelfImage() {
