@@ -18,6 +18,10 @@ fi
 echo "Deploying.."
 
 git checkout deploy || git checkout -b deploy
+
+rm -rf dist/static/js
+rm -rf dist/static/css
+
 git reset --hard
 git merge -X theirs --no-edit master
 
