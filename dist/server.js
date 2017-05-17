@@ -7,7 +7,7 @@ app.use(serveStatic(__dirname));
 
 function enforceHttps(req, res, next) {
   if (req.headers['x-forwarded-proto'] != 'https') {
-    res.redirect(status, 'https://' + req.hostname + req.originalUrl);
+    res.redirect(302, 'https://' + req.hostname + req.originalUrl);
     return;
   }
 
