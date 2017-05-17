@@ -6,7 +6,8 @@
 
     <!-- List Element -->
     <ul class="menu-list">
-        <li class="list">
+
+        <li v-if="selfIsLoggedIn()"class="list">
           <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
@@ -32,7 +33,17 @@
             </div>
           </li>
         </ul>
-        </li>
+      </li>
+
+      <li v-else-if="!selfIsLoggedIn()" class="list">
+        <button style="padding:0; margin:0; border-width:0;" v-on:click="redirectToLogin()">
+            <div class="menu-list-element">
+                  <h1 class="login-promt"> Login or Register </h1>
+            </div>
+        </button>
+      </list>
+
+
 
       <li class="list" v-if="this.$parent.currentlyTravelling">
           <button style="padding:0; margin:0; border-width:0;" @click="showTravelPlan">
@@ -164,6 +175,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         statusBoxNotice: 'Update your status...',
         nickname: 'Should Show',
         selfImageSource: '',
+        loggedIn: false,
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -196,6 +208,32 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       },
     },
     methods: {
+
+      /*
+      Dummy Function
+      Should check if self is logged in and return a boolean and change the data "loggedIn accordingly"
+      */
+      selfIsLoggedIn(){
+        this.loggedIn = false;
+        return false;
+      },
+
+      /*
+      Dummy Function
+      Should re-route the user to the Login view
+      */
+      redirectToLogin() {
+        console.log("Login Dummy");
+      },
+
+      /*
+      Dummy Function
+      Should re-route the user to the Login view
+      */
+      redirectToLogout() {
+        console.log("Logout Dummy");
+      },
+
       //leaving button will direct users to leave the meetup
       async outsideofMap() {
 
@@ -542,6 +580,20 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   top: 50%;
   transform: translateY(-50%);
   right: 12px;
+}
+
+.login-promt  {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+  font-weight: 450;
+  font-size: 13px;
+  color: #FFFFFF;
+  letter-spacing: 0.4px;
+  text-decoration: underline;
+  margin: 0;
 }
 
 </style>
