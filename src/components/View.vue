@@ -17,7 +17,7 @@
 
     <span>
       <transition name="bounce">
-      <el-button v-if="toggle.direction" class="app-btn-action" size="medium" id="btn-direction" icon="d-arrow-right" @click="activateDirection"></el-button>
+      <button v-if="toggle.direction" class="image-button" id="button-directions" @click="activateDirection"><img src="../assets/svg/button/get-directions.svg" /></button>
       </transition>
     </span>
 
