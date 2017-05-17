@@ -159,10 +159,23 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
     methods: {
       //leaving button will direct users to leave the meetup
       async outsideofMap() {
-        let app = this;
-        this.mapout = true;
-        this.$message.info('you left the meetup');
-        router.push({ name: 'LeftMeetup' });
+
+        // Fetch user and meetup hash
+        let user = UserHelper.getUser()
+        let hash = this.$route.params.id
+
+        // Send request to leave meetup
+        let response = await Api.leaveMeetup(hash, user)
+
+        // If successful redirect to LeftMetup page
+        if (response.ok) {
+          let app = this;
+          this.mapout = true;
+          router.push({ name: 'LeftMeetup' });
+          return
+        }
+
+        this.$message.error('Oops, the user could not leave the meetup.');
       },
       toggleShow: function() {
           this.$emit('toggleShow');

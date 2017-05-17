@@ -18,7 +18,7 @@
     methods: {
       goToLandingPage () {
         router.push({name: 'Create'});
-      }
+      },
     },
     mounted () {},
   }
