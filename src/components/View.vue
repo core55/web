@@ -275,6 +275,10 @@ export default {
      *  Join a meetup if not already in. Use local storage to persist user data
      */
     async joinEvent() {
+      //If the user doesn't have the shareLocation in Local Storage we want to set it at start
+      if(UserHelper.retrieveFromLocalStorage('shareLocation') == null){
+         UserHelper.writeToLocalStorage('shareLocation', true);  //share location!
+      }
       let user = UserHelper.getUser();
       let userMeetups = UserHelper.getUserMeetups();
       if (!userMeetups) { userMeetups = []; }
@@ -451,7 +455,7 @@ export default {
           google.maps.event.addDomListener(marker.getDiv(), 'click', function () {
             var userMarkerInformation = app.markersMap[indexOfMarker];
             var marker = userMarkerInformation.marker;
-            
+
             app.checkDirection(marker);
 
             // close info window if one is already open

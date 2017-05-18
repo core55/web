@@ -123,7 +123,14 @@
           <li class="list">
             <div class="sub-list-element">
               <div class="icon-field">
-                <el-switch class="icon" v-model="toggle.uselesslocationUpdates" on-color="#13ce66" off-color="#ff4949"></el-switch>
+                <label v-show="localStorageShareLocation()" class="switch-on">
+                    <input type="checkbox" @click="changeIncognitoMode()">
+                    <div class="slider-on round-on"></div>
+                </label>
+                <label v-show="!localStorageShareLocation()" class="switch-off">
+                    <input type="checkbox" @click="changeIncognitoMode()">
+                    <div class="slider-off round-off"></div>
+                </label>
               </div>
               <div class="text-field">
                 <h1 class="list-title">Share Location</h1>
@@ -348,6 +355,19 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       }
       this.status = null;
       },
+      changeIncognitoMode() {
+        var incognitoMode = UserHelper.retrieveFromLocalStorage('shareLocation');
+        if(incognitoMode == false){
+          UserHelper.writeToLocalStorage('shareLocation', true);
+          return;
+        }
+        UserHelper.writeToLocalStorage('shareLocation', false);
+        return;
+      },
+      localStorageShareLocation() {
+        var incognitoMode = UserHelper.retrieveFromLocalStorage('shareLocation');
+        return incognitoMode;
+      }
     },
 
     computed: {
@@ -612,6 +632,145 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   margin:0;
   border-width:0;
   background-color:transparent;
+}
+
+//CSS for On Custom Switch
+.switch-on {
+  position: relative;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 24px;
+}
+
+/* Hide default HTML checkbox */
+.switch-on input {
+  display:none;
+  }
+
+/* The slider */
+.slider-on {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2EB10C;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider-on.round-on   {
+  -moz-box-shadow:    inset 0px 1px 1px #000000;
+   -webkit-box-shadow: inset 0px 1px 1px #000000;
+   box-shadow:         inset 0px 1px 1px #000000;
+}
+
+.slider-on:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 0px;
+  bottom: 1px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider-on {
+  background-color: #EE3C2E;
+}
+
+input:focus + .slider-on {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider-on:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider-on.round-on {
+  border-radius: 34px;
+}
+
+.slider-on.round-on:before {
+  border-radius: 50%;
+}
+
+
+//CSS for OFF Custom Switch
+.switch-off {
+  position: relative;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 24px;
+}
+
+/* Hide default HTML checkbox */
+.switch-off input {
+  display:none;
+  }
+
+/* The slider */
+.slider-off {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #EE3C2E;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.slider-off.round-off   {
+  -moz-box-shadow:    inset 0px 1px 1px #000000;
+   -webkit-box-shadow: inset 0px 1px 1px #000000;
+   box-shadow:         inset 0px 1px 1px #000000;
+}
+
+.slider-off:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  right: 0px;
+  bottom: 1px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider-off {
+  background-color: #2EB10C;
+}
+
+input:focus + .slider-off {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider-off:before {
+  -webkit-transform: translateX(-20px);
+  -ms-transform: translateX(-20px);
+  transform: translateX(-20px);
+}
+
+/* Rounded sliders */
+.slider-off.round-off {
+  border-radius: 34px;
+}
+
+.slider-off.round-off:before {
+  border-radius: 50%;
 }
 
 </style>

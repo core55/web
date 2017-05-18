@@ -37,7 +37,13 @@ export default class UserHelper {
     return localStorage.removeItem(key);
   }
 
+  //Updates the Selfs Location
+  // If the user is in incogito mode we simply return.
   static async updateUserLocation() {
+
+    if(this.retrieveFromLocalStorage('shareLocation') == false){
+      return;
+    }
     let position = await Api.getMyLocation();
     let response = await Api.updateUserLocation(this.getUser(), {
       lastLatitude: position.lat,
