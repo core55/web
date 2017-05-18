@@ -53,12 +53,18 @@ export default {
       if (response.ok == true) {
         let user = response.body;
         UserHelper.updateUser(user);
-        router.push({ name: 'Create'});
-        return;
+        localStorage.setItem('isAuthenticated', true);
 
-        //todo: retrieve hash of meetup
-        router.push({ name: 'View', params: { id: hash }});
-        return;
+        let hash = localStorage.getItem('currentMeetup')
+
+        // ToDo: change to redirect to specific meetup
+        if (false) {
+          router.push({ name: 'View', params: { id: hash }});
+          return;
+        } else {
+          router.push({ name: 'Create'});
+          return;
+        }
       }
 
       this.$message.error("Oops, login failed.");
