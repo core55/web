@@ -108,7 +108,8 @@ export default {
       newUserFlag:false,
       directions: [],
       currentDirectionTarget: null,
-      infowindow:null
+      infowindow:null,
+      pendingUser:[]
     }
   },
   watch: {
@@ -394,7 +395,8 @@ export default {
     async updateMarkers(users) {
       let app = this;
 
-      var newUserList =[];
+      var pendingI=0;
+      var newUserList =[];//new user join notification
       var userListIndex=0;
 
       for (var i in users) {
@@ -415,11 +417,13 @@ export default {
           }
 
           // update user information
+          if(!this.markersMap[index].nickname&&users[i].nickname){
+            newUserList[userListIndex]=users[i].nickname;
+            userListIndex=userListIndex+1;
+          }
           this.markersMap[index].nickname = users[i].nickname;
           this.markersMap[index].status = users[i].status;
           this.markersMap[index].marker.updateMarkerStyle(users[i]);
-
-          // show popup again, if it was automatically closed before
           if (infoWindowHadOldInformation) {
             setTimeout(function () {
               app.infowindow=null;
@@ -439,6 +443,15 @@ export default {
         // Create a new marker for the new user
         let user = users[i];
         let marker = MarkerHelper.createMarker(user, this.map, this.markersMap, this);
+
+        if(!user.nickname){
+          user.nickname='Annonymous';
+        }
+
+        if(user.nickname!='Annonymous'&&app.newUserFlag){
+          newUserList[userListIndex]=user.nickname;
+          userListIndex=userListIndex+1;
+        }
 
         if (!marker) {
           // something went wrong creating the marker
@@ -471,32 +484,31 @@ export default {
 
         // REFACTOR
         continue;
-
-        if (userListIndex != 0) {
-          if (app.newUserFlag) {
-            var displayStr = '';
-            var userStr = '';
-            var stopIndex = userListIndex - 4;
-            if (userListIndex > 3) {
-              while (userListIndex != stopIndex) {
-                userListIndex = userListIndex - 1;
-                userStr = newUserList[userListIndex] + ', ' + userStr;
-              }
-              displayStr = userStr + ' and ' + stopIndex + ' others ' + ' has just join the meetup'
-            } else {
-              while (userListIndex != 0) {
-                userListIndex = userListIndex - 1;
-                userStr = newUserList[userListIndex] + ', ' + userStr;
-              }
-              displayStr = userStr + ' has just join the meetup'
+    }
+      if (userListIndex != 0) {
+        if (app.newUserFlag) {
+          var displayStr = '';
+          var userStr = '';
+          var stopIndex = userListIndex - 4;
+          if (userListIndex > 3) {
+            while (userListIndex != stopIndex) {
+              userListIndex = userListIndex - 1;
+              userStr = newUserList[userListIndex] + ' , '+' ' + userStr;
             }
-
-            this.$notify({
-              title: 'New user just join the meetup!',
-              message: displayStr,
-              duration: 0
-            });
+            displayStr = userStr + ' and ' + stopIndex + ' others ' + ' has just join the meetup'
+          } else {
+            while (userListIndex != 0) {
+              userListIndex = userListIndex - 1;
+              userStr = newUserList[userListIndex] + ', ' + userStr;
+            }
+            displayStr = userStr + ' has just join the meetup'
           }
+
+          this.$notify({
+            title: 'New user just join the meetup!',
+            message: displayStr,
+            duration: 0
+          });
         }
       }
     },
