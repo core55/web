@@ -32,7 +32,7 @@
 
     <el-dialog class="app-dialog app-dialog-share" top="46%" v-model="toggle.shareDialog" size="small">
       <el-input id="share-url" v-model="shareUrl" :readonly="true" size="large">
-        <el-button type="info" slot="append" @click="shareMeetup">Copy</el-button>
+        <el-button id="share-url-button" type="info" data-clipboard-target="#share-url input" slot="append" @click="shareMeetup">Copy</el-button>
       </el-input>
     </el-dialog>
 
@@ -97,6 +97,7 @@ export default {
       updatingLocation: false,
       updatingLocationInterval: null,
       shareUrl: '',
+      clipboard: null,
       requestState: 0,
       showUsers: false,
       custominfobox: null,
@@ -221,14 +222,6 @@ export default {
      */
     shareMeetup() {
       this.toggle.shareDialog = false;
-      var shareInput = document.querySelector('#share-url > input');
-      try {
-        shareInput.select();
-        document.execCommand('copy');
-      } catch (error) {
-        this.$message.error('Oops, Something went wrong: ' + error);
-        return;
-      }
       this.$message.success('Url copied and ready to share!');
     },
 
@@ -564,8 +557,7 @@ export default {
       app.updateMyLocation();
       app.updateUsersOnMap();
     }, twoMinutes);
-
-    this.clipboard = new Clipboard('#btn-share');
+    this.clipboard = new Clipboard('#share-url-button');
   },
   created: function() {
     //Update location sharing setting
