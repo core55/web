@@ -38,6 +38,7 @@
         if (confirm.ok == true ) {
           let user = confirm.body;
           UserHelper.updateUser(user);
+          localStorage.setItem('isAuthenticated', true);
           this.confirmed = true
           router.push({ name: 'Create' });
           return

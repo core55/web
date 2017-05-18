@@ -8,7 +8,7 @@
     <ul class="menu-list">
 
         <!-- If the user is logged Show the nickname and let update status-->
-        <li v-if="selfIsLoggedIn()"class="list">
+        <li v-if="loggedIn"class="list">
           <button class="menu-button" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
@@ -37,7 +37,7 @@
       </li>
 
       <!-- If the user is NOT logged in give opportunity to log in-->
-      <li v-else-if="!selfIsLoggedIn()" class="list">
+      <li v-else-if="!loggedIn" class="list">
         <button class="menu-button" v-on:click="redirectToLogin()">
             <div class="menu-list-element">
                   <h1 class="login-promt"> Login or Register </h1>
@@ -132,7 +132,7 @@
           </li>
 
           <!-- If the user is logged in it should be given the opportunity to log out -->
-          <li v-if="selfIsLoggedIn()"class="list">
+          <li v-if="loggedIn"class="list">
           <button class="menu-button" v-on:click="redirectToLogout()">
             <div class="sub-list-element">
                 <div class="icon-field">
@@ -189,7 +189,6 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         statusBoxNotice: 'Update your status...',
         nickname: 'Should Show',
         selfImageSource: '',
-        loggedIn: false,
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -225,24 +224,13 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
       /*
       Dummy Function
-      Should check if self is logged in and return a boolean and change the boolean of "loggedIn"" accordingly
-      */
-      selfIsLoggedIn(){
-        if(this.loggedIn == true){
-          console.log("You are Logged in");
-        } else{
-          console.log("You are not Logged in")
-        }
-        return this.loggedIn;
-      },
-
-      /*
-      Dummy Function
       Should re-route the user to the Login view
+      ToDo: redirect to current meetup after login
       */
       redirectToLogin() {
-        console.log("Login Dummy: You logged in Successfully");
-        this.loggedIn = true;
+        // let hash = this.$route.params.id
+        // localStorage.setItem('currentMeetup', hash);
+        router.push({ name: 'Login' });
       },
 
       /*
@@ -250,8 +238,11 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       Should re-route the user to the Login view
       */
       redirectToLogout() {
-        console.log("Logout Dummy: You loged out Succesfully");
-        this.loggedIn = false;
+        localStorage.removeItem('user');
+        localStorage.removeItem('_token');
+        localStorage.removeItem('userMeetups');
+        localStorage.removeItem('isAuthenticated');
+        router.push({ name: 'Create' });
       },
       closeMenu() {
           this.$emit('toggleShow');
@@ -358,9 +349,16 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       this.status = null;
       },
     },
-    mounted () {
 
+    computed: {
+      loggedIn () {
+        let isAuthenticated = localStorage.getItem('isAuthenticated')
+        return isAuthenticated == 'true' ? true : false
+      }
     },
+
+    mounted () {
+    }
   }
 
 </script>
