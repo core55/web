@@ -365,20 +365,17 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       this.status = null;
       },
       changeIncognitoMode() {
-        if(this.shareLocation == false){
-          UserHelper.writeToLocalStorage('shareLocation', false);
-          this.shareLocation = true;
+        var incognitoMode = UserHelper.retrieveFromLocalStorage('shareLocation');
+        if(incognitoMode == false){
+          UserHelper.writeToLocalStorage('shareLocation', true);
           return;
         }
-        UserHelper.writeToLocalStorage('shareLocation', true);
-        this.shareLocation = false;
+        UserHelper.writeToLocalStorage('shareLocation', false);
         return;
       },
       localStorageShareLocation() {
-        var locationUpdating = UserHelper.retrieveFromLocalStorage('shareLocation');
-        console.log("Local Storage says shareLocation: " + locationUpdating);
-        this.shareLocation = locationUpdating;
-        return locationUpdating;
+        var incognitoMode = UserHelper.retrieveFromLocalStorage('shareLocation');
+        return incognitoMode;
       }
     },
     mounted () {

@@ -42,7 +42,6 @@ export default class UserHelper {
   static async updateUserLocation() {
 
     if(this.retrieveFromLocalStorage('shareLocation') == false){
-      console.log("Incognito in Local Storage");
       return;
     }
     let position = await Api.getMyLocation();
