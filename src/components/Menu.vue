@@ -1,17 +1,19 @@
 <template>
   <div class="drawer">
-    <button class="drawer-buttons" id="button-close" v-on:click="toggleShow" ><img src="../assets/svg/button/close.svg"/></button>
+    <button class="drawer-buttons" id="button-close" v-on:click="closeMenu" ><img src="../assets/svg/button/close.svg"/></button>
 
     <img class="logo-in-drawer" src="../assets/svg/logo-drawer.svg"> </img>
 
     <!-- List Element -->
     <ul class="menu-list">
-        <li class="list">
-          <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showProfile = !toggle.showProfile">
+
+        <!-- If the user is logged Show the nickname and let update status-->
+        <li v-if="selfIsLoggedIn()"class="list">
+          <button class="menu-button" v-on:click="toggle.showProfile = !toggle.showProfile">
             <div class="menu-list-element">
               <div class="icon-field">
                 <img v-if="getSelfImage() != null" v-bind:src="getSelfImage()" class="picture" > </img>
-                  <img v-else-if="!hasPicture(user())" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
+                  <img v-else-if="true" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
                 <div class="text-field">
                   <h1 v-model="nickname = user().nickname" class="list-title">{{this.nickname}}</h1>
@@ -32,10 +34,19 @@
             </div>
           </li>
         </ul>
-        </li>
+      </li>
+
+      <!-- If the user is NOT logged in give opportunity to log in-->
+      <li v-else-if="!selfIsLoggedIn()" class="list">
+        <button class="menu-button" v-on:click="redirectToLogin()">
+            <div class="menu-list-element">
+                  <h1 class="login-promt"> Login or Register </h1>
+            </div>
+        </button>
+      </list>
 
       <li class="list" v-if="this.$parent.currentlyTravelling">
-          <button style="padding:0; margin:0; border-width:0;" @click="showTravelPlan">
+          <button class="menu-button" @click="showTravelPlan">
             <div class="menu-list-element" style="background-color:#2AA6D5;">
               <div class="icon-field">
                   <img src="../assets/svg/icon/menu/directions.svg" class="icon" > </img>
@@ -48,7 +59,7 @@
       </li>
 
       <li class="list">
-        <button style="padding:0; margin:0; border-width:0;" v-on:click="toggle.showPeople = !toggle.showPeople">
+        <button class="menu-button" v-on:click="toggle.showPeople = !toggle.showPeople">
           <div class="menu-list-element">
             <div class="icon-field">
               <img src="../assets/svg/icon/menu/people.svg" class="icon" > </img>
@@ -80,7 +91,7 @@
             <div class="people-list-Content">
               <div class="picture-field">
                 <img v-if="user.avatar != undefined" v-bind:src="user.avatar" class="picture" > </img>
-                <img v-else-if="!hasPicture(user)" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
+                <img v-else-if="true" src="../assets/svg/icon/menu/default-image.svg" class="icon" > </img>
               </div>
               <div class="text-area">
                 <h1 class="name-field"> {{user.nickname}}</h1>
@@ -97,7 +108,7 @@
 
       </li>
       <li class="list">
-        <button style="padding:0px; margin:0; border-width:0;position:relative;" v-on:click="showSettings()">
+        <button class="menu-button" v-on:click="showSettings()">
           <div class="menu-list-element">
             <div class="icon-field">
               <img src="../assets/svg/icon/menu/settings-privacy.svg" class="icon" > </img>
@@ -118,6 +129,20 @@
                 <h1 class="list-title">Share Location</h1>
               </div>
             </div>
+          </li>
+
+          <!-- If the user is logged in it should be given the opportunity to log out -->
+          <li v-if="selfIsLoggedIn()"class="list">
+          <button class="menu-button" v-on:click="redirectToLogout()">
+            <div class="sub-list-element">
+                <div class="icon-field">
+                  <img src="../assets/svg/icon/menu/leave.svg" class="icon" > </img>
+                </div>
+                <div class="text-field">
+                  <h1 class="list-title">Logout and Leave</h1>
+                </div>
+              </div>
+            </button>
           </li>
         </ul>
       </li>
@@ -164,6 +189,7 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         statusBoxNotice: 'Update your status...',
         nickname: 'Should Show',
         selfImageSource: '',
+        loggedIn: false,
         toggle: {
           showSettingsAndPrivacy: false,
           showProfile: false,
@@ -196,6 +222,47 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
       },
     },
     methods: {
+
+      /*
+      Dummy Function
+      Should check if self is logged in and return a boolean and change the boolean of "loggedIn"" accordingly
+      */
+      selfIsLoggedIn(){
+        if(this.loggedIn == true){
+          console.log("You are Logged in");
+        } else{
+          console.log("You are not Logged in")
+        }
+        return this.loggedIn;
+      },
+
+      /*
+      Dummy Function
+      Should re-route the user to the Login view
+      */
+      redirectToLogin() {
+        console.log("Login Dummy: You logged in Successfully");
+        this.loggedIn = true;
+      },
+
+      /*
+      Dummy Function
+      Should re-route the user to the Login view
+      */
+      redirectToLogout() {
+        console.log("Logout Dummy: You loged out Succesfully");
+        this.loggedIn = false;
+      },
+      closeMenu() {
+          this.$emit('toggleShow');
+      },
+      closeTravelPlan() {
+        this.toggle.showDirections;
+      },
+      showTravelPlan() {
+      this.$parent.toggle.showDirections = true;
+      },
+
       //leaving button will direct users to leave the meetup
       async outsideofMap() {
 
@@ -222,37 +289,25 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
 
         this.$message.error('Oops, the user could not leave the meetup.');
       },
-      toggleShow: function() {
-          this.$emit('toggleShow');
-      },
-      subListShow: function() {
-          this.$emit('subListShow');
-      },
-      profileShow: function() {
-          this.$emit('profileShow');
-      },
-      peopleListShow: function() {
-        this.$emit('subListShow');
-      },
-      hasPicture: function(user) {
-        var picture = false;
-        if(user.googlePictureURI || user.gravatarURI){
-          picture = true;
-        };
-        return picture;
-      },
-      hasStatus: function(user) {
+      //Checks if a user has a status or not
+      hasStatus(user) {
         var has = true;
         if(user.status == null){
           has = false;
         }
         return has;
       },
+      // Returns the self opject from Local Storage (is up to date with user data)
       user() {
         var self = UserHelper.getUser();
         return self;
       },
 
+      /*
+      This funtion checks if the list of people is open
+      If it is opend it will close the list and open the Settings&Security Tab
+      Else it will keep it close and open the Settings&Security Tab
+      */
       showSettings() {
         if(this.toggle.showPeople == true){
           this.toggle.showPeople = false;
@@ -260,6 +315,8 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         this.toggle.showSettingsAndPrivacy = !this.toggle.showSettingsAndPrivacy;
       },
 
+      // Returns the Selfs Image
+      // Priority 1.GooglePicture 2.Gravatar 3.null (=defaultImage)
       getSelfImage() {
         var self = UserHelper.getUser();
         if(self.googlePictureURI != null){
@@ -279,20 +336,14 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
         }
         return show;
       },
-      //Show the directions to the a Destination
-      // Requires destination {lat: ... , lng: ...}
+      //Show the directions to a Destination
+      // Requires an object of the form {lat: ... , lng: ...}
       findMyRoute(destination) {
         DirectionsHelper.calculateRoute(destination, this.$parent.directions, this.$parent);
+        this.$parent.currentlyTravelling = true;
       },
 
-      closeTravelPlan() {
-        this.toggle.showDirections;
-      },
-
-      showTravelPlan() {
-      this.$parent.toggle.showDirections = true;
-      },
-
+      //Updates the Status of the Self if typing it in to the StatusUpdatecurrentlyTravelling
       async updateStatus(){
       let response = await Api.updateUsersStatus(UserHelper.getUser(), this.status);
       let app=this;
@@ -542,6 +593,27 @@ import DefaultIcon from '../assets/svg/icon/menu/people.svg';
   top: 50%;
   transform: translateY(-50%);
   right: 12px;
+}
+
+.login-promt  {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+  font-weight: 450;
+  font-size: 13px;
+  color: #FFFFFF;
+  letter-spacing: 0.4px;
+  text-decoration: underline;
+  margin: 0;
+}
+.menu-button {
+  position: relative;
+  padding:0;
+  margin:0;
+  border-width:0;
+  background-color:transparent;
 }
 
 </style>
