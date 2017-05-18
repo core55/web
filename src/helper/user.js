@@ -41,7 +41,8 @@ export default class UserHelper {
   // If the user is in incogito mode we simply return.
   static async updateUserLocation() {
 
-    if(this.retrieveFromLocalStorage('shareLocation') != true){
+    if(this.retrieveFromLocalStorage('shareLocation') == false){
+      console.log("Incognito in Local Storage");
       return;
     }
     let position = await Api.getMyLocation();
