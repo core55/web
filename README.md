@@ -1,5 +1,7 @@
 # Web App
 
+**IMPORTANT: dependencies for this repositories are not kept updated and may contain security vulnerabilities.**
+
 ## Intro
 Front-end web app used in the ***[JoinUp](https://www.joinup.nu)*** App.<br><br>
 Provides an interactive map allowing users to share their location with friends and set a meetup point.
